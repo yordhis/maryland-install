@@ -63,9 +63,9 @@
                                             <tbody>
                                                 <tr>
                                                     <td>Barinas</td>
-                                                    <td>{{ explode('-', $pago->fecha)[2] }}</td>
-                                                    <td>{{ explode('-', $pago->fecha)[1] }}</td>
-                                                    <td>{{ explode('-', $pago->fecha)[0] }}</td>
+                                                    <td>{{ explode('-', $pago->fecha)[2] ?? '' }}</td>
+                                                    <td>{{ explode('-', $pago->fecha)[1] ?? '' }}</td>
+                                                    <td>{{ explode('-', $pago->fecha)[0] ?? '' }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -73,7 +73,7 @@
                                         {{-- Numero de control de pago --}}
                                         <h4 class="bg-primary text-white p-2">Control de Pago</h4>
                                         <div class="card shadow-none border border-1">
-                                            <div class="card-text fs-3 text-danger">N° {{ $pago->codigo }}</div>
+                                            <div class="card-text fs-3 text-danger">N° {{ $pago->codigo ?? '' }}</div>
                                         </div>
 
                                     </div> {{-- Cierre de Fecha de pago y control de pago --}}
@@ -89,7 +89,7 @@
                                             <div class="card-text">
                                                 Nombre del estudiante:
                                             </div>
-                                            <span class="ms-2 mt-2 fs-5">{{ $pago->estudiante['nombre'] }}</span>
+                                            <span class="ms-2 mt-2 fs-5">{{ $pago->estudiante['nombre'] ?? '' }}</span>
                                         </div>
                                     </div>
                                     <div class="card-body border-dark border-end border-start ">
@@ -105,8 +105,8 @@
                                                 Horario:
                                             </div>
                                             @isset($pago->horario['horas'])
-                                                <span class="ms-2 mt-2"> {{ $pago->horario['horas'] }} </span>
-                                                <span class="ms-2 mt-2">| Dias: {{ $pago->horario['dias'] }}</span>
+                                                <span class="ms-2 mt-2"> {{ $pago->horario['horas'] ?? '' }} </span>
+                                                <span class="ms-2 mt-2">| Dias: {{ $pago->horario['dias'] ?? '' }}</span>
                                             @endisset
                                         </div>
                                     </div>
@@ -114,32 +114,36 @@
                                     <div class="card-body  border border-dark rounded-bottom">
                                         <div class="d-flex d-inline-flex ">
                                             <div class="card-text">
-                                                Algo:
+                                                Teléfono:
                                             </div>
-                                            <span class="ms-2 mt-2 fs-5"></span>
+                                            <span
+                                                class="ms-2 mt-2 fs-5">{{ '(' . substr($pago->estudiante['telefono'], 0, 4) . ')' . ' ' . substr($pago->estudiante['telefono'], 5, 3) . '-' . substr($pago->estudiante['telefono'], 6, 4) ?? '' }}
+                                            </span>
                                         </div>
 
                                         <div class="d-flex d-inline-flex ">
                                             <div class="card-text">
                                                 Documento o Rif:
                                             </div>
-                                            <span class="mx-2 mt-2 fs-5">{{ $pago->estudiante['cedula'] }}</span>
+                                            <span class="mx-2 mt-2 fs-5">{{ $pago->estudiante['cedula'] ?? '' }}</span>
                                         </div>
 
                                         <div class="d-flex d-inline-flex">
                                             <div class="card-text">
                                                 Formas de pago:
                                             </div>
-                                            @foreach ($metodos as $metodo)
-                                                <div class="form-check form-check-inline mt-2">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        id="{{ $metodo['metodo'] }}" name="met_{{ $metodo['metodo'] }}"
-                                                        value="{{ $metodo['metodo'] }}"
-                                                        {{ $metodo['activo'] ? 'checked' : '' }} disabled>
-                                                    <label class="form-check-label" style="font-size: 10px;"
-                                                        for="{{ $metodo['metodo'] }}">{{ $metodo['metodo'] }}</label>
-                                                </div>
-                                            @endforeach
+                                            @isset($metodos)
+                                                @foreach ($metodos as $metodo)
+                                                    <div class="form-check form-check-inline mt-2">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            id="{{ $metodo['metodo'] }}" name="met_{{ $metodo['metodo'] }}"
+                                                            value="{{ $metodo['metodo'] }}"
+                                                            {{ $metodo['activo'] ? 'checked' : '' }} disabled>
+                                                        <label class="form-check-label" style="font-size: 10px;"
+                                                            for="{{ $metodo['metodo'] }}">{{ $metodo['metodo'] }}</label>
+                                                    </div>
+                                                @endforeach
+                                            @endisset
                                         </div>
 
                                     </div>
@@ -157,7 +161,7 @@
                                     <tbody>
                                         <tr>
                                             <td>01</td>
-                                            <td>{{ $pago->concepto }}</td>
+                                            <td>{{ $pago->concepto ?? '' }}</td>
                                             <td>{{ $pago->monto[1] ?? '' }}</td>
                                             <td>{{ $pago->monto[0] ?? '' }}</td>
                                         </tr>

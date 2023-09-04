@@ -466,14 +466,14 @@
     <div class="caja">
         <img src="assets/img/planilla.png" alt="planilla pdf" >
         
-        <span id="codigo"> {{ $inscripcione->codigo }} </span>
-        <span id="fecha"> {{ $inscripcione->fecha }} </span>
-        <span id="nombre"> {{ $estudiante->nombre }} </span>
-        <span id="cedula"> {{ $estudiante->nacionalidad }}-{{ $estudiante->cedulaFormateada }} </span>
-        <span id="edad"> {{ $estudiante->edad }} </span>
-        <span id="nacimiento"> {{ $estudiante->nacimiento }} </span>
-        <span id="telefono"> {{ $estudiante->telefono }} </span>
-        <span id="correo"> {{ $estudiante->correo }}</span>
+        <span id="codigo"> {{ $inscripcione->codigo ?? '' }} </span>
+        <span id="fecha"> {{ $inscripcione->fecha ?? '' }} </span>
+        <span id="nombre"> {{ $estudiante->nombre ?? '' }} </span>
+        <span id="cedula"> {{ $estudiante->nacionalidad ?? '' }}-{{ $estudiante->cedulaFormateada ?? '' }} </span>
+        <span id="edad"> {{ $estudiante->edad ?? '' }} </span>
+        <span id="nacimiento"> {{ $estudiante->nacimiento ?? '' }} </span>
+        <span id="telefono"> {{ $estudiante->telefono ?? '' }} </span>
+        <span id="correo"> {{ $estudiante->correo ?? '' }}</span>
         <ul id="dificultades">
             @foreach ($estudiante->dificultades as $dificultad)
                 <li class="lista">
@@ -482,7 +482,7 @@
                 </li>
             @endforeach
         </ul>
-        <span id="direccion"> {{ $estudiante->direccion }}</span>
+        <span id="direccion"> {{ $estudiante->direccion ?? '' }}</span>
 
         <!-- START Datos Representante -->
         <span id="rep_nombre"> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->nombre : ''}} </span>
@@ -497,25 +497,25 @@
 
         <!-- START Plan de Estudio -->
         <span id="nivel"> 
-            {{ $inscripcione->grupo['nivel']->nombre }} 
+            {{ $inscripcione->grupo['nivel']->nombre ?? '' }} 
              
         </span>
-        <span id="grupo">{{ $inscripcione->grupo['nombre'] }} </span>
-        <span id="fecha_init"> {{ $inscripcione->grupo['fecha_inicio'] }} </span>
-        <span id="fecha_end"> {{ $inscripcione->grupo['fecha_fin'] }} </span>
+        <span id="grupo">{{ $inscripcione->grupo['nombre'] ?? '' }} </span>
+        <span id="fecha_init"> {{ $inscripcione->grupo['fecha_inicio'] ?? '' }} </span>
+        <span id="fecha_end"> {{ $inscripcione->grupo['fecha_fin'] ?? '' }} </span>
         <span id="horario">
-            {{ $inscripcione->grupo['hora_inicio'] . ' - ' . $inscripcione->grupo['hora_fin'] }}
-            <b>Dias:</b> {{ $inscripcione->grupo['dias'] }}
-            <b>Libro:</b> {{ $inscripcione->grupo['nivel']->libro }}
+            {{ $inscripcione->grupo['hora_inicio'] . ' - ' . $inscripcione->grupo['hora_fin'] ?? ''}}
+            <b>Dias:</b> {{ $inscripcione->grupo['dias'] ?? '' }}
+            <b>Libro:</b> {{ $inscripcione->grupo['nivel']->libro ?? '' }}
         </span>
         <!-- END  Plan de Estudio -->
 
         <!-- START  Plan de Pago -->
-        <span id="plan_nombre"> {{ $inscripcione->plan->nombre }} </span>
-        <span id="plan_descripcion">{{ $inscripcione->plan->descripcion }} <br>
-            Cantidad de cuotas: {{ $inscripcione->plan->cantidad_cuotas }}
+        <span id="plan_nombre"> {{ $inscripcione->plan->nombre ?? '' }} </span>
+        <span id="plan_descripcion">{{ $inscripcione->plan->descripcion ?? '' }} <br>
+            Cantidad de cuotas: {{ $inscripcione->plan->cantidad_cuotas ?? '' }}
         </span>
-        <span id="nivel_precio"> Ref: <br>{{ $inscripcione->grupo['nivel']->precio }} </span>
+        <span id="nivel_precio"> Ref: <br>{{ $inscripcione->grupo['nivel']->precio ?? '' }} </span>
         <ul id="cuotas">
             @foreach ($inscripcione->cuotas as $cuota)
                 <li class="d-inline ms-2">

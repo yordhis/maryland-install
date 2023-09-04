@@ -3,19 +3,19 @@
 @section('title', 'A. Maryland')
 
 @section('content')
-  <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+  <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center ">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-          <div class="d-flex justify-content-center pb-4" >
+          <div class="d-flex justify-content-center pb-1" >
           
             <a href="/" >
               <img src="assets/img/logo.png" alt="logo" id="logo">
             </a>
           </div><!-- End Logo -->
 
-          <div class="card mb-3">
+          <div class="card mb-1">
 
             <div class="card-body">
 
@@ -34,7 +34,9 @@
                     <input type="text" name="email" class="form-control" id="yourUsername" required>
                     <div class="invalid-feedback">Por favor, ingrese su nombre de usuario!</div>
                     @error('nombre')
-                        {{ $message }}
+                        <span class="text-danger">
+                          {{ $message }}
+                        </span>
                     @enderror
                   </div>
                 </div>
@@ -63,14 +65,6 @@
 
             </div>
           </div>
-
-          {{-- <div class="credits"> --}}
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-            {{-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-          </div> --}}
 
         </div>
       </div>
