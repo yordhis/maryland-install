@@ -38,22 +38,22 @@
                                         <tr>
                                             <th scope="row">{{ $contador }}</th>
                                             <td>
-                                                {{ $cuota->estudiante->nombre }} <br>
-                                                {{ number_format($cuota->estudiante->cedula, 0,',', '.') }}
+                                                {{ $cuota->estudiante->nombre ?? 'Nombre no registrado' }} <br>
+                                                {{ number_format($cuota->estudiante->cedula, 0,',', '.') ?? 'Problema con la cédula' }}
                                             </td>
                                             <td>
-                                                {{ substr($cuota->estudiante->telefono,0,4) }} -
-                                                {{ substr($cuota->estudiante->telefono,4, 10) }}
+                                                {{ substr($cuota->estudiante->telefono,0,4)  ?? 'No poseé N° telefono'}} -
+                                                {{ substr($cuota->estudiante->telefono,4, 10) ?? '' }}
                                                  <br>
-                                                {{ $cuota->estudiante->correo }}
+                                                {{ $cuota->estudiante->correo ?? 'No tiene correo registrado' }}
                                             </td>
                                             
-                                            <td>{{ $cuota->fecha }}</td>
-                                            <td>{{ $cuota->cuota }}</td>
+                                            <td>{{ $cuota->fecha ?? 'Sin fecha'}}</td>
+                                            <td>{{ $cuota->cuota ?? 'Sin monto'}}</td>
     
                                             <td>
                                               
-                                                <a href="/pagos/{{$cuota->estudiante->cedula}}/estudiante" target="_self">
+                                                <a href="/pagos/{{$cuota->estudiante->cedula ?? '0000000'}}/estudiante" target="_self">
                                                     <i class="bi bi-paypal fs-3"></i>
                                                 </a>
                                 
