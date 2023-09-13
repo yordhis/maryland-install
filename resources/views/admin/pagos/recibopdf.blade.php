@@ -191,7 +191,7 @@
         {{-- Nombre del estudiante --}}
         <p class="nombreEstudiante">{{$pago->estudiante['nombre'] ?? '' }}</p>
         {{-- Nombre del Representante --}}
-        <p class="nombreRepresentante">{{$pago->estudiante['representante']['nombre'] ?? '' }}</p>
+        <p class="nombreRepresentante">{{$pago->estudiante->representantes[0]['nombre'] ?? '' }}</p>
         
         {{-- Nombre del Horario --}}
         <p class="horario">

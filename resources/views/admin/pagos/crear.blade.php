@@ -57,7 +57,7 @@
                             </a>
                           </span>
                           <input type="text" name="cedula_estudiante" class="form-control fs-5" id="cedula" 
-                          value="{{$estudiante[0]->cedula ?? ""}}"
+                          value="{{ $estudiante[0]->cedula ?? ""}}"
                           placeholder="Ingrese Cédula del estudiante"
                           required>
                           <div class="invalid-feedback">Por favor, Ingrese cédula del estudiante!</div>
@@ -140,7 +140,10 @@
                         <div class="invalid-feedback">Por favor, Ingrese monto a pagar!</div>
                       </div>
 
-                     
+                      <!-- Se envia un codigo de inscripcion en caso de que exista -->
+                     @if (isset($codigoInscripcion))
+                         <input type="hidden" name="codigoInscripcion" value="{{ $codigoInscripcion }}">
+                     @endif
                      
                      
                   
@@ -150,9 +153,11 @@
                   
                 </form>
 
+               
+
               </div>
             </div>
-
+           
           </div>
         </div>
       </div>

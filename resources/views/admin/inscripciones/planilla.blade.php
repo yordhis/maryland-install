@@ -277,10 +277,21 @@
                 </div>
             </div>
 
-            <div class="col-lg-12">
-                <p class="text-center mt-3">
+            <div class="col-lg-12 d-flex  ">
+                <p class="text-center col-6  mt-3">
                     <a href="/inscripciones/{{ $inscripcione->cedula_estudiante }}/{{ $inscripcione->codigo }}"
-                        class="btn btn-primary btn-lg" target="_self" id="imprimirRecibo">Imprimir</a>
+                        class="btn btn-primary btn-lg" target="_self" id="imprimirRecibo">
+                        <i class="bi bi-printer"></i>
+                        Imprimir Planilla
+                    </a>
+                </p>
+
+                <p class="text-center col-6 mt-3">
+                    <a href="/pagos/{{ $inscripcione->cedula_estudiante }}/{{ $inscripcione->codigo }}"
+                        class="btn btn-primary btn-lg" target="_self" id="imprimirRecibo">
+                        <i class="bi bi-paypal" ></i>
+                        Procesar pago
+                    </a>
                 </p>
             </div>
 

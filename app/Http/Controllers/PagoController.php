@@ -16,6 +16,7 @@ use Barryvdh\DomPDF\Facade\PDF;
 use App\Http\Requests\StorePagoRequest;
 use App\Http\Requests\UpdatePagoRequest;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Request;
 
 class PagoController extends Controller
 {
@@ -69,16 +70,15 @@ class PagoController extends Controller
         }
     }
 
-    public function getPagoEstudiante($request)
+    public function getPagoEstudiante($request, $codigoInscripcion)
     {
+     
         try {
-            $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
             $metodos = $this->data->metodosPagos;
             $codigo = Helpers::getCodigo('pagos');
             $conceptos = Concepto::where('estatus', 1)->get();
             $estudiante = Estudiante::where("cedula", $request)->get();
-            return view('admin.pagos.crear', compact('notificaciones', 'usuario', 'conceptos', 'metodos', 'codigo', "estudiante"));
+            return view('admin.pagos.crear', compact('conceptos', 'metodos', 'codigo', "estudiante", 'codigoInscripcion'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar datos de pago del estudiante en el método getPagoEstudiante,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -93,9 +93,9 @@ class PagoController extends Controller
      */
     public function store(StorePagoRequest $request)
     {
+       
         try {
-            $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
+         
             // configuramos las cuotas, metodos y monto para ser almacenados
             $cuotas = Helpers::getArrayInputs($request->request, 'cuo') ?  Helpers::getArrayInputs($request->request, 'cuo') : [0];
             $codigoGrupo = count(Cuota::where('id', $cuotas[0])->get()) ? Cuota::where('id', $cuotas[0])->get()[0]->codigo_grupo : 0;
@@ -147,10 +147,10 @@ class PagoController extends Controller
 
             $respuesta = $this->data->respuesta;
 
-            return $estatusPago ? redirect("pagos/{$id}?mensaje={$mensaje}&estatus={$estatus}")
+            return $estatusPago ? redirect("pagos/{$id}?mensaje={$mensaje}&estatus={$estatus}&codigoInscripcion={$request->codigoInscripcion}")
                 : view(
                     'admin.pagos.crear',
-                    compact('request', 'notificaciones', 'usuario', 'respuesta', 'planes', 'grupos')
+                    compact('request', 'respuesta', 'planes', 'grupos')
                 );
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar datos de pago del estudiante en el método getPagoEstudiante,");

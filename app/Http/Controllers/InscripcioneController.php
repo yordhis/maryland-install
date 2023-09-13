@@ -183,7 +183,7 @@ class InscripcioneController extends Controller
                     );
             } else {
                 // Cuando el estudiante no esta registrado retorna el boton de registrar estudiante
-                return "el estudiante NO existe";
+              
 
                 $this->data->respuesta['mensaje'] = "¡El estudiante no esta registrado en el sistema, Por favor proceda a registrarlo!";
                 $this->data->respuesta['estatus'] = 404;

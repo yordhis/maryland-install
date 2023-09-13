@@ -87,8 +87,8 @@ Route::middleware('auth')->group(function () {
     /**
      * Rutas de Planes de pago
      */
-    Route::get('/pagos/{id}/recibopdf', [PagoController::class, 'recibopdf'])->name('admin.pagos.recibopdf');
-    Route::get('/pagos/{cedula}/estudiante', [PagoController::class, 'getPagoEstudiante'])->name('admin.pagos.estudiante');
+    Route::get('/pagos/{cedula}/{codigo}', [PagoController::class, 'getPagoEstudiante'])->name('admin.pagos.process');
+    Route::get('/generarReciboDePago/{id}/recibopdf', [PagoController::class, 'recibopdf'])->name('admin.pagos.recibopdf');
     Route::resource('/pagos', PagoController::class)->names('admin.pagos');
     
     /**
