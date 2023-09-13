@@ -155,22 +155,25 @@
                                             <hr>
                                         </div>
                                         <div class="col-1">
-                                            <span class="text-danger fs-3" id="closeRepre">X</span>
+                                            <span class="btn btn-none text-danger fs-3" id="closeRepre">X</span>
                                         </div>
+                                        <div class="col-12">
+                                            <label for="yourUsername" class="form-label">Cédula del representante</label><br>
+                                            <small class="text-muted"> Si el representante ya existe los datos se llenaran automaticamente </small>
+                                            <input type="text" name="rep_cedula" class="form-control"
+                                                id="rep_cedula" placeholder="Ingrese la cédula del representante."
+                                                >
+                                            <div class="invalid-feedback">Por favor, Ingrese la cédula del representante!
+                                            </div>
+                                        </div>
+                                       
                                         <div class="col-12">
                                             <label for="yourName" class="form-label">Nombre del representante</label>
                                             <input type="text" name="rep_nombre" class="form-control" id="yourName"
                                                 placeholder="Ingrese Nombre del representante." >
                                             <div class="invalid-feedback">Por favor, Nombre del representante!</div>
                                         </div>
-                                        <div class="col-6">
-                                            <label for="yourUsername" class="form-label">Cédula</label>
-                                            <input type="text" name="rep_cedula" class="form-control"
-                                                id="yourUsername" placeholder="Ingrese la cédula del representante."
-                                                >
-                                            <div class="invalid-feedback">Por favor, Ingrese la cédula del representante!
-                                            </div>
-                                        </div>
+                                        
                                         <div class="col-6">
                                             <label for="yourUsername" class="form-label">Teléfono </label>
                                             <input type="text" name="rep_telefono" class="form-control"
@@ -216,7 +219,7 @@
                                             <hr>
                                         </div>
                                         <div class="col-1">
-                                            <span class="text-danger fs-3" id="closeDifi">X</span>
+                                            <span class="btn btn-none text-danger fs-3" id="closeDifi">X</span>
                                         </div>
                                         <div class="col-4">
                                             <label for="yourUsername" class="form-label">TDH</label>
