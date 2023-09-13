@@ -15,6 +15,7 @@ use App\Models\{
 };
 use Barryvdh\DomPDF\Facade\PDF;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
 
 class InscripcioneController extends Controller
@@ -36,8 +37,7 @@ class InscripcioneController extends Controller
             // Retorna la lista de inscripciones
             // donde el estatus es 3 = completado que hace referencia a que los pagos de
             // de la inscripción estan listo
-            $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
+            // $notificaciones = $this->data->notificaciones;
 
             // Obtenemos todas las inscripciones que poseen el estatus completado
             $inscripciones = Helpers::addDatosDeRelacion(
@@ -89,7 +89,7 @@ class InscripcioneController extends Controller
             }
 
             // return $inscripciones;
-            return view('admin.inscripciones.lista', compact('notificaciones', 'usuario', 'inscripciones'));
+            return view('admin.inscripciones.lista', compact('inscripciones'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar Inscripciones en el método index,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -104,13 +104,12 @@ class InscripcioneController extends Controller
     public function create()
     {
         try {
-            $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
+            // $notificaciones = $this->data->notificaciones;
             $codigo = Helpers::getCodigo('inscripciones');
             $planes = Plane::where("estatus", 1)->get();
             $grupos = Helpers::setMatricula(Grupo::where("estatus", 1)->get());
 
-            return view('admin.inscripciones.crear', compact('notificaciones', 'usuario', 'planes', 'grupos', 'codigo'));
+            return view('admin.inscripciones.crear', compact('planes', 'grupos', 'codigo'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar Inscripciones en el método create,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -126,49 +125,75 @@ class InscripcioneController extends Controller
     public function store(StoreInscripcioneRequest $request)
     {
         try {
-            // Validamos si este estudiante ya esta inscrito en ese grupo de estudio
-            $datoExiste = Helpers::datoExiste($request, [
-                "inscripciones" => [
-                    "cedula_estudiante",
-                    "AND codigo_grupo = {$request['codigo_grupo']}",
-                    "cedula_estudiante",
-                ],
-            ]);
-            $request['extras'] = implode(',', Helpers::getArrayInputs($request->request, 'ext'));
-            $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
             $planes = Plane::where("estatus", 1)->get();
             $grupos = Helpers::setMatricula(Grupo::where("estatus", 1)->get());
             $estatusCreate = 0;
             $id = 0;
-            if (!$datoExiste) {
-                // Registramos la incripcion
-                $estatusCreate = Inscripcione::create($request->all());
-                
-                $id =  $estatusCreate->id;
-                // Asignamos al estudiante al grupo
-                GrupoEstudiante::create([
-                    "cedula_estudiante" => $request->cedula_estudiante,
-                    "codigo_grupo" => $request->codigo_grupo,
+            // el estudiante existe
+            $estudianteExiste = Helpers::datoExiste($request, [
+                "estudiantes" => [
+                    "cedula",
+                    "",
+                    "cedula_estudiante",
+                ],
+            ]);
+            // validamos si los datos del estudiante estan en el sistema
+            if ($estudianteExiste) {
+
+                // Validamos si este estudiante ya esta inscrito en ese grupo de estudio
+                $datoExiste = Helpers::datoExiste($request, [
+                    "inscripciones" => [
+                        "cedula_estudiante",
+                        "AND codigo_grupo = {$request['codigo_grupo']}",
+                        "cedula_estudiante",
+                    ],
                 ]);
 
-                // Creamos las cuotas y registramos
-                Helpers::registrarCuotas(Helpers::getCuotas($request));
-            }
+                if (!$datoExiste) {
+                    // Estraemos los datos extras de la planilla de inscripcion
+                    $request['extras'] = implode(',', Helpers::getArrayInputs($request->request, 'ext'));
+
+                    // Registramos la incripcion
+                    $estatusCreate = Inscripcione::create($request->all());
+                    
+                    $id =  $estatusCreate->id;
+                    // Asignamos al estudiante al grupo
+                    GrupoEstudiante::create([
+                        "cedula_estudiante" => $request->cedula_estudiante,
+                        "codigo_grupo" => $request->codigo_grupo,
+                    ]);
+                    
+                    // Creamos las cuotas y registramos
+                    Helpers::registrarCuotas(Helpers::getCuotas($request));
+                    
+                }
 
 
-            $mensaje = $this->data->respuesta['mensaje'] = $estatusCreate ? "¡La inscripción del estudiante se proceso correctamente!"
-                : "El estudiante ya esta inscrito en este grupo de estudio (Código del grupo: {$datoExiste->codigo_grupo} - {$datoExiste->cedula_estudiante})";
+                $mensaje = $this->data->respuesta['mensaje'] = $estatusCreate ? "¡La inscripción del estudiante se proceso correctamente!"
+                    : "El estudiante ya esta inscrito en este grupo de estudio (Código del grupo: {$datoExiste->codigo_grupo} - {$datoExiste->cedula_estudiante})";
 
-            $estatus = $this->data->respuesta['estatus'] = $estatusCreate ? 200 : 301;
+                $estatus = $this->data->respuesta['estatus'] = $estatusCreate ? 200 : 301;
 
-            $respuesta = $this->data->respuesta;
+                $respuesta = $this->data->respuesta;
 
-            return $estatusCreate ? redirect("inscripciones/{$id}?mensaje={$mensaje}&estatus={$estatus}")
-                : view(
+                return $estatusCreate ? redirect("inscripciones/{$id}?mensaje={$mensaje}&estatus={$estatus}")
+                    : view(
+                        'admin.inscripciones.crear',
+                        compact('request', 'respuesta', 'planes', 'grupos')
+                    );
+            } else {
+                // Cuando el estudiante no esta registrado retorna el boton de registrar estudiante
+                return "el estudiante NO existe";
+
+                $this->data->respuesta['mensaje'] = "¡El estudiante no esta registrado en el sistema, Por favor proceda a registrarlo!";
+                $this->data->respuesta['estatus'] = 404;
+                $respuesta = $this->data->respuesta;
+
+                return view(
                     'admin.inscripciones.crear',
-                    compact('request', 'notificaciones', 'usuario', 'respuesta', 'planes', 'grupos')
+                    compact('request', 'respuesta', 'planes', 'grupos')
                 );
+            }
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Procesar Inscripción en el método store,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -230,7 +255,6 @@ class InscripcioneController extends Controller
             );
             return $pdf->download("{$inscripcione->codigo}-{$inscripcione->cedula_estudiante}-{$inscripcione->fecha}.pdf");
         } catch (\Throwable $th) {
-           
         }
     }
     /**

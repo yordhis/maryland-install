@@ -95,6 +95,7 @@ Route::middleware('auth')->group(function () {
      * Rutas de Inscripciones de estudiantes
      */
     
+    Route::get('inscripciones/paso/{paso}',[InscripcioneController::class, 'getPasos'])->name('admin.inscripciones.pasos');
     Route::get('/inscripciones/{cedula}/{codigo}', [InscripcioneController::class, 'planillapdf'])->name('admin.inscripciones.pdf');
     Route::resource('/inscripciones', InscripcioneController::class)->names('admin.inscripciones');
     Route::resource('/notas', NotaController::class)->names('admin.notas');
