@@ -277,7 +277,7 @@ class InscripcioneController extends Controller
      */
     public function update(UpdateInscripcioneRequest $request, Inscripcione $inscripcione)
     {
-        return redirect()->route('admin.inscripciones.index');
+        return $request;
     }
 
     /**
@@ -290,14 +290,21 @@ class InscripcioneController extends Controller
     {
         try {
 
+            // Eliminamos Las cuotas relacionads al estudiante en ese grupo
+            Cuota::where([
+                "cedula_estudiante" => $inscripcione->cedula_estudiante,
+                "codigo_grupo" => $inscripcione->codigo_grupo,
+            ])->delete();
+
             // Eliminamos al estudiante del grupo
             GrupoEstudiante::where([
                 "cedula_estudiante" => $inscripcione->cedula_estudiante,
                 "codigo_grupo" => $inscripcione->codigo_grupo,
-            ])->update(["estatus" => 0]);
+            ])->delete();
+            
 
             // Borramos la inscripción
-            $inscripcione->update(["estatus" => 0]);
+            $inscripcione->delete();
 
             $mensaje = "Datos de Inscripción Eliminado correctamente.";
             $estatus = 200;

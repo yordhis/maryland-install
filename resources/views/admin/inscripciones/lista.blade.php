@@ -69,6 +69,8 @@
                                                 @include('admin.inscripciones.partials.modal')
 
                                                 @include('admin.inscripciones.partials.modalEliminar')
+
+                                                @include('admin.inscripciones.partials.modalEditar')
                                                     
                                             </td>
                                         </tr>

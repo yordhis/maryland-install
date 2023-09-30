@@ -167,8 +167,6 @@ class PagoController extends Controller
     public function show(Pago $pago)
     {
         try {
-            $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
             $metodos = $this->data->metodosPagos;
             $pago['estudiante'] = Helpers::getEstudiante($pago->cedula_estudiante);
             $pago->id_cuota = explode(",", $pago->id_cuota);
@@ -208,7 +206,7 @@ class PagoController extends Controller
             }
 
             // return $pago;
-            return view('admin.pagos.recibo', compact('notificaciones', 'usuario', 'pago', 'metodos'));
+            return view('admin.pagos.recibo', compact('pago', 'metodos'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar datos de pago del estudiante en el método show,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -312,8 +310,7 @@ class PagoController extends Controller
     public function destroy(Pago $pago)
     {
         try {
-            $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
+     
             // Cambiamos de estado las cuotas del pago
             $pago->id_cuota = explode(",", $pago->id_cuota);
             if ($pago->id_cuota[0] > 0) {
@@ -323,7 +320,7 @@ class PagoController extends Controller
             }
 
             // Eliminamos el pago
-            $pago->update(["estatus" => 0]);
+            $pago->delete();
 
             // Redireccionamos con una respuesta
             $mensaje = "El Pago del estudiante se eliminó correctamente.";

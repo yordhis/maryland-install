@@ -65,10 +65,10 @@
 
                       {{-- Cedula --}}
                       <div class="col-4">
-                        <label for="yourPassword" class="form-label">Cédula <span class="text-danger">(No editable)</span></label>
+                        <label for="yourPassword" class="form-label">Cédula de identidad</label>
                         <input type="text" name="cedula" class="form-control bg-secondary-light" id="yourUsername" 
                         placeholder="Ingrese número de cédula" value="{{$estudiante->cedula}}"
-                        readonly
+                      
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese número de cédula!</div>
                       </div>
@@ -87,7 +87,7 @@
                         <input type="email" name="correo" class="form-control" id="yourUsername" 
                         placeholder="Ingrese dirección de correo."
                         value="{{$estudiante->correo}}"
-                        required>
+                        >
                         <div class="invalid-feedback">Por favor, Ingrese dirección de correo!</div>
                       </div>
 
@@ -96,7 +96,7 @@
                         <input type="date" name="nacimiento" class="form-control" id="yourUsername" 
                         
                         value="{{$estudiante->nacimiento}}"
-                        required>
+                        >
                         <div class="invalid-feedback">Por favor, ingrese fecha de nacimiento!</div>
                       </div>
 
@@ -105,7 +105,7 @@
                         <input type="number" name="edad" class="form-control" id="yourUsername" 
                         placeholder="Ingrese edad."
                         value="{{$estudiante->edad}}"
-                        required>
+                        >
                         <div class="invalid-feedback">Por favor, Ingrese edad!</div>
                       </div>
 
@@ -114,7 +114,7 @@
                         <input type="text" name="direccion" class="form-control" id="yourUsername" 
                         placeholder="Ingrese dirección de domicilio."
                         value="{{$estudiante->direccion}}"
-                        required>
+                        >
                         <div class="invalid-feedback">Por favor, Ingrese edad!</div>
                       </div>
 
@@ -125,7 +125,7 @@
                       </div>
 
                       <div class="col-4 card">
-                        <img src="{{$estudiante->foto}}" class="img-fluid rounded" alt="">                        
+                        <img src="{{ $estudiante->foto }}" class="img-fluid rounded" alt="">                        
                       </div>
 
                         {{-- INICIO DE DATOS DEL REPRESENTANTE --}}

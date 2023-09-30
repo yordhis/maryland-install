@@ -29,6 +29,90 @@ class Helpers extends Model
     public static $estudiantes;
     public static $fechaCuota;
 
+    public static function updateCedula($cedulaActual, $cedulaNueva){
+
+        try {
+            // Pagos
+            Pago::where('cedula_estudiante', $cedulaActual)->update([
+                "cedula_estudiante" => $cedulaNueva
+            ]);
+            // Inscripciones
+            Inscripcione::where('cedula_estudiante', $cedulaActual)->update([
+                "cedula_estudiante" => $cedulaNueva
+            ]);
+
+            // Grupos
+            GrupoEstudiante::where('cedula_estudiante', $cedulaActual)->update([
+                "cedula_estudiante" => $cedulaNueva
+            ]);
+
+            // Dificultades 
+            DificultadEstudiante::where('cedula_estudiante', $cedulaActual)->update([
+                "cedula_estudiante" => $cedulaNueva
+            ]);
+
+             // Representantes 
+             RepresentanteEstudiante::where('cedula_estudiante', $cedulaActual)->update([
+                "cedula_estudiante" => $cedulaNueva
+            ]);
+            
+
+            return true;
+        } catch (\Throwable $th) {
+            $errorInfo = Helpers::getMensajeError($th, "Error al Actualizar La Cédula del estudiante en todas sus relaciones en el objeto helper método updateCedula,");
+            return response()->view('errors.404', compact("errorInfo"), 404);
+        }
+    }
+
+    public static function setDificultades($listDificultades, $cedulaEstudiante){
+        foreach ($listDificultades as $insertDificultad) {
+            $d = DificultadEstudiante::updateOrCreate(
+                [
+                    // Para comparar
+                    "cedula_estudiante" => $cedulaEstudiante,
+                    "dificultad" => $insertDificultad->nombre
+                ],
+                [
+                    // Para las nueva inserción
+                    "dificultad" => $insertDificultad->nombre,
+                    "estatus" => $insertDificultad->estatus
+                ]
+            );
+        }
+    }
+
+    public static function setRepresentantes($request){
+        try {
+            /** Se registra el representante */
+            Representante::updateOrCreate([
+                // Comparamos
+                "cedula" => $request->rep_cedula,
+            ],[
+                // Se actualiza o Crea el representante 
+               "nombre" => $request->rep_nombre ?? '',
+               "edad" => $request->rep_edad ?? '',
+               "ocupacion" => $request->rep_ocupacion ?? '',
+               "telefono" => $request->rep_telefono ?? '',
+               "direccion" => $request->rep_direccion ?? '',
+               "correo" => $request->rep_correo ?? '',
+           ]);
+   
+           /** Relacionamos los estudiante con el representante */
+           RepresentanteEstudiante::updateOrCreate([
+               "cedula_estudiante" => $request->cedula,
+           ],[
+               "cedula_representante" => $request->rep_cedula
+           ]);
+            return true;
+        } catch (\Throwable $th) {
+            //throw $th;
+            $errorInfo = Helpers::getMensajeError($th, "Error al Registrar el representante en el objeto helper,");
+            return response()->view('errors.404', compact("errorInfo"), 404);
+        }
+
+
+    }
+
     public static function getUsuarios(){
         $usuarios = User::all();
         foreach ($usuarios as $key => $usuario) {
@@ -133,8 +217,8 @@ class Helpers extends Model
 
         if ($dificultades) {
             foreach ($listDificultades as $listDificultad) {
-                foreach ($dificultades as $dificultad) {
-                    if ($dificultad == $listDificultad->nombre) {
+                foreach ($dificultades as $nombreDificultad) {
+                    if ($nombreDificultad == $listDificultad->nombre) {
                         $listDificultad->estatus = 1;
                         break;
                     } else {
@@ -170,7 +254,10 @@ class Helpers extends Model
     public static function getEstudiante($cedula)
     {
         if (isset($cedula)) {
-            $estudiante = Estudiante::where('cedula', $cedula)->get();
+            $estudiante = Estudiante::where([
+                "cedula" => $cedula,
+                "estatus" => 1
+            ])->get();
 
             if (isset($estudiante[0])) {
                 $estudiante = $estudiante[0];
@@ -250,7 +337,7 @@ class Helpers extends Model
 
             }
         } else {
-            $estudiante = ["no hay datos"];
+            $estudiante = [];
         }
         return $estudiante;
     }
@@ -265,9 +352,11 @@ class Helpers extends Model
     {
         // Movemos la imagen a storage/app/public/fotos
         $imagen = $request->file('file')->store('public/fotos');
+
         // configuramos la url de /public a /storage
         $url = Storage::url($imagen);
 
+        // Retorna la URL de la imagen
         return $url;
     }
 

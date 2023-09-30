@@ -35,7 +35,7 @@
                                     {{-- Membrete de la academia --}}
                                     <div class="d-flex flex-column flex-fill align-self-center text-center text-dark mx-5">
                                         <p class="m-0">ACADEMIA DE FORMACIÓN E IDIOMAS</p>
-                                        <h2 class="text-primary">MARYLAN</h2>
+                                        <h2 class="text-primary">MARYLAND</h2>
                                         <div class="text-center bg-primary mx-5" style="height: 3px;"></div>
                                         <h5 class="m-0">RIF V- 12.204.759-4</h5>
                                         <p>
@@ -99,7 +99,7 @@
                                                 Representante:
                                             </div>
                                             <span
-                                                class="ms-2 mt-2 fs-5">{{ $pago->estudiante->representantes[0]['nombre'] ?? ''  }}</span>
+                                                class="ms-2 mt-2 fs-5">{{ $pago->estudiante->representantes[0]['nombre'] ?? '' }}</span>
                                         </div>
                                         <div class="d-flex d-inline-flex ms-5">
                                             <div class="card-text">
@@ -193,25 +193,28 @@
 
                         </div>
 
-                        <div class="card-footer">
-                            <div class="card-text text-center">
-                                <a href="/generarReciboDePago/{{ $pago->id }}/recibopdf" class="btn btn-primary btn-lg"
-                                    id="imprimirRecibo" target="_self">Imprimir Recibo de pago</a>
+                        <div class="card-footer text-center ">
+
+                            <div class="card-text  ">
+                                <a href="/generarReciboDePago/{{ $pago->id }}/recibopdf"
+                                    class="btn btn-primary btn-lg d-inline me-3" id="imprimirRecibo" target="_self">
+                                    <i class="bi bi-printer"></i>
+                                    Imprimir Recibo de pago
+                                </a>
+
+                                @isset($_GET['codigoInscripcion'])
+                                    <a href="/inscripciones/{{ $pago->cedula_estudiante }}/{{ $_GET['codigoInscripcion'] ?? '0000' }}"
+                                        class="btn btn-primary btn-lg d-inline" target="_self" id="imprimirRecibo">
+                                        <i class="bi bi-printer"></i>
+                                        Imprimir Planilla de Inscripción
+                                    </a>
+                                @endisset
                             </div>
                         </div>
 
                     </div>
                 </div>
-                @if ($_GET['codigoInscripcion'])
-                    <p class="text-start  mt-3">
-                        <a href="/inscripciones/{{ $pago->cedula_estudiante }}/{{ $_GET['codigoInscripcion'] ?? '0000' }}"
-                            class="btn btn-primary btn-lg" target="_self" id="imprimirRecibo">
-                            <i class="bi bi-printer"></i>
-                            Imprimir Planilla de Inscripción
-                        </a>
-                    </p>
-                    
-                @endif
+
             </div>
 
 

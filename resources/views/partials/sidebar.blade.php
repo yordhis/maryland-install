@@ -170,7 +170,7 @@ $subcategoria = 'LISTA';
             </ul>
         </li><!-- End Components Nav | Pagos -->
 
-        <!-- Start Components Nav | Incripciones -->
+        <!-- Start Components Nav | Inscripciones -->
         <li class="nav-item">
             <a class="nav-link {{ $categoria == 'INSCRIPCIONES' ? 'collapse show' : 'collapsed' }}"
                 data-bs-target="#components-nav-8" data-bs-toggle="collapse" href="#">
@@ -188,7 +188,7 @@ $subcategoria = 'LISTA';
                 <li>
                     <a href="/inscripciones/create" target="_self"
                         class="{{ $categoria == 'INSCRIPCIONES' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
-                        <i class="bi bi-circle"></i><span>Incribir</span>
+                        <i class="bi bi-circle"></i><span>Procesar Inscripción</span>
                     </a>
                 </li>
 

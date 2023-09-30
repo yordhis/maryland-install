@@ -6,3 +6,5 @@ define('ERROR_MESSAGE', [
     "1062" => "Dato duplicado, Ingrese uno diferente",
     "2002" => "No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión."
 ]);
+
+define("FOTO_PORDEFECTO", "/storage/fotos/default.jpg");
