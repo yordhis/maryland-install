@@ -129,10 +129,13 @@ class PagoController extends Controller
 
                 $contador = 0;
 
+                // Contamos las cuotas pagadas
                 foreach ($cuotas as $cuota) {
                     if ($cuota['estatus'] == 1) $contador++;
                 }
 
+                // Comparamos si las cuotyas pagadas son igual alas cuotas creadas
+                // para cambiar el estatus de la inscripcion
                 if ($contador == count($cuotas)) {
                     Inscripcione::where([
                         "cedula_estudiante" => $request['cedula_estudiante'],
@@ -140,6 +143,7 @@ class PagoController extends Controller
                     ])->update(["estatus" => 3]);
                 }
             }
+            
             $mensaje = $this->data->respuesta['mensaje'] = $estatusPago ? "¡El Pago del estudiante se proceso correctamente!"
                 : "No se pudo procesar el pago, por favor vuelva a intentar.";
 

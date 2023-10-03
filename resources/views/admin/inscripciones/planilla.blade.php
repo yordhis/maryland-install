@@ -60,18 +60,22 @@
                             <tbody>
                                 <!-- Start Datos de estudiante -->
                                 <tr class="text-start">
-                                    <td colspan="2">
+                                    <td colspan="4">
                                         <b>Nombre y Apellido:</b>
                                         <span> {{ $estudiante->nombre }} </span>
                                     </td>
-                                    <td>
+                                    
+                                </tr>
+                                <tr class="text-start">
+                                    <td colspan="2">
                                         <b>Cédula:</b>
                                         <span> {{ $estudiante->cedulaFormateada }} </span>
                                     </td>
-                                    <td>
+                                    <td colspan="2">
                                         <b>Edad:</b>
                                         <span> {{ $estudiante->edad }} </span>
                                     </td>
+                                    
                                 </tr>
 
                                 <tr class="text-start">
@@ -175,11 +179,11 @@
                                     </td>
                                     <td>
                                         <b>Fecha de inicio:</b>
-                                        <span> {{ $inscripcione->grupo['fecha_inicio'] }} </span>
+                                        <span> {{ $inscripcione->fecha_init }} </span>
                                     </td>
                                     <td>
                                         <b>Fecha de fin:</b>
-                                        <span> {{ $inscripcione->grupo['fecha_fin'] }} </span>
+                                        <span> {{ $inscripcione->fecha_end }} </span>
                                     </td>
                                 </tr>
 
@@ -187,7 +191,7 @@
                                     <td colspan="4">
                                         <b>Horario:</b>
                                         <span id="datos_plan_estudio_horario">
-                                            {{ $inscripcione->grupo['hora_inicio'] . ' - ' . $inscripcione->grupo['hora_fin'] }}
+                                            {{ $inscripcione->hora_init . ' - ' . $inscripcione->hora_end }}
                                             <b>Dias:</b> {{ $inscripcione->grupo['dias'] }}
                                         </span>
                                     </td>
@@ -226,7 +230,7 @@
                                             @foreach ($inscripcione->cuotas as $cuota)
                                                 <li class="d-inline ms-2">
                                                     <input type="checkbox" disabled {{ $cuota->estatus ? 'checked' : '' }}>
-                                                    <label for="dif"> {{ $cuota->cuota }} | {{ $cuota->fecha }}
+                                                    <label for="dif"> {{ $cuota->cuota }} | {{ date_format(date_create($cuota->fecha), "d-m-Y") }}
                                                     </label>
                                                 </li>
                                             @endforeach

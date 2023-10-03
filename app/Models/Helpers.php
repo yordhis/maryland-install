@@ -29,6 +29,23 @@ class Helpers extends Model
     public static $estudiantes;
     public static $fechaCuota;
 
+    public static function setFechasHorasNormalizadas($datos){
+        $fechaInscripcion = Carbon::parse($datos->fecha);
+        $dtInit = Carbon::parse($datos->grupo['fecha_inicio']);
+        $dtEnd = Carbon::parse($datos->grupo['fecha_fin']);
+        $htInit = Carbon::parse($datos->grupo['hora_inicio']);
+        $htEnd = Carbon::parse($datos->grupo['hora_fin']);
+        
+        // Normalizando fechas y horas
+        $datos->fecha_init = $dtInit->format('d-m-Y');
+        $datos->fecha_end = $dtEnd->format('d-m-Y');
+        $datos->hora_init = $htInit->format('h:ia');
+        $datos->hora_end = $htEnd->format('h:ia');
+        $datos->fecha = $fechaInscripcion->format('d-m-Y');
+
+        return $datos;
+    }
+
     public static function updateCedula($cedulaActual, $cedulaNueva){
 
         try {

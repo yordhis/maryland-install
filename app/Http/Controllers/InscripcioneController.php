@@ -213,9 +213,9 @@ class InscripcioneController extends Controller
             foreach ($estudiante->inscripciones as $inscripcion) {
                 if ($inscripcion->codigo == $inscripcione->codigo) $inscripcione = $inscripcion;
             }
-            $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
-            return view('admin.inscripciones.planilla', compact('notificaciones', 'usuario', 'estudiante', 'inscripcione'));
+            $inscripcione = Helpers::setFechasHorasNormalizadas($inscripcione); 
+         
+            return view('admin.inscripciones.planilla', compact('estudiante', 'inscripcione'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al mostrar Planilla de Inscripción en el método show,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -232,17 +232,16 @@ class InscripcioneController extends Controller
             foreach ($estudiante->inscripciones as $inscripcion) {
                 if ($inscripcion->codigo == $codigo) $inscripcione = $inscripcion;
             }
+           
+            $inscripcione = Helpers::setFechasHorasNormalizadas($inscripcione); 
+         
+           
 
-            $notificaciones = $data->notificaciones;
-            $usuario = $data->usuario;
-
-            //     return view('admin.inscripciones.planillapdf', 
-            //     compact(
-            //        'inscripcione', 
-            //        'notificaciones',
-            //        'usuario',
-            //        'estudiante'
-            //    ));
+                return view('admin.inscripciones.planillapdf', 
+                compact(
+                   'inscripcione', 
+                   'estudiante'
+               ));
             // Se genera el pdf
             $pdf = PDF::loadView(
                 'admin.inscripciones.planillapdf',
@@ -277,7 +276,28 @@ class InscripcioneController extends Controller
      */
     public function update(UpdateInscripcioneRequest $request, Inscripcione $inscripcione)
     {
-        return $request;
+        try {
+            $estatusUpdate = 0;
+            // Editamos la observación
+            $datosExtras = explode(",", $inscripcione->extras);
+            $datosExtras[4] = $request->observacion;
+            $datosExtras = implode(",", $datosExtras);
+            $estatusUpdate = $inscripcione->update(["extras" => $datosExtras]);
+            $estudiante = Helpers::getEstudiante($inscripcione->cedula_estudiante);
+
+            $mensaje = $this->data->respuesta['mensaje'] = $estatusUpdate 
+            ? "¡La Oservación de la planilla de inscripción del estudiante {$estudiante->nombre} de cédula: {$estudiante->cedula} se proceso correctamente!" 
+            : "La observación No registro correctamente, por favor vuelva a intentar y si el error persiste llame a soporte.";
+            $estatus = $this->data->respuesta['estatus'] = $estatusUpdate ? 200 : 404;
+            $respuesta = $this->data->respuesta;
+
+            return redirect("inscripciones/?mensaje={$mensaje}&estatus={$estatus}");
+
+
+        } catch (\Throwable $th) {
+            $errorInfo = Helpers::getMensajeError($th, "Error al Actulizar la Oservación de la Planilla de Inscripción en el método update,");
+            return response()->view('errors.404', compact("errorInfo"), 404);
+        }
     }
 
     /**
@@ -296,11 +316,19 @@ class InscripcioneController extends Controller
                 "codigo_grupo" => $inscripcione->codigo_grupo,
             ])->delete();
 
+            // Eliminamos los pagos relacionads al estudiante en ese grupo e inscripcion
+            Inscripcione::where([
+                "cedula_estudiante" => $inscripcione->cedula_estudiante,
+                "codigo_grupo" => $inscripcione->codigo_grupo,
+            ])->delete();
+
             // Eliminamos al estudiante del grupo
             GrupoEstudiante::where([
                 "cedula_estudiante" => $inscripcione->cedula_estudiante,
                 "codigo_grupo" => $inscripcione->codigo_grupo,
             ])->delete();
+
+            // Eliminar pagos relacionados al estudiante
             
 
             // Borramos la inscripción

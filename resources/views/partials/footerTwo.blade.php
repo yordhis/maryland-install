@@ -19,6 +19,15 @@
  <script src="assets/vendor/chart.js/chart.umd.js"></script>
  <script src="assets/vendor/echarts/echarts.min.js"></script>
  <script src="assets/vendor/quill/quill.min.js"></script>
+
+ {{-- <script src="assets/vendor/quill/quill.min.js"></script> --}}
+ <!-- Main Quill library -->
+{{-- <script src="//cdn.quilljs.com/1.3.6/quill.js"></script> --}}
+{{-- <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script> --}}
+
+
+
+
  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
  <script src="assets/vendor/php-email-form/validate.js"></script>
@@ -32,3 +41,6 @@
  <script src="assets/js/grupos/getDataGrupo.js"></script>
  <script src="assets/js/partials/sidebar.js"></script>
  <script src="assets/js/partials/alert.js"></script>
+
+
+ 

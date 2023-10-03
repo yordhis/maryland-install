@@ -62,14 +62,14 @@
         #nombre{
             position: absolute;
             color:#000000;
-            /* background-color: #D90000; */
-         
-            width:210px;
+            background-color: #D90000;
+            text-align: start;
+            width:539px;
             font-size: 12px;
             margin-top: 180px;
             margin-bottom: 0px;
             margin-right: 0px;
-            margin-left: 65px;
+            margin-left: 125px;
         }
         #cedula{
             position: absolute;
@@ -78,22 +78,22 @@
             text-align: start;
             width:auto;
             font-size: 12px;
-            margin-top: 180px;
+            margin-top: 207px;
             margin-bottom: 0px;
             margin-right: 0px;
-            margin-left: 475px;
+            margin-left: 165px;
         }
         #edad{
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
             text-align: start;
-            width:auto;
+            width:150px;
             font-size: 12px;
-            margin-top: 180px;
+            margin-top: 205px;
             margin-bottom: 0px;
             margin-right: 0px;
-            margin-left: 645px;
+            margin-left: 455px;
         }
         #nacimiento{
             position: absolute;
@@ -102,7 +102,7 @@
             text-align: start;
             width:auto;
             font-size: 12px;
-            margin-top: 210px;
+            margin-top: 230px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 100px;
@@ -114,7 +114,7 @@
             text-align: start;
             width:auto;
             font-size: 12px;
-            margin-top: 210px;
+            margin-top: 230px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 240px;
@@ -124,9 +124,9 @@
             color:#000000;
             /* background-color: #D90000; */
             text-align: start;
-            width:auto;
+            width:230px;
             font-size: 12px;
-            margin-top: 210px;
+            margin-top: 230px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 440px;
@@ -135,14 +135,15 @@
         #dificultades{
             position: absolute;
             color:#000000;
-            /* background-color: #d9000026; */
-           
+            /* background-color: #d90000; */
+            text-align: left;
             width: 350px;
             font-size: 12px;
-            margin-top: 233px;
+            padding: 0%;
+            margin-top: 259px;
             margin-bottom: 0px;
             margin-right: 0px;
-            margin-left: 75px;
+            margin-left: 155px;
         }
         #dificultades > li{
             display: inline; 
@@ -150,14 +151,14 @@
         #direccion{
             position: absolute;
             color:#000000;
-            /* background-color: #d9000026; */
-           text-align: left;
-            width: 350px;
+            /* background-color: #fd0303; */
+            text-align: start;
+            width: 530px;
             font-size: 12px;
-            margin-top: 260px;
+            margin-top: 280px;
             margin-bottom: 0px;
             margin-right: 0px;
-            margin-left: 145px;
+            margin-left: 140px;
         }
         /* END estilos Estudiante */
 
@@ -166,14 +167,14 @@
         #rep_nombre{
             position: absolute;
             color:#000000;
-            /* background-color: #D90000; */
-         
-            width:210px;
-            font-size: 12px;
-            margin-top: 305px;
+            /* background-color: #ff0000; */
+            text-align: start;
+            width:215px;
+            font-size: 11px;
+            margin-top: 327px;
             margin-bottom: 0px;
             margin-right: 0px;
-            margin-left: 65px;
+            margin-left: 122px;
         }
         #rep_cedula{
             position: absolute;
@@ -181,8 +182,8 @@
             /* background-color: #D90000; */
             text-align: start;
             width:auto;
-            font-size: 12px;
-            margin-top: 305px;
+            font-size: 14px;
+            margin-top: 335px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 475px;
@@ -194,19 +195,19 @@
             text-align: start;
             width:auto;
             font-size: 12px;
-            margin-top: 305px;
+            margin-top: 335px;
             margin-bottom: 0px;
             margin-right: 0px;
-            margin-left: 645px;
+            margin-left: 635px;
         }
         #rep_telefono{
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
             text-align: start;
-            width:auto;
-            font-size: 12px;
-            margin-top: 335px;
+            width:270px;
+            font-size: 14px;
+            margin-top: 355px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 75px;
@@ -216,9 +217,9 @@
             color:#000000;
             /* background-color: #D90000; */
             text-align: start;
-            width:auto;
+            width:270px;
             font-size: 12px;
-            margin-top: 335px;
+            margin-top: 355px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 440px;
@@ -228,9 +229,9 @@
             color:#000000;
             /* background-color: #D90000; */
             text-align: left;
-            width:350px;
-            font-size: 12px;
-            margin-top: 360px;
+            width:500px;
+            font-size: 10px;
+            margin-top: 382px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 85px;
@@ -240,9 +241,9 @@
             color:#000000;
             /* background-color: #D90000; */
             text-align: left;
-            width:350px;
-            font-size: 12px;
-            margin-top: 385px;
+            width:500px;
+            font-size: 10px;
+            margin-top: 405px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 145px;
@@ -257,7 +258,7 @@
             width:100px;
             font-size: 12px;
             /* background-color: #d900002c; */
-            margin-top: 435px;
+            margin-top: 455px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 95px;
@@ -267,9 +268,9 @@
             color:#000000;
             /* background-color: #D90000; */
             text-align: start;
-            width:auto;
-            font-size: 12px;
-            margin-top: 430px;
+            width:125px;
+            font-size: 10px;
+            margin-top: 455px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 330px;
@@ -281,7 +282,7 @@
             text-align: start;
             width:auto;
             font-size: 12px;
-            margin-top: 438px;
+            margin-top: 462px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 486px;
@@ -293,7 +294,7 @@
             text-align: start;
             width:auto;
             font-size: 12px;
-            margin-top: 438px;
+            margin-top: 462px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 595px;
@@ -307,7 +308,7 @@
             width:450px;
             font-size: 12px;
             /* background-color: #d900002c; */
-            margin-top: 460px;
+            margin-top: 480px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 65px;
@@ -321,7 +322,7 @@
             width:100px;
             font-size: 12px;
             /* background-color: #d900002c; */
-            margin-top: 510px;
+            margin-top: 533px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 95px;
@@ -331,9 +332,9 @@
             color:#000000;
             /* background-color: #D90000; */
             text-align: left;
-            width:250px;
-            font-size: 12px;
-            margin-top: 501px;
+            width:220px;
+            font-size: 10px;
+            margin-top: 530px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 350px;
@@ -344,8 +345,8 @@
             /* background-color: #D90000; */
             text-align: left;
             width:auto;
-            font-size: 12px;
-            margin-top: 501px;
+            font-size: 10px;
+            margin-top: 530px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 625px;
@@ -358,7 +359,7 @@
             text-align: left;
             width: 550px;
             font-size: 12px;
-            margin-top: 533px;
+            margin-top: 560px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 15px;
@@ -376,7 +377,7 @@
             text-align: left;
             width:auto;
             font-size: 16px;
-            margin-top: 557px;
+            margin-top: 583px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 107px;
@@ -388,7 +389,7 @@
             text-align: left;
             width:auto;
             font-size: 16px;
-            margin-top: 557px;
+            margin-top: 583px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 147px;
@@ -413,7 +414,7 @@
             text-align: left;
             width:auto;
             font-size: 16px;
-            margin-top: 585px;
+            margin-top: 610px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 145px;
@@ -426,7 +427,7 @@
             text-align: left;
             width:auto;
             font-size: 16px;
-            margin-top: 585px;
+            margin-top: 610px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 185px;
@@ -437,9 +438,9 @@
             color:#000000;
             /* background-color: #D90000; */
             text-align: left;
-            width:450px;
+            width:300px;
             font-size: 12px;
-            margin-top: 585px;
+            margin-top: 610px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 360px;
@@ -452,7 +453,7 @@
             text-align: left;
             width:550px;
             font-size: 12px;
-            margin-top: 615px;
+            margin-top: 640px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 85px;
@@ -470,8 +471,8 @@
         <span id="fecha"> {{ $inscripcione->fecha ?? '' }} </span>
         <span id="nombre"> {{ $estudiante->nombre ?? '' }} </span>
         <span id="cedula"> {{ $estudiante->nacionalidad ?? '' }}-{{ $estudiante->cedulaFormateada ?? '' }} </span>
-        <span id="edad"> {{ $estudiante->edad ?? '' }} </span>
-        <span id="nacimiento"> {{ $estudiante->nacimiento ?? '' }} </span>
+        <span id="edad"> {{ $estudiante->edad . " Años" ?? '' }} </span>
+        <span id="nacimiento"> {{  date_format(date_create($estudiante->nacimiento), 'd-m-Y') ?? '' }} </span>
         <span id="telefono"> {{ $estudiante->telefono ?? '' }} </span>
         <span id="correo"> {{ $estudiante->correo ?? '' }}</span>
         <ul id="dificultades">
@@ -488,9 +489,9 @@
         <span id="rep_nombre"> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->nombre : ''}} </span>
         <span id="rep_cedula"> {{ count($estudiante->representantes) ? number_format($estudiante->representantes[0]->cedula, 0, ',', '.') : ''}}
         </span>
-        <span id="rep_edad"> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->edad : '' }} </span>
+        <span id="rep_edad">  {{ count($estudiante->representantes) ? $estudiante->representantes[0]->edad : '' }} </span>
         <span id="rep_telefono"> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->telefono : '' }} </span>
-        <span id="rep_correo"> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->correo : '' }}</span>
+        <span id="rep_correo">  {{ count($estudiante->representantes) ? $estudiante->representantes[0]->correo : '' }}</span>
         <span id="rep_ocupacion"> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->ocupacion : '' }} </span>
         <span id="rep_direccion"> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->direccion : '' }} </span>
         <!-- End Datos Representante -->
@@ -501,10 +502,10 @@
              
         </span>
         <span id="grupo">{{ $inscripcione->grupo['nombre'] ?? '' }} </span>
-        <span id="fecha_init"> {{ $inscripcione->grupo['fecha_inicio'] ?? '' }} </span>
-        <span id="fecha_end"> {{ $inscripcione->grupo['fecha_fin'] ?? '' }} </span>
+        <span id="fecha_init"> {{ $inscripcione->fecha_init ?? '' }} </span>
+        <span id="fecha_end"> {{ $inscripcione->fecha_end ?? '' }} </span>
         <span id="horario">
-            {{ $inscripcione->grupo['hora_inicio'] . ' - ' . $inscripcione->grupo['hora_fin'] ?? ''}}
+            {{ $inscripcione->hora_init . ' - ' . $inscripcione->hora_end ?? ''}}
             <b>Dias:</b> {{ $inscripcione->grupo['dias'] ?? '' }}
             <b>Libro:</b> {{ $inscripcione->grupo['nivel']->libro ?? '' }}
         </span>
@@ -520,7 +521,7 @@
             @foreach ($inscripcione->cuotas as $cuota)
                 <li class="d-inline ms-2">
                     <input type="checkbox" disabled {{ $cuota->estatus ? 'checked' : '' }}>
-                    <label for="dif"> Ref: {{ $cuota->cuota }} | {{ $cuota->fecha }}
+                    <label for="dif"> Ref: {{ $cuota->cuota }} | {{ date_format(date_create($cuota->fecha), "d-m-Y") }}
                     </label>
                 </li>
             @endforeach
@@ -529,7 +530,6 @@
 
         <!-- START Datos Extras -->
         @php
-
             $extras = explode(",", $inscripcione->extras);
         @endphp
         @if ($extras[0] == 'si')
@@ -547,6 +547,7 @@
         @if ($extras[2] == 'no')
         <i id="no_material">X</i>
         @endif
+
         <span id="se_entero">{{  empty($extras[3]) ? '' : $extras[3] }}</span>
         <span id="observacion">{{ empty($extras[4]) ? '' : $extras[4] }}</span>
         <!-- END Datos Extras -->
