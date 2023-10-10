@@ -29,13 +29,93 @@ class Helpers extends Model
     public static $estudiantes;
     public static $fechaCuota;
 
-    public static function setFechasHorasNormalizadas($datos){
+    public static function destroyData($cedulaEstudiante, $codigoGrupo, $autorizado)
+    {
+        // Si el codigo grupo es null se elimina todo ya que se esta eliminando el estudiante por completo
+        if ($codigoGrupo == null) {
+            // Eliminamos Las cuotas relacionads al estudiante en ese grupo
+            if ($autorizado['cuotas']) {
+                Cuota::where([
+                    "cedula_estudiante" => $cedulaEstudiante
+                ])->delete();
+            }
+
+            // Eliminamos los pagos relacionads al estudiante en ese grupo e inscripcion
+            if ($autorizado['pagos']) {
+                Pago::where([
+                    "cedula_estudiante" => $cedulaEstudiante
+                ])->delete();
+            }
+            // Eliminamos al estudiante del grupo
+            if ($autorizado['grupoEstudiante']) {
+                GrupoEstudiante::where([
+                    "cedula_estudiante" => $cedulaEstudiante
+                ])->delete();
+            }
+            // Eliminamos la inscripcion del estudiante
+            if ($autorizado['inscripcione']) {
+                Inscripcione::where([
+                    "cedula_estudiante" => $cedulaEstudiante
+                ])->delete();
+            }
+            // Eliminamos la Representantes del estudiante
+            if ($autorizado['representanteEstudiante']) {
+                RepresentanteEstudiante::where([
+                    "cedula_estudiante" => $cedulaEstudiante
+                ])->delete();
+            }
+            // Eliminamos la Representantes del estudiante
+            if ($autorizado['dificultadEstudiante']) {
+                DificultadEstudiante::where([
+                    "cedula_estudiante" => $cedulaEstudiante
+                ])->delete();
+            }
+        }else{
+            // Eliminamos Las cuotas relacionads al estudiante en ese grupo
+            if ($autorizado['cuotas']) {
+                Cuota::where([
+                    "cedula_estudiante" => $cedulaEstudiante,
+                    "codigo_grupo" => $codigoGrupo,
+                ])->delete();
+            }
+    
+            // Eliminamos los pagos relacionads al estudiante en ese grupo e inscripcion
+            if ($autorizado['pagos']) {
+                Pago::where([
+                    "cedula_estudiante" => $cedulaEstudiante,
+                    "codigo_grupo" => $codigoGrupo,
+                ])->delete();
+            }
+            // Eliminamos al estudiante del grupo
+            if ($autorizado['grupoEstudiante']) {
+                GrupoEstudiante::where([
+                    "cedula_estudiante" => $cedulaEstudiante,
+                    "codigo_grupo" => $codigoGrupo,
+                ])->delete();
+            }
+            // Eliminamos la inscripcion del estudiante
+            if ($autorizado['inscripcione']) {
+                Inscripcione::where([
+                    "cedula_estudiante" => $cedulaEstudiante,
+                    "codigo_grupo" => $codigoGrupo,
+                ])->delete();
+            }
+        }
+    }
+
+    public static function getRepresentante($cedula)
+    {
+        return Representante::where(['cedula' => $cedula])->get();
+    }
+
+    public static function setFechasHorasNormalizadas($datos)
+    {
         $fechaInscripcion = Carbon::parse($datos->fecha);
         $dtInit = Carbon::parse($datos->grupo['fecha_inicio']);
         $dtEnd = Carbon::parse($datos->grupo['fecha_fin']);
         $htInit = Carbon::parse($datos->grupo['hora_inicio']);
         $htEnd = Carbon::parse($datos->grupo['hora_fin']);
-        
+
         // Normalizando fechas y horas
         $datos->fecha_init = $dtInit->format('d-m-Y');
         $datos->fecha_end = $dtEnd->format('d-m-Y');
@@ -46,7 +126,8 @@ class Helpers extends Model
         return $datos;
     }
 
-    public static function updateCedula($cedulaActual, $cedulaNueva){
+    public static function updateCedula($cedulaActual, $cedulaNueva)
+    {
 
         try {
             // Pagos
@@ -68,11 +149,11 @@ class Helpers extends Model
                 "cedula_estudiante" => $cedulaNueva
             ]);
 
-             // Representantes 
-             RepresentanteEstudiante::where('cedula_estudiante', $cedulaActual)->update([
+            // Representantes 
+            RepresentanteEstudiante::where('cedula_estudiante', $cedulaActual)->update([
                 "cedula_estudiante" => $cedulaNueva
             ]);
-            
+
 
             return true;
         } catch (\Throwable $th) {
@@ -81,7 +162,8 @@ class Helpers extends Model
         }
     }
 
-    public static function setDificultades($listDificultades, $cedulaEstudiante){
+    public static function setDificultades($listDificultades, $cedulaEstudiante)
+    {
         foreach ($listDificultades as $insertDificultad) {
             $d = DificultadEstudiante::updateOrCreate(
                 [
@@ -98,39 +180,51 @@ class Helpers extends Model
         }
     }
 
-    public static function setRepresentantes($request){
+    public static function asignarRepresentante($cedulaEstudiante, $cedulaRepresentante)
+    {
+        if (isset($cedulaEstudiante) && isset($cedulaRepresentante)) {
+            return RepresentanteEstudiante::create([
+                "cedula_estudiante" => $cedulaEstudiante,
+                "cedula_representante" => $cedulaRepresentante
+            ]);
+        } else {
+            return false;
+        }
+    }
+
+    public static function setRepresentantes($request)
+    {
         try {
             /** Se registra el representante */
             Representante::updateOrCreate([
                 // Comparamos
                 "cedula" => $request->rep_cedula,
-            ],[
+            ], [
                 // Se actualiza o Crea el representante 
-               "nombre" => $request->rep_nombre ?? '',
-               "edad" => $request->rep_edad ?? '',
-               "ocupacion" => $request->rep_ocupacion ?? '',
-               "telefono" => $request->rep_telefono ?? '',
-               "direccion" => $request->rep_direccion ?? '',
-               "correo" => $request->rep_correo ?? '',
-           ]);
-   
-           /** Relacionamos los estudiante con el representante */
-           RepresentanteEstudiante::updateOrCreate([
-               "cedula_estudiante" => $request->cedula,
-           ],[
-               "cedula_representante" => $request->rep_cedula
-           ]);
+                "nombre" => $request->rep_nombre ?? '',
+                "edad" => $request->rep_edad ?? '',
+                "ocupacion" => $request->rep_ocupacion ?? '',
+                "telefono" => $request->rep_telefono ?? '',
+                "direccion" => $request->rep_direccion ?? '',
+                "correo" => $request->rep_correo ?? '',
+            ]);
+
+            /** Relacionamos los estudiante con el representante */
+            RepresentanteEstudiante::updateOrCreate([
+                "cedula_estudiante" => $request->cedula,
+            ], [
+                "cedula_representante" => $request->rep_cedula
+            ]);
             return true;
         } catch (\Throwable $th) {
             //throw $th;
             $errorInfo = Helpers::getMensajeError($th, "Error al Registrar el representante en el objeto helper,");
             return response()->view('errors.404', compact("errorInfo"), 404);
         }
-
-
     }
 
-    public static function getUsuarios(){
+    public static function getUsuarios()
+    {
         $usuarios = User::all();
         foreach ($usuarios as $key => $usuario) {
             $usuarios[$key] = self::getUsuario($usuario->id);
@@ -138,7 +232,8 @@ class Helpers extends Model
         return $usuarios;
     }
 
-    public static function getUsuario($id){
+    public static function getUsuario($id)
+    {
         $usuario = User::where("id", $id)->get()[0];
         if ($usuario) {
             $usuario->permisos = self::getPermisosUsuario(RolPermiso::where("id_rol", $usuario->rol)->get());
@@ -147,10 +242,11 @@ class Helpers extends Model
         return $usuario;
     }
 
-    public static function getPermisosUsuario($permisos){
+    public static function getPermisosUsuario($permisos)
+    {
         $permisosObject = [];
         foreach ($permisos as $permiso) {
-           $permisosObject[$permiso->id_permiso] = Permiso::where('id', $permiso->id_permiso)->get()[0];
+            $permisosObject[$permiso->id_permiso] = Permiso::where('id', $permiso->id_permiso)->get()[0];
         }
         return $permisosObject;
     }
@@ -165,7 +261,6 @@ class Helpers extends Model
         $code->setYear($code->year + 1);
         $codigo = explode("-", $code->toDateString())[0];
         return $codigo;
-
     }
 
     public static function getMensajeError($e, $mensaje)
@@ -191,8 +286,9 @@ class Helpers extends Model
         foreach ($request as $key => $value) {
             $text = substr($key, 0, 3);
 
-            if ($text == $prefijo): $array[] = $value;
-                continue;endif;
+            if ($text == $prefijo) : $array[] = $value;
+                continue;
+            endif;
         }
 
         return $array;
@@ -204,15 +300,16 @@ class Helpers extends Model
      * @param inputChecks array
      */
 
-     public static function getCheckboxActivo($datos, $inputChecks){
+    public static function getCheckboxActivo($datos, $inputChecks)
+    {
         foreach ($datos as $key => $dato) {
             $dato->activo = 0;
             foreach ($inputChecks as $check) {
-                if($dato->id == $check) $dato->activo = 1;
+                if ($dato->id == $check) $dato->activo = 1;
             }
         }
         return $datos;
-     }
+    }
     /**
      * Esta funcion recibe la informacion del formulario y detecta cuales son los input que
      * contienen las dificultades y las convierte en un array y despues solicita las dificultades
@@ -228,8 +325,9 @@ class Helpers extends Model
 
         foreach ($request as $key => $value) {
             $text = substr($key, 0, 3);
-            if ($text == "dif"): $dificultades[] = $value;
-                continue;endif;
+            if ($text == "dif") : $dificultades[] = $value;
+                continue;
+            endif;
         }
 
         if ($dificultades) {
@@ -284,8 +382,8 @@ class Helpers extends Model
                 if (count($estudiante['representantes'])) {
                     foreach ($estudiante['representantes'] as $key => $repre) {
                         $estudiante['representantes'][$key] = count(Representante::where('cedula', $repre['cedula_representante'])->get()) >= 1
-                        ? Representante::where('cedula', $repre['cedula_representante'])->get()[0]
-                        : [];
+                            ? Representante::where('cedula', $repre['cedula_representante'])->get()[0]
+                            : [];
                     }
                 }
 
@@ -301,11 +399,11 @@ class Helpers extends Model
                 }
                 $estudiante['grupos'] = $grupos;
 
-               
+
                 // Obtenemos todos los datos de inscripción del estudiante
                 $inscripciones = Inscripcione::where("cedula_estudiante", $estudiante->cedula)->get() ?? [];
-                if(count($inscripciones)){
-                   
+                if (count($inscripciones)) {
+
                     $inscripciones = Helpers::addDatosDeRelacion(
                         $inscripciones,
                         [
@@ -313,7 +411,6 @@ class Helpers extends Model
                             "planes" => "codigo_plan",
                         ]
                     );
-                    
                 }
                 $estudiante['inscripciones'] = $inscripciones;
 
@@ -343,7 +440,6 @@ class Helpers extends Model
                             if ($cuota->estatus == 1) {
                                 $totalAbonado += $cuota->cuota;
                             }
-
                         }
                         $inscripcion['totalAbonado'] = $totalAbonado;
                     }
@@ -351,7 +447,6 @@ class Helpers extends Model
                     // formateamos la cedula
                     $estudiante->cedulaFormateada = number_format($estudiante->cedula, 0, ',', '.');
                 }
-
             }
         } else {
             $estudiante = [];
@@ -409,14 +504,14 @@ class Helpers extends Model
 
     public static function addDatosDeRelacion($array, $arrayKey, $sqlExtra = "")
     {
-        if(count($array)){
+        if (count($array)) {
             foreach ($array as $key => $value) {
                 foreach ($arrayKey as $keyTable => $valueKey) {
                     $llave = explode("_", $valueKey);
                     // return DB::select("select * from {$keyTable} where {$llave[0]} = :{$valueKey} {$sqlExtra}", [$value[$valueKey]]);
                     $array[$key][$llave[1]] = count(DB::select("select * from {$keyTable} where {$llave[0]} = :{$valueKey} {$sqlExtra}", [$value[$valueKey]])) > 1
-                    ? DB::select("select * from {$keyTable} where {$llave[0]} = :{$valueKey} {$sqlExtra}", [$value[$valueKey]])
-                    : DB::select("select * from {$keyTable} where {$llave[0]} = :{$valueKey} {$sqlExtra}", [$value[$valueKey]])[0] ?? [];
+                        ? DB::select("select * from {$keyTable} where {$llave[0]} = :{$valueKey} {$sqlExtra}", [$value[$valueKey]])
+                        : DB::select("select * from {$keyTable} where {$llave[0]} = :{$valueKey} {$sqlExtra}", [$value[$valueKey]])[0] ?? [];
                 }
             }
         }
@@ -454,12 +549,12 @@ class Helpers extends Model
      * Validar si el dato existe
      */
 
-    public static function datoExiste($data, $array=["tabla"=>["campo","sqlExtra","key"]])
+    public static function datoExiste($data, $array = ["tabla" => ["campo", "sqlExtra", "key"]])
     {
         foreach ($array as $key => $value) {
             return $result = count(DB::select("select * from {$key} where {$value[0]} = :codigo {$value[1]}", [$data[$value[2]]]))
-            ? DB::select("select * from {$key} where {$value[0]} = :codigo {$value[1]}", [$data[$value[2]]])[0]
-            : false;
+                ? DB::select("select * from {$key} where {$value[0]} = :codigo {$value[1]}", [$data[$value[2]]])[0]
+                : false;
         }
     }
 
@@ -565,7 +660,9 @@ class Helpers extends Model
                 if ($value != 0 && $pos >= $def) {
                     $c = number_format($n, $pos);
                     $c_len = strlen(substr(strrchr($c, "."), 1));
-                    if ($c_len > $def) {return rtrim($c, 0);}
+                    if ($c_len > $def) {
+                        return rtrim($c, 0);
+                    }
                     return $c; // or break
                 }
                 $pos++;
@@ -573,5 +670,4 @@ class Helpers extends Model
         }
         return number_format($n, $def);
     }
-
 } // end

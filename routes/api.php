@@ -35,4 +35,5 @@ use App\Http\Controllers\{
 // });
 
 Route::get('/getEstudiante/{cedula}', [ApiController::class, 'getEstudiante']);
+Route::get('/getRepresentante/{cedula}', [ApiController::class, 'getRepresentante']);
 Route::get('/grupo/{codigo}', [ApiController::class, 'getGrupo']);

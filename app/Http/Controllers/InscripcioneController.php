@@ -11,6 +11,7 @@ use App\Models\{
     GrupoEstudiante,
     Helpers,
     Inscripcione,
+    Pago,
     Plane
 };
 use Barryvdh\DomPDF\Facade\PDF;
@@ -235,25 +236,22 @@ class InscripcioneController extends Controller
            
             $inscripcione = Helpers::setFechasHorasNormalizadas($inscripcione); 
          
-           
-
-                return view('admin.inscripciones.planillapdf', 
-                compact(
-                   'inscripcione', 
-                   'estudiante'
-               ));
+            //     return view('admin.inscripciones.planillapdf', 
+            //     compact(
+            //        'inscripcione', 
+            //        'estudiante'
+            //    ));
             // Se genera el pdf
             $pdf = PDF::loadView(
                 'admin.inscripciones.planillapdf',
                 compact(
                     'inscripcione',
-                    'notificaciones',
-                    'usuario',
                     'estudiante'
                 )
             );
             return $pdf->download("{$inscripcione->codigo}-{$inscripcione->cedula_estudiante}-{$inscripcione->fecha}.pdf");
         } catch (\Throwable $th) {
+            dd();
         }
     }
     /**
@@ -310,26 +308,12 @@ class InscripcioneController extends Controller
     {
         try {
 
-            // Eliminamos Las cuotas relacionads al estudiante en ese grupo
-            Cuota::where([
-                "cedula_estudiante" => $inscripcione->cedula_estudiante,
-                "codigo_grupo" => $inscripcione->codigo_grupo,
-            ])->delete();
-
-            // Eliminamos los pagos relacionads al estudiante en ese grupo e inscripcion
-            Inscripcione::where([
-                "cedula_estudiante" => $inscripcione->cedula_estudiante,
-                "codigo_grupo" => $inscripcione->codigo_grupo,
-            ])->delete();
-
-            // Eliminamos al estudiante del grupo
-            GrupoEstudiante::where([
-                "cedula_estudiante" => $inscripcione->cedula_estudiante,
-                "codigo_grupo" => $inscripcione->codigo_grupo,
-            ])->delete();
-
-            // Eliminar pagos relacionados al estudiante
-            
+            Helpers::destroyData($inscripcione->cedula_estudiante, $inscripcione->codigo_grupo, [
+                "pagos" => true,
+                "cuotas" => true,
+                "inscripcione" => false,
+                "grupoEstudiante" => true,
+            ]);
 
             // Borramos la inscripción
             $inscripcione->delete();

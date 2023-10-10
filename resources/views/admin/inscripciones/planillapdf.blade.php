@@ -62,8 +62,8 @@
         #nombre{
             position: absolute;
             color:#000000;
-            background-color: #D90000;
-            text-align: start;
+            /* background-color: #D90000; */
+            text-align: left;
             width:539px;
             font-size: 12px;
             margin-top: 180px;
@@ -75,31 +75,31 @@
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
-            text-align: start;
+            text-align: left;
             width:auto;
-            font-size: 12px;
+            font-size: 14px;
             margin-top: 207px;
             margin-bottom: 0px;
             margin-right: 0px;
-            margin-left: 165px;
+            margin-left: 145px;
         }
         #edad{
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
-            text-align: start;
+            text-align: left;
             width:150px;
             font-size: 12px;
             margin-top: 205px;
             margin-bottom: 0px;
             margin-right: 0px;
-            margin-left: 455px;
+            margin-left: 385px;
         }
         #nacimiento{
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
-            text-align: start;
+            text-align: left;
             width:auto;
             font-size: 12px;
             margin-top: 230px;
@@ -111,7 +111,7 @@
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
-            text-align: start;
+            text-align: left;
             width:auto;
             font-size: 12px;
             margin-top: 230px;
@@ -123,7 +123,7 @@
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
-            text-align: start;
+            text-align: left;
             width:230px;
             font-size: 12px;
             margin-top: 230px;
@@ -152,7 +152,7 @@
             position: absolute;
             color:#000000;
             /* background-color: #fd0303; */
-            text-align: start;
+            text-align: left;
             width: 530px;
             font-size: 12px;
             margin-top: 280px;
@@ -168,7 +168,7 @@
             position: absolute;
             color:#000000;
             /* background-color: #ff0000; */
-            text-align: start;
+            text-align: left;
             width:215px;
             font-size: 11px;
             margin-top: 327px;
@@ -180,7 +180,7 @@
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
-            text-align: start;
+            text-align: left;
             width:auto;
             font-size: 14px;
             margin-top: 335px;
@@ -192,7 +192,7 @@
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
-            text-align: start;
+            text-align: left;
             width:auto;
             font-size: 12px;
             margin-top: 335px;
@@ -204,7 +204,7 @@
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
-            text-align: start;
+            text-align: left;
             width:270px;
             font-size: 14px;
             margin-top: 355px;
@@ -216,7 +216,7 @@
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
-            text-align: start;
+            text-align: left;
             width:270px;
             font-size: 12px;
             margin-top: 355px;
@@ -267,7 +267,7 @@
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
-            text-align: start;
+            text-align: left;
             width:125px;
             font-size: 10px;
             margin-top: 455px;
@@ -279,7 +279,7 @@
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
-            text-align: start;
+            text-align: left;
             width:auto;
             font-size: 12px;
             margin-top: 462px;
@@ -291,7 +291,7 @@
             position: absolute;
             color:#000000;
             /* background-color: #D90000; */
-            text-align: start;
+            text-align: left;
             width:auto;
             font-size: 12px;
             margin-top: 462px;

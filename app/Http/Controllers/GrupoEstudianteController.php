@@ -88,36 +88,31 @@ class GrupoEstudianteController extends Controller
      */
     public function destroy(GrupoEstudiante $grupoEstudiante)
     {
-        if($grupoEstudiante->update(["estatus" => 0])){
-            $data = new DataDev();
-            $notificaciones = $data->notificaciones;
-            $usuario = $data->usuario;
-            $data->respuesta['activo'] = true;
-            $data->respuesta['estatus'] = 404;
-            $data->respuesta['mensaje'] = "Estudiante eliminado del Grupo correctamente";
-            $respuesta = $data->respuesta;
-            $grupos = Grupo::where('codigo', $grupoEstudiante->codigo_grupo)->get();
+        try {
+            // return url()->previous();
+            $estudiante = Helpers::getEstudiante($grupoEstudiante->cedula_estudiante);
+            $grupo = Grupo::where('codigo', $grupoEstudiante->codigo_grupo)->get()[0];
+         
+            if($grupoEstudiante->delete()){
+               
+                Helpers::destroyData($grupoEstudiante->cedula_estudiante, $grupoEstudiante->codigo_grupo, [
+                    "pagos" => true,
+                    "cuotas" => true,
+                    "inscripcione" => true,
+                    "grupoEstudiante" => false,
+                ]);
 
-            // Agregar info de los grupos
-            foreach ($grupos as $grupo) {
-                $grupo['profesor'] = Profesore::where('cedula', $grupo->cedula_profesor)->get()[0];
-                $grupo['nivel'] = Nivele::where('codigo', $grupo->codigo_nivel)->get()[0];
-                $grupo['matricula'] = GrupoEstudiante::where([
-                    'codigo_grupo' => $grupo->codigo, 
-                    'estatus' => 1
-                ])
-                ->get()->count();
-                $grupo['estudiantes'] = GrupoEstudiante::where([
-                    'codigo_grupo' => $grupo->codigo, 
-                    'estatus' => 1
-                ])->get();
-                foreach ($grupo->estudiantes as $key => $est) {
-                    $grupo->estudiantes[$key] = Helpers::getEstudiante($est->cedula_estudiante);
-                    $grupo->estudiantes[$key]['id'] = $est->id; // se le asigna el id asignado en la tabla pibote para poceder a eliminar
-                }
+                $mensaje = "El estudiante {$estudiante->nombre}, fue eliminado del grupo correctamente";
+                $estatus = 200;
+                return redirect(url()->previous()."?mensaje={$mensaje}&estatus={$estatus}");
+            }else {
+                $mensaje = "No funcionó";
+                $estatus = 404;
+                return redirect(url()->previous()."?mensaje=not found&estatus=404");
             }
-            return view('admin.grupos.ver', compact('grupo', 'usuario', 'notificaciones', 'respuesta'));
+        } catch (\Throwable $th) {
+            $errorInfo = Helpers::getMensajeError($th, "Error al Eliminar el estudiante del grupo en el método destroy,");
+            return response()->view('errors.404', compact("errorInfo"), 404);
         }
-        return redirect()->route('admin.grupos.index');
     }
 }

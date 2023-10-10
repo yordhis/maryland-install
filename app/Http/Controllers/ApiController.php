@@ -13,6 +13,29 @@ use App\Models\{
 class ApiController extends Controller
 {
 
+    public function getRepresentante($cedula)
+    {
+        try {
+            
+            $representante = Helpers::getRepresentante($cedula);
+            if (count($representante)) {
+                // return response()->json($representante[0], Response::HTTP_OK);
+                return response()->json([
+                    "mensaje" => "Busqueda Exitosa",
+                    "data" => $representante[0], 
+                    "estatus" => Response::HTTP_OK 
+                ], Response::HTTP_OK);
+            }else {
+                return response()->json([
+                    "mensaje" => "No hay Resultados", 
+                    "estatus" => Response::HTTP_NOT_FOUND 
+                ], Response::HTTP_NOT_FOUND);
+            }
+        } catch (\Throwable $th) {
+            $errorInfo = Helpers::getMensajeError($th, "Error en la API al retornar los datos del Representante en el método getRepresentante,");
+            return response()->view('errors.404', compact("errorInfo"), 404);
+        }
+    }
     public function getEstudiante($cedula)
     {
         try {

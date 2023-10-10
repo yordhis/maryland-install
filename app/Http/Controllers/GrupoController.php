@@ -124,9 +124,7 @@ class GrupoController extends Controller
     public function show(Grupo $grupo)
     {
         try {
-            $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
-
+      
             $grupo['profesor'] = Profesore::where('cedula', $grupo->cedula_profesor)->get()[0];
             $grupo['nivel'] = Nivele::where('codigo', $grupo->codigo_nivel)->get()[0];
             $grupo['matricula'] = GrupoEstudiante::where([
@@ -144,7 +142,7 @@ class GrupoController extends Controller
                 $grupo->estudiantes[$key]['id'] = $est->id; // se le asigna el id asignado en la tabla pibote para poceder a eliminar
             }
             // return $grupo;
-            return view("admin.grupos.ver", compact('grupo', 'notificaciones', 'usuario'));
+            return view("admin.grupos.ver", compact('grupo'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error de Consulta de grupo en el método show,");
             return response()->view('errors.404', compact("errorInfo"), 404);

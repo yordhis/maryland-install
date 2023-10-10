@@ -7,13 +7,15 @@
         @include('partials.alert')
     @endisset
 
+    <div id="alert"></div>
+
     <!-- Card with header and footer -->
     <div class="card rounded-5">
         <div class="card-header rounded-5 shadow bg-primary">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h2 class="text-white">Grupo {{ $grupo->nombre }}</h2>
+                        <h2 class="text-white">Grupo {{ $grupo->nombre }} {{ $mensaje  ?? '' }}</h2>
                         <p class="text-white">
                             <b class="text-warning">Nivel:</b> {{ $grupo->nivel['nombre'] }} <br>
                             <b class="text-warning">Libro:</b> {{ $grupo->nivel['libro'] }} <br>

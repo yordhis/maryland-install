@@ -30,5 +30,6 @@
  <script src="assets/js/estudiantes/editar.js"></script>
  <script src="assets/js/estudiantes/getData.js"></script>
  <script src="assets/js/grupos/getDataGrupo.js"></script>
+ <script src="assets/js/representantes/getRepresentante.js"></script>
  <script src="assets/js/partials/sidebar.js"></script>
  <script src="assets/js/partials/alert.js"></script>

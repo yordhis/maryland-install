@@ -292,7 +292,7 @@
 
                 <p class="text-center col-6 mt-3">
                     <a href="/pagos/{{ $inscripcione->cedula_estudiante }}/{{ $inscripcione->codigo }}"
-                        class="btn btn-primary btn-lg" target="_self" id="imprimirRecibo">
+                        class="btn btn-primary btn-lg" target="_self" id="procesarPago">
                         <i class="bi bi-paypal" ></i>
                         Procesar pago
                     </a>

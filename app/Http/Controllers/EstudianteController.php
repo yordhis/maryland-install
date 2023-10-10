@@ -96,7 +96,8 @@ class EstudianteController extends Controller
             }
 
             // Se activa el estudiante y se actualiza la data
-            $estatusCreate = Estudiante::where('cedula', $estudianteInactivo->cedula)->update([
+            $estatusCreate = Estudiante::where('cedula', $estudianteInactivo->cedula)
+            ->update([
                 "estatus" => $request->estatus,
                 "nombre" => $request->nombre,
                 "nacionalidad" => $request->nacionalidad,
@@ -111,8 +112,13 @@ class EstudianteController extends Controller
             if ($estatusCreate) {
                 // Validamos si existe el representante
                 if (isset($request->rep_cedula)) {
-                    // Se crea y asigna el representante al estudiante
-                    Helpers::setRepresentantes($request);
+                    if (isset($request->rep_nombre)) {
+                        // Se crea y asigna el representante al estudiante
+                        Helpers::setRepresentantes($request);
+                    }else{
+                        // Solo asignamos al representante
+                        Helpers::asignarRepresentante($request->cedula, $request->rep_cedula);
+                    }
                 }
                 // Configuramos las dificultades en un array
                 $listDificultades = Helpers::getDificultades($request->request);
@@ -139,8 +145,13 @@ class EstudianteController extends Controller
             if ($estatusCreate) {
                 // Validamos si existe el representante
                 if (isset($request->rep_cedula)) {
-                    // Se crea y asigna el representante al estudiante
-                    Helpers::setRepresentantes($request);
+                    if (isset($request->rep_nombre)) {
+                        // Se crea y asigna el representante al estudiante
+                        Helpers::setRepresentantes($request);
+                    }else{
+                        // Solo asignamos al representante
+                        Helpers::asignarRepresentante($request->cedula, $request->rep_cedula);
+                    }
                 }
 
                 if (isset($dificultadesInput)) {
@@ -247,52 +258,14 @@ class EstudianteController extends Controller
             // Actualizamos los datos del representante
             // validamos que la cedula no cambio
             if (isset($request->rep_cedula)) {
-                // Seteamos los representantes
-                Helpers::setRepresentantes($request);
-                // obtenemos la relacion del estudiante con el representante
-                // $cedulaDeRelacion = RepresentanteEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
-                // if (count($cedulaDeRelacion)) {
-                //     // Cedula del representante ya relacionado con el estudiante
-                //     $cedulaRepre = $cedulaDeRelacion[0]['cedula_representante'];
-
-                //     // Comparamos si la cedula no cambio
-                //     if ($cedulaRepre !== $request->rep_cedula) {
-                //         // En caso de que cambio el representante se actualiza la cedula de relacion
-                //         $r = RepresentanteEstudiante::where('cedula_representante', $cedulaRepre)
-                //             ->update([
-                //                 "cedula_representante" => $request->rep_cedula
-                //             ]);
-                //             /** Se Actualiza el representante */
-                //             Representante::where("cedula", $cedulaRepre)->update([
-                //                 "nombre" => $request->rep_nombre,
-                //                 "cedula" => $request->rep_cedula,
-                //                 "edad" => $request->rep_edad,
-                //                 "ocupacion" => $request->rep_ocupacion,
-                //                 "telefono" => $request->rep_telefono,
-                //                 "direccion" => $request->rep_direccion,
-                //                 "correo" => $request->rep_correo,
-                //             ]);
-                //     }
-                // } else {
-                //     // creamos el representante
-                //     $r = Representante::create([
-                //         "nombre" => $request->rep_nombre,
-                //         "cedula" => $request->rep_cedula,
-                //         "edad" => $request->rep_edad,
-                //         "ocupacion" => $request->rep_ocupacion,
-                //         "telefono" => $request->rep_telefono,
-                //         "direccion" => $request->rep_direccion,
-                //         "correo" => $request->rep_correo,
-                //     ]);
-
-                //     if ($r) {
-                //         /** Relacionamos los estudiante con el representante */
-                //         RepresentanteEstudiante::create([
-                //             "cedula_estudiante" => $request->cedula,
-                //             "cedula_representante" => $request->rep_cedula
-                //         ]);
-                //     }
-                // }
+                if (isset($request->rep_nombre)) {
+                    // Se crea y asigna el representante al estudiante
+                    Helpers::setRepresentantes($request);
+                }else{
+                    // Solo asignamos al representante
+                    Helpers::asignarRepresentante($request->cedula, $request->rep_cedula);
+                }
+                
             }
 
             // Configuramos las dificultades en un array y obtenemos
@@ -350,7 +323,16 @@ class EstudianteController extends Controller
 
         try {
 
-            $estudiante->update(['estatus' => 0]);
+            Helpers::destroyData($estudiante->cedula, "", [
+                "pagos" => true,
+                "cuotas" => true,
+                "inscripcione" => true,
+                "grupoEstudiante" => true,
+                "representanteEstudiante" => true,
+                "dificultadEstudiante" => true,
+            ]);
+
+            $estudiante->delete();
             $mensaje = "El estudiante {$estudiante->nombre}, fue eliminado correctamente";
             $estatus = 200;
             return redirect()->route('admin.estudiantes.index', compact('mensaje', 'estatus'));
