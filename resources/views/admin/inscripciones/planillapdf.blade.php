@@ -401,7 +401,7 @@
             text-align: left;
             width:450px;
             font-size: 12px;
-            margin-top: 560px;
+            margin-top: 590px;
             margin-bottom: 0px;
             margin-right: 0px;
             margin-left: 220px;
