@@ -1,6 +1,6 @@
 @extends('layouts.index')
 
-@section('title', 'Not Found')
+@section('title', 'Not Found (404)')
 
 @section('content')
     <div class="card mt-5">
@@ -10,7 +10,7 @@
                 {{$errorInfo ?? 'No hay mensaje de error por favor llame a soporte. '}}
             </p>
 
-            <a href="/panel" target="_self" class="btn btn-primary">Volver al panel</a>
+            <a href="{{ route('admin.panel.index') }}" class="btn btn-primary">Volver al panel</a>
         </div>
     </div>
     

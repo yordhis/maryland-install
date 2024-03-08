@@ -15,7 +15,7 @@ $subcategoria = 'LISTA';
         @if (Auth::user()->rol == 1 || Auth::user()->rol == 2)
         <!-- Start Components Nav | Panel -->
         <li class="nav-item">
-            <a class="nav-link" href="/panel" target="_self">
+            <a class="nav-link" href="{{ route('admin.panel.index') }}" >
                 <i class="bi bi-grid"></i>
                 <span>Panel</span>
             </a>
@@ -31,16 +31,16 @@ $subcategoria = 'LISTA';
                 class="nav-content {{ $categoria == 'PROFESORES' ? 'collapse show' : 'collapse' }} "
                 data-bs-parent=" #sidebar-nav">
                 <li>
-                    <a href="/profesores"
+                    <a href="{{ route('admin.profesores.index') }}"
                         class="{{ $categoria == 'PROFESORES' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}"
-                        target="_self">
+                        >
                         <i class="bi bi-circle"></i><span>Lista</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/profesores/create"
+                    <a href="{{ route('admin.profesores.create') }}"
                         class="{{ $categoria == 'PROFESORES' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}"
-                        target="_self">
+                        >
                         <i class="bi bi-circle"></i><span>Crear</span>
                     </a>
                 </li>
@@ -58,14 +58,14 @@ $subcategoria = 'LISTA';
                 class="nav-content {{ $categoria == 'ESTUDIANTES' ? 'collapse show' : 'collapse' }} "
                 data-bs-parent=" #sidebar-nav">
                 <li>
-                    <a href="/estudiantes" target="_self"
+                    <a href="{{ route('admin.estudiantes.index') }}" 
                         class="{{ $categoria == 'ESTUDIANTES' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Lista</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="/estudiantes/create" target="_self"
+                    <a href="{{ route('admin.estudiantes.create') }}"  
                         class="{{ $categoria == 'ESTUDIANTES' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Crear</span>
                     </a>
@@ -83,13 +83,13 @@ $subcategoria = 'LISTA';
             <ul id="components-nav-4" class="nav-content {{ $categoria == 'NIVELES' ? 'collapse show' : 'collapse' }} "
                 data-bs-parent=" #sidebar-nav">
                 <li>
-                    <a href="/niveles" target="_self"
+                    <a href="{{ route('admin.niveles.index') }}" 
                         class="{{ $categoria == 'NIVELES' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Lista</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/niveles/create" target="_self"
+                    <a href="{{ route('admin.niveles.create') }}" 
                         class="{{ $categoria == 'NIVELES' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Crear</span>
                     </a>
@@ -107,13 +107,13 @@ $subcategoria = 'LISTA';
             <ul id="components-nav-5" class="nav-content {{ $categoria == 'PLANES' ? 'collapse show' : 'collapse' }} "
                 data-bs-parent=" #sidebar-nav">
                 <li>
-                    <a href="/planes" target="_self"
+                    <a href="{{ route('admin.planes.index') }}" 
                         class="{{ $categoria == 'PLANES' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Lista</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/planes/create" target="_self"
+                    <a href="{{ route('admin.niveles.create') }}" 
                         class="{{ $categoria == 'PLANES' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Crear</span>
                     </a>
@@ -131,13 +131,13 @@ $subcategoria = 'LISTA';
             <ul id="components-nav-6" class="nav-content {{ $categoria == 'GRUPOS' ? 'collapse show' : 'collapse' }} "
                 data-bs-parent=" #sidebar-nav">
                 <li>
-                    <a href="/grupos" target="_self"
+                    <a href="{{ route('admin.grupos.index') }}" 
                         class="{{ $categoria == 'GRUPOS' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Lista</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/grupos/create" target="_self"
+                    <a href="{{ route('admin.grupos.create') }}" 
                         class="{{ $categoria == 'GRUPOS' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Crear</span>
                     </a>
@@ -155,13 +155,13 @@ $subcategoria = 'LISTA';
             <ul id="components-nav-7" class="nav-content {{ $categoria == 'PAGOS' ? 'collapse show' : 'collapse' }} "
                 data-bs-parent=" #sidebar-nav">
                 <li>
-                    <a href="/pagos" target="_self"
+                    <a href="{{ route('admin.pagos.index') }}" 
                         class="{{ $categoria == 'PAGOS' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Lista</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/pagos/create" target="_self"
+                    <a href="{{ route('admin.pagos.create') }}" 
                         class="{{ $categoria == 'PAGOS' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Procesar Pago</span>
                     </a>
@@ -180,13 +180,13 @@ $subcategoria = 'LISTA';
                 class="nav-content {{ $categoria == 'INSCRIPCIONES' ? 'collapse show' : 'collapse' }} "
                 data-bs-parent=" #sidebar-nav">
                 <li>
-                    <a href="/inscripciones" target="_self"
+                    <a href="{{ route('admin.inscripciones.index') }}" 
                         class="{{ $categoria == 'INSCRIPCIONES' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Lista</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/inscripciones/create" target="_self"
+                    <a href="{{ route('admin.inscripciones.create') }}" 
                         class="{{ $categoria == 'INSCRIPCIONES' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Procesar Inscripción</span>
                     </a>
@@ -219,13 +219,13 @@ $subcategoria = 'LISTA';
                         class="nav-content {{ $categoria == 'CONCEPTOS' ? 'collapse show' : 'collapse' }} "
                         data-bs-parent=" #sidebar-nav-1">
                         <li>
-                            <a href="conceptos" target="_self"
+                            <a href="{{ route('admin.conceptos.index') }}" 
                                 class="{{ $categoria == 'CONCEPTOS' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}">
                                 <i class="bi bi-circle"></i><span>Lista</span>
                             </a>
                         </li>
                         <li>
-                            <a href="conceptos/create" target="_self"
+                            <a href="{{ route('admin.conceptos.create') }}" 
                                 class="{{ $categoria == 'CONCEPTOS' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
                                 <i class="bi bi-circle"></i><span>Crear</span>
                             </a>
@@ -244,13 +244,13 @@ $subcategoria = 'LISTA';
                         class="nav-content {{ $categoria == 'USUARIOS' ? 'collapse show' : 'collapse' }} "
                         data-bs-parent=" #sidebar-nav-1">
                         <li>
-                            <a href="usuarios" target="_self"
+                            <a href="{{ route('admin.usuarios.index') }}" 
                                 class="{{ $categoria == 'USUARIOS' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}">
                                 <i class="bi bi-circle"></i><span>Lista</span>
                             </a>
                         </li>
                         <li>
-                            <a href="usuarios/create" target="_self"
+                            <a href="{{ route('admin.usuarios.create') }}" 
                                 class="{{ $categoria == 'USUARIOS' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
                                 <i class="bi bi-circle"></i><span>Crear</span>
                             </a>

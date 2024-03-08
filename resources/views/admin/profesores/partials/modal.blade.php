@@ -16,7 +16,7 @@
             ¿Esta seguro que desea eliminar al profesor <span class="text-danger fs-5">{{$profesor->nombre}}</span>? 
         </div>
         <div class="modal-footer">
-            <form action="profesores/{{$profesor->id}}" method="post" target="_self">
+            <form action="{{ route('admin.profesores.destroy', $profesor->id) }}" method="post" >
             @csrf
             @method('delete')
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

@@ -24,7 +24,15 @@ class StoreProfesoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "nombre"        => "required | max:255", 
+            "nacionalidad"  => "required", 
+            "cedula"        => "required | numeric | unique:profesores",
+            "telefono"      => "required | numeric",
+            "correo"        => "required | max:255",
+            "nacimiento"    => "required",
+            "edad"          => "required | numeric",     
+            "direccion"     => "required | max:255",
+            "foto"          => "mimes:jpg,bmp,png",
         ];
     }
 }

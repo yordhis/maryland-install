@@ -68,6 +68,7 @@ class ProfesoreController extends Controller
      */
     public function store(StoreProfesoreRequest $request)
     {
+       
         $estatusCreate = 0;
         $datoExiste = Helpers::datoExiste($request, [
             "profesores" => ["cedula", "", "cedula"]
@@ -87,10 +88,11 @@ class ProfesoreController extends Controller
                                     : "La cédula ingresada ya esta registrada con {$datoExiste->nombre} - V-{$datoExiste->cedula}, por favor vuelva a intentar con otra cédula.";
         $this->respuesta['estatus'] = $estatusCreate ? 201 : 301;
        
+        $profesores = $this->profesores;
         $respuesta = $this->respuesta;
         $usuario = $this->usuario;
         $notificaciones = $this->notificaciones;
-        return $estatusCreate ? view('admin.profesores.crear', compact('notificaciones', 'usuario', 'respuesta'))
+        return $estatusCreate ? view('admin.profesores.lista', compact('notificaciones', 'usuario', 'respuesta', 'profesores'))
         : view('admin.profesores.crear', compact('notificaciones', 'usuario', 'respuesta', 'request'));
     }
 
@@ -128,13 +130,12 @@ class ProfesoreController extends Controller
      */
     public function update(UpdateProfesoreRequest $request, Profesore $profesore)
     {
+       
        // Validamos si se envio una foto
        if (isset($request->file)) {
-             // Eliminamos la imagen anterior
-             $fotoActual = explode('/', $profesore->foto);
-             if($fotoActual[count($fotoActual)-1] != 'default.jpg'){
-                 Helpers::removeFile($profesore->foto);
-             }
+            // Eliminamos la imagen anterior
+            Helpers::removeFile($profesore->foto);
+             
             // Insertamos la nueva imagen o archivo
             $request['foto'] = Helpers::setFile($request);
         }else{
@@ -148,11 +149,10 @@ class ProfesoreController extends Controller
             $respuesta = $this->respuesta;
             $usuario = $this->usuario;
             $notificaciones = $this->notificaciones;
-            
         }
+        $profesores = $this->profesores;
         
-        
-        return view('admin.profesores.editar', compact('notificaciones', 'usuario', 'respuesta', 'profesore'));
+        return view('admin.profesores.lista', compact('notificaciones', 'usuario', 'respuesta', 'profesores'));
     }
 
     /**

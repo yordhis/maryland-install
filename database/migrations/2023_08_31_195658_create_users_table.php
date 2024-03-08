@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('email_verified_at', 255)->nullable();
             $table->string('remember_token', 255)->nullable();
             $table->string('rol', 55)->default(2);
-            $table->text('password')->nullable();
-            $table->text('foto')->default('/storage/fotos/default.jpg');
+            $table->string('password', 255)->nullable();
+            $table->string('foto', 255)->default('/assets/img/avatar.png');
             $table->timestamps();
         });
     }

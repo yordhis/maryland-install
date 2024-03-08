@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Usuario')
+@section('title', 'Crear Profesor')
 
 
 @section('content')
@@ -27,7 +27,7 @@
                 
 
 
-                <form action="/profesores" method="post" class="row g-3 needs-validation" target="_self" 
+                <form action="{{ route('admin.profesores.store') }}" method="post" class="row g-3 needs-validation" 
                 enctype="multipart/form-data"
                 novalidate>
                  @csrf
@@ -39,9 +39,12 @@
                           <span class="input-group-text text-white bg-primary" id="inputGroupPrepend">@</span>
                           <input type="text" name="nombre" class="form-control" id="yourUsername" 
                           placeholder="Ingrese su nombres y apellidos"
-                          value="{{ $request->nombre ?? '' }}"
+                          value="{{ $request->nombre ?? old('nombre') }}"
                           required>
                           <div class="invalid-feedback">Por favor, ingrese nombre! </div>
+                          @error('nombre')
+                            <div class="text-danger">{{ $message }}</div>
+                          @enderror
                         </div>
                       </div>
 
@@ -52,12 +55,18 @@
                             <option value="{{ $request->nacionalidad }}" selected >{{ $request->nacionalidad }}</option>
                           @endif
                           <option value="">Seleccione Nacionalidad</option>
+                          @error('nacionalidad')
+                            <option value="{{ old('nacionalidad') }}" selected>{{ old('nacionalidad') }}</option>  
+                          @enderror
                           <option value="V">V</option>
                           <option value="E">E</option>
                         </select>
                         <div class="invalid-feedback">
-                         Por favor, ingresar nacionalidad!
+                          Por favor, ingresar nacionalidad!
                         </div>
+                        @error('nacionalidad')
+                          <div class="text-danger">{{ $message }}</div>
+                        @enderror
                       </div>
                      
     
@@ -65,65 +74,83 @@
                         <label for="yourPassword" class="form-label">Cédula</label>
                         <input type="text" name="cedula" class="form-control" id="yourUsername" 
                         placeholder="Ingrese número de cédula"
-                        value="{{ $request->cedula ?? '' }}"
+                        value="{{ $request->cedula ?? old('cedula') }}"
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese número de cédula!</div>
+                        @error('cedula')
+                          <div class="text-danger">{{ $message }}</div>
+                        @enderror
                       </div>
 
                       <div class="col-4">
                         <label for="yourPassword" class="form-label">Teléfono</label>
                         <input type="text" name="telefono" class="form-control" id="yourUsername" 
                         placeholder="Ingrese número de teléfono"
-                        value="{{ $request->telefono ?? '' }}"
+                        value="{{ $request->telefono ?? old('telefono') }}"
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese número de teléfono!</div>
+                        @error('telefono')
+                          <div class="text-danger">{{ $message }}</div>
+                        @enderror
                       </div>
 
                       <div class="col-4">
                         <label for="yourPassword" class="form-label">E-mail</label>
                         <input type="email" name="correo" class="form-control" id="yourUsername" 
                         placeholder="Ingrese dirección de correo."
-                        value="{{ $request->correo ?? '' }}"
+                        value="{{ $request->correo ?? old('correo') }}"
                         >
                         <div class="invalid-feedback">Por favor, Ingrese dirección de correo!</div>
+                        @error('correo')
+                          <div class="text-danger">{{ $message }}</div>
+                        @enderror
                       </div>
 
                       <div class="col-4">
                         <label for="yourPassword" class="form-label">Fecha de nacimiento</label>
                         <input type="date" name="nacimiento" class="form-control" id="yourUsername" 
                         placeholder="Ingrese fecha de nacimiento."
-                        value="{{ $request->nacimiento ?? '' }}"
+                        value="{{ $request->nacimiento ?? old('nacimiento') }}"
                         required>
                         <div class="invalid-feedback">Por favor, ingrese fecha de nacimiento!</div>
+                        @error('nacimiento')
+                          <div class="text-danger">{{ $message }}</div>
+                        @enderror
                       </div>
 
                       <div class="col-4">
                         <label for="yourPassword" class="form-label">Edad</label>
                         <input type="number" name="edad" class="form-control" id="yourUsername" 
                         placeholder="Ingrese edad."
-                        value="{{ $request->edad ?? '' }}"
+                        value="{{ $request->edad ?? old('edad') }}"
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese edad!</div>
+                        @error('edad')
+                          <div class="text-danger">{{ $message }}</div>
+                        @enderror
                       </div>
 
                       <div class="col-12">
                         <label for="yourPassword" class="form-label">Dirección de habitación</label>
                         <input type="text" name="direccion" class="form-control" id="yourUsername" 
                         placeholder="Ingrese dirección de domicilio."
-                        value="{{ $request->direccion ?? '' }}"
+                        value="{{ $request->direccion ?? old('direccion') }}"
                         required>
-                        <div class="invalid-feedback">Por favor, Ingrese edad!</div>
+                        <div class="invalid-feedback">Por favor, Ingrese dirección!</div>
+                        @error('direccion')
+                          <div class="text-danger">{{ $message }}</div>
+                        @enderror
                       </div>
 
                       <div class="col-12">
                         <label for="file" class="form-label">Subir Foto (Opcional)</label>
-                        <input type="file" name="file" class="form-control " id="file">
+                        <input type="file" name="file" class="form-control " id="file" accept="image/*">
                         {{-- <div class="invalid-feedback">Ingrese una imagen valida</div> --}}
+                        @error('file')
+                          <div class="text-danger">{{ $message }}</div>
+                        @enderror
                       </div>
-
-                  
-
-                  
+    
                   <div class="col-12">
                     <button class="btn btn-primary w-100" type="submit">Crear profesor</button>
                   </div>
@@ -133,13 +160,6 @@
               </div>
             </div>
 
-            {{-- <div class="credits"> --}}
-              <!-- All the links in the footer should remain intact. -->
-              <!-- You can delete the links only if you purchased the pro version. -->
-              <!-- Licensing information: https://bootstrapmade.com/license/ -->
-              <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-               {{-- <a href="https://bootstrapmade.com/">BootstrapMade</a> --}}
-            {{-- </div> --}}
 
           </div>
         </div>

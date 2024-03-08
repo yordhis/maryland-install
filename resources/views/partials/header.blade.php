@@ -5,9 +5,8 @@
     <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-        <a href="index.html" class="">
-        <img src="assets/img/Logo.png" height="50" width="255" alt="">
-        {{-- <span class="d-none d-lg-block">NiceAdmin</span> --}}
+        <a href="{{ route('admin.panel.index') }}" class="">
+            <img src="{{ asset('assets/img/Logo.png') }}" height="50" width="255" alt="">
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
@@ -19,11 +18,11 @@
 
         <li class="nav-item d-block d-lg-none">
             <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
+                <i class="bi bi-search"></i>
             </a>
         </li><!-- End Search Icon-->
 
-        {{-- <li class="nav-item dropdown">
+        <li class="nav-item dropdown">
 
             <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
@@ -46,7 +45,7 @@
                     <i class="bi bi-exclamation-circle text-warning"></i>
                     <div>
                     <h4>{{$noticia['descripcion']}}</h4>
-                    <p> <a href="/{{$noticia['tipo']}}"> Verificar: {{$noticia['tipo']}}</a> </p>
+                    <p> <a href="{{ route($noticia['route']) }}"> Verificar: {{$noticia['tipo']}}</a> </p>
                    
                     </div>
                 </li>
@@ -71,7 +70,7 @@
 
             </ul><!-- End Notification Dropdown Items -->
 
-        </li> --}}
+        </li>
         <!-- End Notification Nav -->
 
         
@@ -79,8 +78,8 @@
         <li class="nav-item dropdown pe-3">
 
             <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="{{Auth::user()->foto ?? ''}}" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">{{Auth::user()->nombre ?? ''}}</span>
+            <img src="{{asset(Auth::user()->foto) ?? asset('assets/img/avatar.png') }}" alt="Avatar img" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->nombre ?? ''}}</span>
             </a><!-- End Profile Iamge Icon -->
 
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -95,7 +94,7 @@
 
 
             <li>
-                <form action="logout" method="post" class="text-center" target="_self">
+                <form action="{{ route('logout') }}" method="post" class="text-center">
                 @csrf
                 @method('post')
                     <button type="submit" class="btn btn-node ">

@@ -13,7 +13,7 @@
     <h1 class="text-primary">{{ $categoria }}</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.html">Admin</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.panel.index') }}">Admin</a></li>
         <li class="breadcrumb-item active">{{ ucfirst(strtolower($categoria)) }}</li>
         @isset($subcategoria)
             <li class="breadcrumb-item active">{{ ucfirst(strtolower($subcategoria)) }}</li>

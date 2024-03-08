@@ -18,7 +18,7 @@
                             <div class="card-body profile-card pt-4 d-flex flex-inline align-items-center">
                                 
                                     <div class="col-sm-2">
-                                        <img src="{{$profesor['foto']}}" alt="Profile" class="rounded-circle">
+                                        <img src="{{ asset($profesor['foto']) }}" alt="Foto" class="rounded-circle">
                                     </div>
                                     <div class="col-sm-3">
                                         <p class="text-primary">Profesor</p>
@@ -30,9 +30,14 @@
                                     <div class="col-sm-3">
                                         
                                         <p class="text-primary">Contacto</p>
-                                        <h2>{{
-                                        "(".substr( $profesor['telefono'],0,4).")"." ".substr( $profesor['telefono'],5,3)."-".substr( $profesor['telefono'],6,4)
-                                        }}</h2>
+                                        @if ($profesor['telefono'])
+                                            <h2>{{
+                                            "(".substr( $profesor['telefono'],0,4).")"." ".substr( $profesor['telefono'],5,3)."-".substr( $profesor['telefono'],6,4)
+                                            }}</h2>
+                                            
+                                        @else
+                                            <h2>No registrado.</h2>
+                                        @endif
                                         <h6>{{ $profesor['correo'] }}</h6>
                                         
                                     </div>
@@ -48,7 +53,7 @@
                                         <div class="social-links mt-2 d-flex flex-column ">
                                             {{-- <a href="/profesores/{{$profesor->id}}" class="twitter text-danger fs-3 mb-3 "><i class="bi bi-trash"></i></a> --}}
                                             @include('admin.profesores.partials.modal')
-                                            <a href="/profesores/{{$profesor->id}}/edit" target="_self" class="facebook text-warning fs-3"><i class="bi bi-pencil"></i></a>
+                                            <a href="{{ route('admin.profesores.edit', $profesor->id ) }}"  class="facebook text-warning fs-3"><i class="bi bi-pencil"></i></a>
                                         </div>
                                     </div>
                                     

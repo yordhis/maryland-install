@@ -70,11 +70,11 @@ class DataDev
         $this->notificaciones = [
             "total" => 5,
             "data"=>[
-                ["descripcion"=>"Franklin Pago", "tipo"=>"Pago"],
-                ["descripcion"=>"Franklin 2 Pago", "tipo"=>"Pago"],
-                ["descripcion"=>"Franklin 3 Pago", "tipo"=>"Pago"],
-                ["descripcion"=>"Franklin 4 Pago", "tipo"=>"Pago"],
-                ["descripcion"=>"Franklin 5 Pago", "tipo"=>"Pago"]
+                ["descripcion"=>"Franklin Pago", "tipo"=>"Pago", "route"=> "admin.pagos.index"],
+                ["descripcion"=>"Franklin 2 Pago", "tipo"=>"Pago", "route"=> "admin.pagos.index"],
+                ["descripcion"=>"Franklin 3 Pago", "tipo"=>"Pago", "route"=> "admin.pagos.index"],
+                ["descripcion"=>"Franklin 4 Pago", "tipo"=>"Pago", "route"=> "admin.pagos.index"],
+                ["descripcion"=>"Franklin 5 Pago", "tipo"=>"Pago", "route"=> "admin.pagos.index"]
             ]
         ];
 

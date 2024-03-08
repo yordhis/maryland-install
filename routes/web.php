@@ -39,22 +39,22 @@ Route::get('/', function () {
  */
 Route::get('/login', [LoginController::class, 'index'])->name('login.index')->middleware('guest');
 Route::post('/login', [LoginController::class, 'store'])->name('login.store');
-Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Route::resource('/login', LoginController::class)->names('login')->middleware('guest');
 
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/panel', [DashboardController::class, 'index']);
+    Route::get('/panel', [DashboardController::class, 'index'])->name('admin.panel.index');
     // muestra todas las cuotas atrazadas
-    Route::get('/cuotas', [CuotaController::class, 'index']);
+    Route::get('/cuotas', [CuotaController::class, 'index'])->name('admin.coutas.index');
     
     /**
      * Rutas de controlador usuarios
      */
     /** Vistas */
-    Route::resource('/usuarios', UserController::class)->names('admin.users');
+    Route::resource('/usuarios', UserController::class)->names('admin.usuarios');
     
     /**
      * Rutas de Profesor

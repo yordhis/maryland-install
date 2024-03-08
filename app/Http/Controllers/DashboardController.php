@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateDashboardRequest;
 use App\Models\{
     Cuota,
     Dashboard,
+    DataDev,
     Estudiante,
     Grupo,
     GrupoEstudiante,
@@ -16,6 +17,12 @@ use App\Models\{
 
 class DashboardController extends Controller
 {
+    public $data;
+
+    public function __construct()
+    {
+        $this->data = new DataDev;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +30,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        
+        $notificaciones = $this->data->notificaciones;
         $dataTarjetas = [
             "grupos" => Grupo::where('estatus', 1)->count(),
             "estudiantes" => GrupoEstudiante::where('estatus', 1)->count(),
@@ -38,23 +45,7 @@ class DashboardController extends Controller
             ->count()
         ];
 
-        $notificaciones = [
-            "total" => 5,
-            "data"=>[
-                ["descripcion"=>"Franklin Pago", "tipo"=>"Pago"],
-                ["descripcion"=>"Franklin 2 Pago", "tipo"=>"Pago"],
-                ["descripcion"=>"Franklin 3 Pago", "tipo"=>"Pago"],
-                ["descripcion"=>"Franklin 4 Pago", "tipo"=>"Pago"],
-                ["descripcion"=>"Franklin 5 Pago", "tipo"=>"Pago"]
-            ]
-        ];
-
-        $usuario = [
-            "nombre" => "admin",
-            "rol" => "administrador",
-        ];
-
-        return view('admin.dashboard', compact('dataTarjetas', 'notificaciones', 'usuario'));
+        return view('admin.dashboard', compact('dataTarjetas', 'notificaciones'));
     }
 
     /**

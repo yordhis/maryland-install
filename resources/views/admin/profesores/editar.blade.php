@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Usuario')
+@section('title', 'Editar Profesor')
 
 
 @section('content')
@@ -27,7 +27,7 @@
                 
 
 
-                <form action="/profesores/{{$profesore->id}}" method="post" class="row g-3 needs-validation" target="_self" 
+                <form action="{{ route('admin.profesores.update', $profesore->id) }}" method="post" class="row g-3 needs-validation"
                 enctype="multipart/form-data"
                 novalidate>
                  @csrf
@@ -39,9 +39,12 @@
                           <span class="input-group-text text-white bg-primary" id="inputGroupPrepend">@</span>
                           <input type="text" name="nombre" class="form-control" id="yourUsername" 
                           placeholder="Ingrese su nombres y apellidos"
-                          value="{{$profesore->nombre}}"
+                          value="{{$profesore->nombre ?? old('nombre')}}"
                           required>
                           <div class="invalid-feedback">Por favor, ingrese nombre! </div>
+                          @error('nombre')
+                            <div class="text-danger"> {{ $message }} </div>
+                          @enderror
                         </div>
                       </div>
 
@@ -63,62 +66,89 @@
                         <div class="invalid-feedback">
                          Por favor, ingresar nacionalidad!
                         </div>
+                        @error('nacionalidad')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
                      
     
                       <div class="col-4">
                         <label for="yourPassword" class="form-label">Cédula</label>
-                        <input type="text" name="cedula" class="form-control bg-muted" id="yourUsername" 
-                        placeholder="Ingrese número de cédula"
-                        value="{{$profesore->cedula}}"
-                        readonly
-                        required>
+                        <div class="input-group">
+                          <input type="text" name="cedula" class="form-control bg-muted" id="inputCedula" 
+                          placeholder="Ingrese número de cédula"
+                          value="{{ $profesore->cedula ?? old('cedula') }}"
+                          disabled
+                          readonly
+                          required>
+                          <button type="button" class="btn btn-warning" id="activarEdicionDeCedula">
+                            <i class="bi bi-pencil"></i>
+                          </button>
+                        </div>
                         <div class="invalid-feedback">Por favor, Ingrese número de cédula!</div>
+                        @error('cedula')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
                       <div class="col-4">
                         <label for="yourPassword" class="form-label">Teléfono</label>
                         <input type="text" name="telefono" class="form-control" id="yourUsername" 
                         placeholder="Ingrese número de teléfono"
-                        value="{{$profesore->telefono}}"
+                        value="{{$profesore->telefono ?? old('telefono')}}"
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese número de teléfono!</div>
+                        @error('telefono')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
                       <div class="col-4">
                         <label for="yourPassword" class="form-label">E-mail</label>
                         <input type="email" name="correo" class="form-control" id="yourUsername" 
                         placeholder="Ingrese dirección de correo."
-                        value="{{$profesore->correo}}"
+                        value="{{$profesore->correo ?? old('correo')}}"
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese dirección de correo!</div>
+                        @error('correo')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
                       <div class="col-4">
                         <label for="yourPassword" class="form-label">Fecha de nacimiento</label>
                         <input type="date" name="nacimiento" class="form-control" id="yourUsername" 
                         placeholder="Ingrese fecha de nacimiento."
-                        value="{{$profesore->nacimiento}}"
+                        value="{{$profesore->nacimiento ?? old('nacimiento')}}"
                         required>
                         <div class="invalid-feedback">Por favor, ingrese fecha de nacimiento!</div>
+                        @error('nacimiento')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
                       <div class="col-4">
                         <label for="yourPassword" class="form-label">Edad</label>
                         <input type="number" name="edad" class="form-control" id="yourUsername" 
                         placeholder="Ingrese edad."
-                        value="{{$profesore->edad}}"
+                        value="{{$profesore->edad ?? old('edad')}}"
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese edad!</div>
+                        @error('edad')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
                       <div class="col-12">
                         <label for="yourPassword" class="form-label">Dirección de habitación</label>
                         <input type="text" name="direccion" class="form-control" id="yourUsername" 
                         placeholder="Ingrese dirección de domicilio."
-                        value="{{$profesore->direccion}}"
+                        value="{{$profesore->direccion ?? old('direccion')}}"
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese edad!</div>
+                        @error('direccion')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
                       <div class="col-6">
@@ -143,19 +173,13 @@
               </div>
             </div>
 
-            {{-- <div class="credits"> --}}
-              <!-- All the links in the footer should remain intact. -->
-              <!-- You can delete the links only if you purchased the pro version. -->
-              <!-- Licensing information: https://bootstrapmade.com/license/ -->
-              <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-               {{-- <a href="https://bootstrapmade.com/">BootstrapMade</a> --}}
-            {{-- </div> --}}
 
           </div>
         </div>
       </div>
 
     </section>
+    <script src="{{ asset('assets/js/profesores/editar.js') }}"></script>
 @endsection
 
 

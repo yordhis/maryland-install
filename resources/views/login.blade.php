@@ -10,8 +10,8 @@
 
           <div class="d-flex justify-content-center pb-1" >
           
-            <a href="/" >
-              <img src="assets/img/logo.png" alt="logo" id="logo">
+            <a href="{{ route('login.index') }}" >
+              <img src="{{ asset('assets/img/logo.png') }}" alt="logo" id="logo">
             </a>
           </div><!-- End Logo -->
 
@@ -24,7 +24,7 @@
                 <p class="text-center small text-danger">Ingrese su nombre de usuario y contraseña para iniciar sesión</p>
               </div>
 
-              <form action="/login" method="post" class="row g-3 needs-validation" target="_self" novalidate>
+              <form action="{{ route('login.store') }}" method="post" class="row g-3 needs-validation" novalidate>
               @csrf
               @method('post')
                 <div class="col-12">
