@@ -2,6 +2,7 @@ if (document.getElementById('rep_cedula')) {
     
     let inputCedulaRepresentante = document.getElementById('rep_cedula'),
     componenteRepresentante = document.getElementById('componenteRepresentante'),
+    preloadSpan = document.getElementById('preload'),
     mensajeRepresentante = document.getElementById('mensajeRepresentante'),
     URLpatname = window.location.pathname,
     URLhref = window.location.href;
@@ -102,7 +103,9 @@ if (document.getElementById('rep_cedula')) {
     /** Funcion que Obtiene datos del representante */
      function getRepresentante(cedula) {
         if (cedula.value.length > 6) {
-            componenteRepresentante.innerHTML = preload;
+            preloadSpan.innerHTML = preload;
+            componenteRepresentante.classList.remove('visible');
+            componenteRepresentante.classList.add('invisible');
             setTimeout(()=>{
 
                 fetch(URL_BASE_API + "/getRepresentante/" + cedula.value)
@@ -115,7 +118,9 @@ if (document.getElementById('rep_cedula')) {
                             componenteRepresentante.innerHTML = getCardRepresentante(result.data);
                         }else{
                             mensajeRepresentante.textContent = result.mensaje;
-                            componenteRepresentante.innerHTML = inputsRepresentante;
+                            preloadSpan.innerHTML = "";
+                            componenteRepresentante.classList.remove('invisible');
+                            componenteRepresentante.classList.add('visible');
                         }
                     })
                     .catch((err) => {

@@ -55,14 +55,25 @@
                                         </div>
                                     </div>
 
+                             
                                     <div class="col-12">
                                         <label for="yourPassword" class="form-label">Nueva Contrseña</label>
-                                        <input type="password" name="password" class="form-control" id="yourPassword"
-                                            placeholder="Ingrese su contraseña" 
-                                            value="{{ $request->password ?? '' }}"
-                                            >
+                                        <div class="input-group">
+                                          <input type="password" name="password" class="form-control bg-muted" id="inputCedula" 
+                                          placeholder="Ingrese nueva contraseña"
+                                          value="{{ $profesore->password ?? old('password') }}"
+                                          disabled
+                                          readonly
+                                          required>
+                                          <button type="button" class="btn btn-warning" id="activarEdicionDeCedula">
+                                            <i class="bi bi-pencil"></i>
+                                          </button>
+                                        </div>
                                         <div class="invalid-feedback">Por favor ingrese su Nueva contraseña!</div>
-                                    </div>
+                                        @error('cedula')
+                                          <div class="text-danger"> {{ $message }} </div>
+                                        @enderror
+                                      </div>
 
                                     <div class="col-12">
                                         <label for="yourName" class="form-label">Rol del usuario</label>
@@ -116,6 +127,6 @@
                     </div>
                 </div>
             </div>
-
+            <script src="{{ asset('assets/js/profesores/editar.js') }}"></script>
         </section>
     @endsection

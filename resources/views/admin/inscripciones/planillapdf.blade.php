@@ -11,16 +11,15 @@
     {{-- SEO --}}
     <meta content="" name="description">
     <meta content="" name="keywords">
-    <base href="http://academiamaryland.com/" target="objetivo">
     <!-- Favicons -->
-    <link href="assets/img/logo-img-circulo.png" rel="icon">
-    <link href="assets/img/logo-img-circulo.png" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/logo-img-circulo.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/logo-img-circulo.png') }}" rel="apple-touch-icon">
 
    
 
     <!-- Template Main CSS File -->
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/personalizado.css" rel="stylesheet">
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/personalizado.css') }}" rel="stylesheet">
 
     <style>
         body{
@@ -465,7 +464,7 @@
 
 <body>
     <div class="caja">
-        <img src="assets/img/planilla.png" alt="planilla pdf" >
+        <img src="{{ asset('assets/img/planilla.png') }}" alt="planilla pdf" >
         
         <span id="codigo"> {{ $inscripcione->codigo ?? '' }} </span>
         <span id="fecha"> {{ $inscripcione->fecha ?? '' }} </span>
@@ -514,10 +513,10 @@
         <!-- START  Plan de Pago -->
         <span id="plan_nombre"> {{ $inscripcione->plan->nombre ?? '' }} </span>
         <span id="plan_descripcion">{{ $inscripcione->plan->descripcion ?? '' }} <br>
-            Cantidad de cuotas: {{ $inscripcione->plan->cantidad_cuotas ?? '' }}
+            {{-- Cantidad de cuotas: {{ $inscripcione->plan->cantidad_cuotas ?? '' }} --}}
         </span>
         <span id="nivel_precio"> Ref: <br>{{ $inscripcione->grupo['nivel']->precio ?? '' }} </span>
-        <ul id="cuotas">
+        {{-- <ul id="cuotas">
             @foreach ($inscripcione->cuotas as $cuota)
                 <li class="d-inline ms-2">
                     <input type="checkbox" disabled {{ $cuota->estatus ? 'checked' : '' }}>
@@ -525,7 +524,7 @@
                     </label>
                 </li>
             @endforeach
-        </ul>
+        </ul> --}}
         <!-- END  Plan de Pago -->
 
         <!-- START Datos Extras -->

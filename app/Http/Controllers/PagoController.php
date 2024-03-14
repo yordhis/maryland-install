@@ -74,11 +74,12 @@ class PagoController extends Controller
     {
      
         try {
+            $notificaciones = $this->data->notificaciones;
             $metodos = $this->data->metodosPagos;
             $codigo = Helpers::getCodigo('pagos');
             $conceptos = Concepto::where('estatus', 1)->get();
             $estudiante = Estudiante::where("cedula", $request)->get();
-            return view('admin.pagos.crear', compact('conceptos', 'metodos', 'codigo', "estudiante", 'codigoInscripcion'));
+            return view('admin.pagos.crear', compact('conceptos', 'notificaciones', 'metodos', 'codigo', "estudiante", 'codigoInscripcion'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar datos de pago del estudiante en el método getPagoEstudiante,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -171,6 +172,7 @@ class PagoController extends Controller
     public function show(Pago $pago)
     {
         try {
+            $notificaciones = $this->data->notificaciones;
             $metodos = $this->data->metodosPagos;
             $pago['estudiante'] = Helpers::getEstudiante($pago->cedula_estudiante);
             $pago->id_cuota = explode(",", $pago->id_cuota);
@@ -210,7 +212,7 @@ class PagoController extends Controller
             }
 
             // return $pago;
-            return view('admin.pagos.recibo', compact('pago', 'metodos'));
+            return view('admin.pagos.recibo', compact('pago', 'metodos', 'notificaciones'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar datos de pago del estudiante en el método show,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -267,7 +269,7 @@ class PagoController extends Controller
                 // Codigo para previsualizar el pdf
                 // return view('admin.pagos.recibopdf',  compact('pago', 'metodos'));
                 // Se genera el pdf
-                $pdf = PDF::loadView('admin.pagos.recibopdf', compact('pago', 'metodos'));
+                $pdf = PDF::loadView('admin.pagos.recibopdf', compact('pago', 'metodos', 'notificaciones'));
                 return $pdf->download("{$pago->cedula_estudiante}-{$pago->fecha}.pdf");
             } else {
                 // en caso de que el recibo no existe redireccionamos a la lista de pago 

@@ -101,26 +101,26 @@
                           @foreach ($estudiante->representantes as $representante)
                               
                             <div class="col-md-12 label"> 
-                              <span class="text-primary">Nombre:</span> {{ $representante->nombre }} 
+                              <span class="text-primary">Nombre:</span> {{ $representante->nombre ?? ''}} 
                             </div>
                             <div class="col-md-12 label"> 
-                              <span class="text-primary">Cédula:</span> {{ $representante->cedula }} 
-                            </div>
-
-                            <div class="col-md-12 label"> 
-                              <span class="text-primary">Teléfono:</span> {{ $representante->telefono }} 
+                              <span class="text-primary">Cédula:</span> {{ $representante->cedula ?? '' }} 
                             </div>
 
                             <div class="col-md-12 label"> 
-                              <span class="text-primary">Correo:</span> {{ $representante->correo }}
+                              <span class="text-primary">Teléfono:</span> {{ $representante->telefono ?? ''}} 
                             </div>
 
                             <div class="col-md-12 label"> 
-                              <span class="text-primary">Ocupación:</span> {{ $representante->ocupacion }}
+                              <span class="text-primary">Correo:</span> {{ $representante->correo ?? ''}}
                             </div>
 
                             <div class="col-md-12 label"> 
-                              <span class="text-primary">Direccion de domicilio:</span> {{ $representante->direccion }}
+                              <span class="text-primary">Ocupación:</span> {{ $representante->ocupacion ?? ''}}
+                            </div>
+
+                            <div class="col-md-12 label"> 
+                              <span class="text-primary">Direccion de domicilio:</span> {{ $representante->direccion ?? ''}}
                             </div>
 
                           @endforeach

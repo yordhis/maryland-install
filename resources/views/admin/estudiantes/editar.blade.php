@@ -31,6 +31,16 @@
                  @csrf
                  @method('put')  
                  
+                      
+                      <div class="col-12  card my-3">
+                        @if ($estudiante->foto)
+                            <img src="{{ asset($estudiante->foto ) }}" class="rounded mx-auto d-block" alt="">                        
+                        @else
+                          <img src="{{ asset('assets/img/avatar.png') }}" class="rounded mx-auto d-block" alt="">                        
+                            
+                        @endif
+                      </div>
+
                       <div class="col-12">
                         <label for="yourUsername" class="form-label">Nombre y apellido</label>
                         <div class="input-group has-validation">
@@ -39,11 +49,14 @@
                           placeholder="Ingrese su nombres y apellidos" value="{{$estudiante->nombre}}"
                           required>
                           <div class="invalid-feedback">Por favor, ingrese nombre! </div>
+                          @error('nombre')
+                            <div class="text-danger"> {{ $message }} </div>
+                          @enderror
                         </div>
                       </div>
 
                       
-                      <div class="col-4">
+                      <div class="col-xs-12 col-sm-4">
                         <label for="validationCustom04" class="form-label">Nacionalidad</label>
                         <select name="nacionalidad"  class="form-select" id="validationCustom04" required>
                           <option selected disabled value="">Seleccione Nacionalidad</option>
@@ -61,52 +74,76 @@
                         <div class="invalid-feedback">
                          Por favor, ingresar nacionalidad!
                         </div>
+                        @error('nacionalidad')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
                       {{-- Cedula --}}
-                      <div class="col-4">
-                        <label for="yourPassword" class="form-label">Cédula de identidad</label>
-                        <input type="text" name="cedula" class="form-control bg-secondary-light" id="yourUsername" 
-                        placeholder="Ingrese número de cédula" value="{{$estudiante->cedula}}"
-                      
-                        required>
+                      <div class="col-xs-12 col-sm-4">
+                        <label for="yourPassword" class="form-label">Cédula</label>
+                        <div class="input-group">
+                          <input type="text" name="cedula" class="form-control bg-muted" id="inputCedula" 
+                          placeholder="Ingrese número de cédula"
+                          value="{{ $estudiante->cedula ?? old('cedula') }}"
+                          disabled
+                          readonly
+                          required>
+                          <button type="button" class="btn btn-warning" id="activarEdicionDeCedula">
+                            <i class="bi bi-pencil"></i>
+                          </button>
+                        </div>
                         <div class="invalid-feedback">Por favor, Ingrese número de cédula!</div>
+                        @error('cedula')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
-                      <div class="col-4">
+                      <div class="col-xs-12 col-sm-4">
                         <label for="yourPassword" class="form-label">Teléfono</label>
                         <input type="text" name="telefono" class="form-control" id="yourUsername" 
                         placeholder="Ingrese número de teléfono"
                         value="{{$estudiante->telefono}}"
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese número de teléfono!</div>
+                        @error('telefono')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
-                      <div class="col-4">
+                      <div class="col-xs-12 col-sm-4">
                         <label for="yourPassword" class="form-label">E-mail</label>
                         <input type="email" name="correo" class="form-control" id="yourUsername" 
                         placeholder="Ingrese dirección de correo."
                         value="{{$estudiante->correo}}"
-                        >
+                        required>
                         <div class="invalid-feedback">Por favor, Ingrese dirección de correo!</div>
+                        @error('correo')
+                         <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
-                      <div class="col-4">
+                      <div class="col-xs-12 col-sm-4">
                         <label for="yourPassword" class="form-label">Fecha de nacimiento</label>
                         <input type="date" name="nacimiento" class="form-control" id="yourUsername" 
-                        
                         value="{{$estudiante->nacimiento}}"
-                        >
+                        required>
                         <div class="invalid-feedback">Por favor, ingrese fecha de nacimiento!</div>
+                        @error('nacimiento')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
-                      <div class="col-4">
+                      <div class="col-xs-12 col-sm-4">
                         <label for="yourPassword" class="form-label">Edad</label>
                         <input type="number" name="edad" class="form-control" id="yourUsername" 
                         placeholder="Ingrese edad."
                         value="{{$estudiante->edad}}"
-                        >
+                        required>
                         <div class="invalid-feedback">Por favor, Ingrese edad!</div>
+                        @error('edad')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
                       <div class="col-12">
@@ -114,19 +151,44 @@
                         <input type="text" name="direccion" class="form-control" id="yourUsername" 
                         placeholder="Ingrese dirección de domicilio."
                         value="{{$estudiante->direccion}}"
-                        >
-                        <div class="invalid-feedback">Por favor, Ingrese edad!</div>
+                        required>
+                        <div class="invalid-feedback">Por favor, Ingrese dirección!</div>
+                        @error('direccion')
+                          <div class="text-danger"> {{ $message }} </div>
+                        @enderror
                       </div>
 
-                      <div class="col-8">
+                        <div class="col-12">
+                          <label for="yourPassword" class="form-label">Grado de estudio</label>
+                          <input type="text" name="grado" class="form-control" id="yourUsername"
+                              placeholder="Ingrese grado de estudio." 
+                              value="{{ $estudiante->grado ?? '' }}"
+                              required>
+                          <div class="invalid-feedback">Por favor, Ingrese grado de estudio!</div>
+                          @error('grado')
+                              {{ $message }}
+                          @enderror
+                      </div> 
+
+                      <div class="col-12">
+                          <label for="yourPassword" class="form-label">Ocupación o profesión</label>
+                          <input type="text" name="ocupacion" class="form-control" id="yourUsername"
+                              placeholder="Ingrese ocupación." 
+                              value="{{ $estudiante->ocupacion ?? '' }}"
+                              required>
+                          <div class="invalid-feedback">Por favor, Ingrese ocupación!</div>
+                          @error('ocupacion')
+                              {{ $message }}
+                          @enderror
+                      </div> 
+
+
+                      <div class="col-12 my-3">
                         <label for="file" class="form-label">Subir Foto (Opcional)</label>
                         <input type="file" name="file" class="form-control " id="file"> 
                         
                       </div>
 
-                      <div class="col-4 card">
-                        <img src="{{ $estudiante->foto }}" class="img-fluid rounded" alt="">                        
-                      </div>
 
                         {{-- INICIO DE DATOS DEL REPRESENTANTE --}}
                         <div id="" class="row">
@@ -138,7 +200,7 @@
                                 <h5 class="card-title">Representantes</h5>
                                 @if (!count($representantes))
                                    
-                                  <a href="" class="" id="btnAddRepresentante" target="_self" >
+                                  <a href="" class="text-primary" id="btnAddRepresentante">
                                     <i class="bi bi-plus-circle fs-4"> Añadir representante</i>
                                   </a>
                                   <div id="addRepresentante"></div>
@@ -338,6 +400,7 @@
       </div>
 
     </section>
+    <script src="{{ asset('assets/js/profesores/editar.js') }}"></script>
   </div>
 @endsection
 

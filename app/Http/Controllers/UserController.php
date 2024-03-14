@@ -89,7 +89,7 @@ class UserController extends Controller
             $estatus = $this->data->respuesta['estatus'] = $estatusCreate ? 200 
                                       : 301;
             $respuesta = $this->data->respuesta;
-            return $estatusCreate ? redirect()->route('admin.users.index', compact('mensaje', 'estatus'))
+            return $estatusCreate ? redirect()->route('admin.usuarios.index', compact('mensaje', 'estatus'))
                                   : view('admin.usuarios.crear', compact('request', 'notificaciones', 'usuario', 'respuesta', 'roles') );
     
             
@@ -108,7 +108,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return redirect()->route('admin.users.index', compact('mensaje', 'estatus'));
+        return redirect()->route('admin.usuarios.index', compact('mensaje', 'estatus'));
     }
 
     /**
@@ -141,7 +141,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-     
+
         try {
             $user = User::where('email',$request->email)->get()[0];
              // Validamos si se envio una foto
@@ -167,7 +167,7 @@ class UserController extends Controller
             if($user->update($request->all())){
                 $mensaje = "El Usuario se Actualizó correctamente.";
                 $estatus = 200;
-                return redirect()->route('admin.users.index', compact('mensaje', 'estatus'));
+                return redirect()->route('admin.usuarios.index', compact('mensaje', 'estatus'));
             }
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error de al intentar Actualizar un usuario,");
@@ -188,7 +188,7 @@ class UserController extends Controller
             User::destroy("id", $request);
             $mensaje = "El Usuario se Eliminó correctamente.";
             $estatus = 200;
-            return redirect()->route( 'admin.users.index', compact('mensaje', 'estatus') );
+            return redirect()->route( 'admin.usuarios.index', compact('mensaje', 'estatus') );
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error de al intentar Eliminar un usuario,");
             return response()->view('errors.404', compact("errorInfo"), 404);

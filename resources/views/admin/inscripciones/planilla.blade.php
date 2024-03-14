@@ -23,26 +23,29 @@
                     <div class="card-head ">
                         <div class="row">
 
-                            <div class="col-sm-8 text-center">
-                                <img src="assets/img/Planilla-head-custom.png" class="align-self-center" alt="">
-                            </div>
-                            <div class="col-sm-4 p-4">
-                                <!-- Codigo de inscripcion-->
-                                <div class="card border border-1 shadow-none">
-                                    <p class="text-inline p-2 m-0">
-                                        <b class="text-danger fs-5">N° Recibo: </b>
-                                        <span class="text-danger fs-4"> {{ $inscripcione->codigo }} </span>
-                                    </p>
-                                </div>
-                                <!-- Fecha de inscripcion-->
-                                <div class="card border border-1 shadow-none">
-                                    <p class="text-inline p-2 m-0">
-                                        <b class="text-danger">Fecha de Inscripción: </b><br>
-                                        <span id="fecha"> {{ $inscripcione->fecha }} </span>
-                                    </p>
-                                </div>
+                            <div class="position-relative ">
+                                <img src="{{ asset('assets/img/Planilla-head-custom.png') }}" class="img-fluid " style="" alt="">
+                                <div class="position-absolute top-0 end-0">
 
-
+                                    <div class="mt-3 mx-5">
+                                        <!-- Codigo de inscripcion-->
+                                        <div class="card border border-1 shadow-none">
+                                            <p class="text-inline p-2 m-0">
+                                                <b class="text-danger fs-5">N° Recibo: </b>
+                                                <span class="text-danger fs-4"> {{ $inscripcione->codigo }} </span>
+                                            </p>
+                                        </div>
+                                        <!-- Fecha de inscripcion-->
+                                        <div class="card border border-1 shadow-none">
+                                            <p class="text-inline p-2 m-0">
+                                                <b class="text-danger">Fecha de Inscripción: </b><br>
+                                                <span id="fecha"> {{ $inscripcione->fecha }} </span>
+                                            </p>
+                                        </div>
+        
+        
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -214,7 +217,7 @@
                                     <td colspan="2">
                                         <b>Descripción del Plan:</b>
                                         <span>{{ $inscripcione->plan->descripcion }} <br>
-                                            Cantidad de cuotas: {{ $inscripcione->plan->cantidad_cuotas }} </span>
+                                            {{-- Cantidad de cuotas: {{ $inscripcione->plan->cantidad_cuotas }} </span> --}}
                                     </td>
                                     <td>
                                         <b>Valor del Nivel:</b>
@@ -223,7 +226,7 @@
 
                                 </tr>
 
-                                <tr>
+                                {{-- <tr>
                                     <td colspan="4">
                                         <b>Cuotas:</b>
                                         <ul id="datos_plan_pago_cuotas">
@@ -236,7 +239,8 @@
                                             @endforeach
                                         </ul>
                                     </td>
-                                </tr>
+                                </tr> --}}
+
                             </tbody>
                             <thead>
                                 <tr>

@@ -22,6 +22,8 @@ class Estudiante extends Model
         "nacimiento",
         "edad",
         "direccion",
+        "grado",
+        "ocupacion",
         "foto",
         "estatus"
     ];

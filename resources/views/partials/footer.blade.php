@@ -19,10 +19,13 @@
  <script src="{{ asset('assets/vendor/chart.js/chart.umd.js') }}"></script>
  <script src="{{ asset('assets/vendor/echarts/echarts.min.js') }}"></script>
  <script src="{{ asset('assets/vendor/quill/quill.min.js') }}"></script>
- <script src="{{ asset('assets/vendor/simple-datatables/simple-datatables.js') }}"></script>
+ {{-- <script src="{{ asset('assets/vendor/simple-datatables/simple-datatables.js') }}"></script> --}}
  <script src="{{ asset('assets/vendor/tinymce/tinymce.min.js') }}"></script>
  <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
 
+ {{-- simple data table --}}
+ <script src="{{ asset('assets/js/simple-datatables.js') }}"></script>
+ 
  <!-- Template Main JS File -->
  <script src="{{ asset('assets/js/main.js') }}"></script>
  <script src="{{ asset('assets/js/estudiantes/create.js') }}"></script>
@@ -33,3 +36,23 @@
  <script src="{{ asset('assets/js/representantes/getRepresentante.js') }}"></script>
  <script src="{{ asset('assets/js/partials/sidebar.js') }}"></script>
  <script src="{{ asset('assets/js/partials/alert.js') }}"></script>
+
+ <script> 
+  try {
+        const dataTable = new simpleDatatables.DataTable("#datatable", {
+            searchable: true,
+            fixedHeight: false,
+            labels: {
+                placeholder: "Buscar...",
+                searchTitle: "Buecar",
+                pageTitle: "Pagina {page}",
+                perPage: "Entradas por página",
+                noRows: "No hay resultados",
+                info: "Página {start} a {end} de {rows} páginas",
+                noResults: "Ningún resultado coincide con su consulta de búsqueda",
+            },
+        })
+  } catch (error) {
+        console.log(error)
+  }
+</script>

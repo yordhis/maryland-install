@@ -30,7 +30,10 @@
 {{-- Cierre Quill Editor --}}
 
 <link href="{{ asset('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
-<link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
+{{-- <link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet"> --}}
+
+{{-- estilos de data table --}}
+<link href="{{ asset('assets/css/simple-datatables.css') }}" rel="stylesheet">
 
 <!-- Template Main CSS File -->
 <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">

@@ -7,8 +7,15 @@
     <section class="section">
         <div class="row">
 
-            <div class="col-sm-12">
+            <div class="col-xs-12 col-sm-8 ">
                 <h2>Lista de Estudiantes</h2>
+            </div>
+            <div class="col-xs-12 col-sm-4 text-end mb-2">
+                <a href="{{ route('admin.estudiantes.create') }}" 
+                class="btn btn-primary">
+                    <i class="bi bi-person-plus"></i>
+                    Registrar nuevo estudiante
+                </a>
             </div>
 
 
@@ -20,7 +27,7 @@
                     
                         <!-- Table with stripped rows -->
                         
-                            <table class="table datatable ">
+                            <table class="table" id="datatable">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>

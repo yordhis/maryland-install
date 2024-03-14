@@ -38,7 +38,7 @@ class InscripcioneController extends Controller
             // Retorna la lista de inscripciones
             // donde el estatus es 3 = completado que hace referencia a que los pagos de
             // de la inscripción estan listo
-            // $notificaciones = $this->data->notificaciones;
+            $notificaciones = $this->data->notificaciones;
 
             // Obtenemos todas las inscripciones que poseen el estatus completado
             $inscripciones = Helpers::addDatosDeRelacion(
@@ -90,7 +90,7 @@ class InscripcioneController extends Controller
             }
 
             // return $inscripciones;
-            return view('admin.inscripciones.lista', compact('inscripciones'));
+            return view('admin.inscripciones.lista', compact('inscripciones', 'notificaciones'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar Inscripciones en el método index,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -105,12 +105,12 @@ class InscripcioneController extends Controller
     public function create()
     {
         try {
-            // $notificaciones = $this->data->notificaciones;
             $codigo = Helpers::getCodigo('inscripciones');
             $planes = Plane::where("estatus", 1)->get();
             $grupos = Helpers::setMatricula(Grupo::where("estatus", 1)->get());
-
-            return view('admin.inscripciones.crear', compact('planes', 'grupos', 'codigo'));
+            
+            $notificaciones = $this->data->notificaciones;
+            return view('admin.inscripciones.crear', compact('planes', 'grupos', 'codigo', 'notificaciones'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar Inscripciones en el método create,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -176,11 +176,11 @@ class InscripcioneController extends Controller
                 $estatus = $this->data->respuesta['estatus'] = $estatusCreate ? 200 : 301;
 
                 $respuesta = $this->data->respuesta;
-
+                $notificaciones = $this->data->notificaciones;
                 return $estatusCreate ? redirect("inscripciones/{$id}?mensaje={$mensaje}&estatus={$estatus}")
                     : view(
                         'admin.inscripciones.crear',
-                        compact('request', 'respuesta', 'planes', 'grupos')
+                        compact('request', 'respuesta', 'planes', 'grupos', 'notificaciones')
                     );
             } else {
                 // Cuando el estudiante no esta registrado retorna el boton de registrar estudiante
@@ -215,8 +215,8 @@ class InscripcioneController extends Controller
                 if ($inscripcion->codigo == $inscripcione->codigo) $inscripcione = $inscripcion;
             }
             $inscripcione = Helpers::setFechasHorasNormalizadas($inscripcione); 
-         
-            return view('admin.inscripciones.planilla', compact('estudiante', 'inscripcione'));
+            $notificaciones = $this->data->notificaciones;
+            return view('admin.inscripciones.planilla', compact('estudiante', 'inscripcione', 'notificaciones'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al mostrar Planilla de Inscripción en el método show,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -227,6 +227,7 @@ class InscripcioneController extends Controller
     {
 
         try {
+            $notificaciones = $this->data->notificaciones;
             $inscripcione = [];
             $data = new DataDev();
             $estudiante = Helpers::getEstudiante($cedula);
@@ -246,7 +247,8 @@ class InscripcioneController extends Controller
                 'admin.inscripciones.planillapdf',
                 compact(
                     'inscripcione',
-                    'estudiante'
+                    'estudiante',
+                    'notificaciones'
                 )
             );
             return $pdf->download("{$inscripcione->codigo}-{$inscripcione->cedula_estudiante}-{$inscripcione->fecha}.pdf");

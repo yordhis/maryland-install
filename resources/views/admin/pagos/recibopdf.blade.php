@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="http://academiamaryland.com/" target="objetivo">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Recibo</title>
 
@@ -173,7 +172,7 @@
     
     
     <div class="caja">
-        <img src="assets/img/recibo_pago.png" class="centrar-img" width="700" alt="">
+        <img src="{{ asset('assets/img/recibo_pago.png') }}" class="centrar-img" width="700" alt="">
 
         
         <p class="codigo"></p>

@@ -21,24 +21,14 @@ use App\Models\{
 class EstudianteController extends Controller
 {
 
-    public $respuesta;
-    public $notificaciones;
-    public $usuario;
-    public $estudiantes;
+    public $data;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $data = new DataDev;
-        $this->respuesta = $data->respuesta;
-
-        $this->notificaciones = $data->notificaciones;
-
-        $this->usuario = $data->usuario;
-
-        $this->estudiantes = Helpers::getEstudiantes();
+        $this->data = new DataDev;
     }
 
     /**
@@ -48,8 +38,9 @@ class EstudianteController extends Controller
      */
     public function index()
     {
-        $estudiantes =  $this->estudiantes;
-        return view('admin.estudiantes.lista', compact('estudiantes'));
+        $estudiantes =  Helpers::getEstudiantes();;
+        $notificaciones =  $this->data->notificaciones;
+        return view('admin.estudiantes.lista', compact('estudiantes', 'notificaciones'));
     }
 
     /**
@@ -59,10 +50,8 @@ class EstudianteController extends Controller
      */
     public function create()
     {
-
-        $usuario = $this->usuario;
-        $notificaciones = $this->notificaciones;
-        return view('admin.estudiantes.crear', compact('notificaciones', 'usuario'));
+        $notificaciones = $this->data->notificaciones;
+        return view('admin.estudiantes.crear', compact('notificaciones'));
     }
 
     /**
@@ -73,65 +62,9 @@ class EstudianteController extends Controller
      */
     public function store(StoreEstudianteRequest $request)
     {
-        // Validando cedula 
-        $estatusCreate = 0;
-        $datoExiste = Helpers::datoExiste($request, [
-            "estudiantes" => ["cedula", " AND estatus = 1 ", "cedula"]
-        ]);
+            // Validando cedula 
+            $estatusCreate = 0;   
 
-
-
-        // Localizando si el estudiante es inactivo en la DB
-        $estudianteInactivo = Helpers::datoExiste($request, [
-            "estudiantes" => ["cedula", " AND estatus = 0 ", "cedula"]
-        ]);
-
-
-        // si el estudiante existe pero esta inactivo se porcede a activar y actualizar datos
-        if ($estudianteInactivo) {
-            $request['estatus'] = 1;
-            // Validamos si se envio una foto
-            if (isset($request->file)) {
-                $request['foto'] = Helpers::setFile($request);
-            }
-
-            // Se activa el estudiante y se actualiza la data
-            $estatusCreate = Estudiante::where('cedula', $estudianteInactivo->cedula)
-            ->update([
-                "estatus" => $request->estatus,
-                "nombre" => $request->nombre,
-                "nacionalidad" => $request->nacionalidad,
-                "correo" => $request->correo,
-                "telefono" => $request->telefono,
-                "nacimiento" => $request->nacimiento,
-                "direccion" => $request->direccion,
-                "edad" => $request->edad,
-                "foto" => $request->foto ?? FOTO_PORDEFECTO,
-            ]);
-
-            if ($estatusCreate) {
-                // Validamos si existe el representante
-                if (isset($request->rep_cedula)) {
-                    if (isset($request->rep_nombre)) {
-                        // Se crea y asigna el representante al estudiante
-                        Helpers::setRepresentantes($request);
-                    }else{
-                        // Solo asignamos al representante
-                        Helpers::asignarRepresentante($request->cedula, $request->rep_cedula);
-                    }
-                }
-                // Configuramos las dificultades en un array
-                $listDificultades = Helpers::getDificultades($request->request);
-                if (isset($listDificultades)) {
-                    /** Relacionamos los estudiante con la dificultad */
-                    // Recorremos las dificultades para actualizar las o crear si no existe
-                   Helpers::setDificultades($listDificultades, $request->cedula);
-                }
-            }
-        }
-
-        // Si el estudiante no esta en la DB se procede a crear
-        if (!$datoExiste && !$estudianteInactivo) {
             // Configuramos las dificultades en un array
             $dificultadesInput = Helpers::getDificultades($request->request);
 
@@ -165,30 +98,20 @@ class EstudianteController extends Controller
                     }
                 }
             }
-        }
+        
 
-        $cedulaAlert = $datoExiste ? $datoExiste->cedula = number_format($datoExiste->cedula, 0, ',', '.') : '';
+        $mensaje = $this->data->respuesta['mensaje'] = $estatusCreate ? "Estudiante registrado correctamente"
+            : "No se pudo registrar verifique los datos.";
+        $estatus = $this->data->respuesta['estatus'] =  $estatusCreate ? 201 : 404;
 
-        $mensaje = $this->respuesta['mensaje'] = $estatusCreate ? "Estudiante registrado correctamente"
-            : "La cédula ingresada ya esta registrada con {$datoExiste->nombre} - V-{$datoExiste->cedula}, por favor vuelva a intentar con otra cédula.";
-        $estatus = $this->respuesta['estatus'] =  $estatusCreate ? 201 : 301;
-
-        $respuesta = $this->respuesta;
+        $respuesta = $this->data->respuesta;
+        $notificaciones =  $this->data->notificaciones;
 
         return $estatusCreate ? redirect()->route('admin.estudiantes.index', compact('mensaje', 'estatus'))
-            : view('admin.estudiantes.crear', compact('respuesta', 'request'));
+            : view('admin.estudiantes.crear', compact('respuesta', 'request', 'notificaciones'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Estudiante  $estudiante
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Estudiante $estudiante)
-    {
-        //
-    }
+  
 
     /**
      * Show the form for editing the specified resource.
@@ -207,11 +130,12 @@ class EstudianteController extends Controller
                 $data = Representante::where('cedula', $repre['cedula_representante'])->get();
                 $repre['data'] = $data[0];
             }
-
+            $notificaciones = $this->data->notificaciones;
             return view('admin.estudiantes.editar', compact(
                 'estudiante',
                 'representantes',
-                'listDificultades'
+                'listDificultades',
+                'notificaciones'
             ));
         } catch (\Throwable $th) {
             //throw $th;
@@ -281,15 +205,15 @@ class EstudianteController extends Controller
             ]);
         } catch (\Throwable $th) {
             //throw $th;
-            $this->respuesta['activo'] = true;
-            $this->respuesta['mensaje'] = "Algo fallo al actualizar los datos del estudiante." . PHP_EOL
+            $this->data->respuesta['activo'] = true;
+            $this->data->respuesta['mensaje'] = "Algo fallo al actualizar los datos del estudiante." . PHP_EOL
                 . " Verifique este error: " . $th->getMessage() . PHP_EOL
                 . "Codigo: " . $th->getCode() . PHP_EOL
                 . "linea: " . $th->getLine();
-            $this->respuesta['estatus'] = 404;
-            $respuesta = $this->respuesta;
-            $notificaciones = $this->notificaciones;
-            $usuario = $this->usuario;
+            $this->data->respuesta['estatus'] = 404;
+            $respuesta = $this->data->respuesta;
+            $notificaciones = $this->data->notificaciones;
+            
             $representantes = RepresentanteEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
             $listDificultades = DificultadEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
 
@@ -301,7 +225,6 @@ class EstudianteController extends Controller
                 'admin.estudiantes.editar',
                 compact(
                     'notificaciones',
-                    'usuario',
                     'respuesta',
                     'estudiante',
                     'representantes',

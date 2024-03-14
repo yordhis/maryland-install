@@ -48,7 +48,7 @@
                         </div>
                       </div>
 
-                      <div class="col-4">
+                      <div class="col-xs-12 col-sm-4">
                         <label for="validationCustom04" class="form-label">Nacionalidad</label>
                         <select name="nacionalidad"  class="form-select" id="validationCustom04" required>
                           <option selected disabled value="">Seleccione Nacionalidad</option>
@@ -72,7 +72,7 @@
                       </div>
                      
     
-                      <div class="col-4">
+                      <div class="col-xs-12 col-sm-4">
                         <label for="yourPassword" class="form-label">Cédula</label>
                         <div class="input-group">
                           <input type="text" name="cedula" class="form-control bg-muted" id="inputCedula" 
@@ -91,7 +91,7 @@
                         @enderror
                       </div>
 
-                      <div class="col-4">
+                      <div class="col-xs-12 col-sm-4">
                         <label for="yourPassword" class="form-label">Teléfono</label>
                         <input type="text" name="telefono" class="form-control" id="yourUsername" 
                         placeholder="Ingrese número de teléfono"
@@ -103,7 +103,7 @@
                         @enderror
                       </div>
 
-                      <div class="col-4">
+                      <div class="col-xs-12 col-sm-4">
                         <label for="yourPassword" class="form-label">E-mail</label>
                         <input type="email" name="correo" class="form-control" id="yourUsername" 
                         placeholder="Ingrese dirección de correo."
@@ -115,7 +115,7 @@
                         @enderror
                       </div>
 
-                      <div class="col-4">
+                      <div class="col-xs-12 col-sm-4">
                         <label for="yourPassword" class="form-label">Fecha de nacimiento</label>
                         <input type="date" name="nacimiento" class="form-control" id="yourUsername" 
                         placeholder="Ingrese fecha de nacimiento."
@@ -127,7 +127,7 @@
                         @enderror
                       </div>
 
-                      <div class="col-4">
+                      <div class="col-xs-12 col-sm-4">
                         <label for="yourPassword" class="form-label">Edad</label>
                         <input type="number" name="edad" class="form-control" id="yourUsername" 
                         placeholder="Ingrese edad."
@@ -151,13 +151,13 @@
                         @enderror
                       </div>
 
-                      <div class="col-6">
+                      <div class="col-xs-12 col-sm-6">
                         <label for="file" class="form-label">Subir Foto (Opcional)</label>
                         <input type="file" name="file" class="form-control " id="file">
                         {{-- <div class="invalid-feedback">Ingrese una imagen valida</div> --}}
                       </div>
 
-                      <div class="col-6 card">
+                      <div class="col-xs-12 col-sm-6 card">
                         <img src="{{$profesore->foto}}" class="img-fluid rounded" alt="">                        
                       </div>
 

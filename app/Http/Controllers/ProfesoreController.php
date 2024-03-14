@@ -88,12 +88,12 @@ class ProfesoreController extends Controller
                                     : "La cédula ingresada ya esta registrada con {$datoExiste->nombre} - V-{$datoExiste->cedula}, por favor vuelva a intentar con otra cédula.";
         $this->respuesta['estatus'] = $estatusCreate ? 201 : 301;
        
-        $profesores = $this->profesores;
+        $profesores = Profesore::where('estatus', '!=', 0)->orderBy('id','DESC')->get();
         $respuesta = $this->respuesta;
-        $usuario = $this->usuario;
         $notificaciones = $this->notificaciones;
-        return $estatusCreate ? view('admin.profesores.lista', compact('notificaciones', 'usuario', 'respuesta', 'profesores'))
-        : view('admin.profesores.crear', compact('notificaciones', 'usuario', 'respuesta', 'request'));
+
+        return $estatusCreate ? view('admin.profesores.lista', compact('notificaciones', 'respuesta', 'profesores'))
+        : view('admin.profesores.crear', compact('notificaciones', 'respuesta', 'request'));
     }
 
     /**
@@ -116,9 +116,8 @@ class ProfesoreController extends Controller
      */
     public function edit(Profesore $profesore)
     {
-        $usuario = $this->usuario;
         $notificaciones = $this->notificaciones;
-        return view('admin.profesores.editar', compact('profesore', 'usuario', 'notificaciones'));
+        return view('admin.profesores.editar', compact('profesore', 'notificaciones'));
     }
 
     /**
@@ -150,7 +149,7 @@ class ProfesoreController extends Controller
             $usuario = $this->usuario;
             $notificaciones = $this->notificaciones;
         }
-        $profesores = $this->profesores;
+        $profesores = Profesore::where('estatus', '!=', 0)->orderBy('id','DESC')->get();
         
         return view('admin.profesores.lista', compact('notificaciones', 'usuario', 'respuesta', 'profesores'));
     }
@@ -166,7 +165,8 @@ class ProfesoreController extends Controller
         $profesore->update([
             "estatus" => 0
         ]);
-    
-        return redirect()->route('admin.profesores.index');
+        $mensaje = "el profesor fue eliminado correctamente.";
+        $estatus = 200;
+        return redirect()->route('admin.profesores.index', compact('mensaje', 'estatus'));
     }
 }

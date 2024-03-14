@@ -24,7 +24,18 @@ class UpdateEstudianteRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "cedula"        => "numeric | unique:estudiantes",
+            "file"          => "max:2048 | mimes:jpg,bmp,png",
+            "nombre"        => "max:255  | required", 
+            "nacionalidad"  => "required", 
+            "telefono"      => "min:11 | required",
+            "correo"        => "required",
+            "nacimiento"    => "required",
+            "edad"          => "numeric | required",
+            "direccion"     => "max: 255 | required",
+            "grado"         => "max: 255 | required",
+            "ocupacion"     => "max: 255 | required",
+            
         ];
     }
 }
