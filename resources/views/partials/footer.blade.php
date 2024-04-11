@@ -34,7 +34,7 @@
  <script src="{{ asset('assets/js/estudiantes/getData.js') }}"></script>
  <script src="{{ asset('assets/js/grupos/getDataGrupo.js') }}"></script>
  <script src="{{ asset('assets/js/representantes/getRepresentante.js') }}"></script>
- <script src="{{ asset('assets/js/partials/sidebar.js') }}"></script>
+ {{-- <script src="{{ asset('assets/js/partials/sidebar.js') }}"></script> --}}
  <script src="{{ asset('assets/js/partials/alert.js') }}"></script>
 
  <script> 

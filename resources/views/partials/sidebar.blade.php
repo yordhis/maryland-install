@@ -186,8 +186,8 @@ $subcategoria = 'LISTA';
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.inscripciones.create') }}" 
-                        class="{{ $categoria == 'INSCRIPCIONES' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
+                    <a href="{{ route('admin.inscripciones.createEstudiante') }}" 
+                        class="{{ $categoria == 'INSCRIPCIONES' ? ($subcategoria == 'ESTUDIANTE' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Procesar Inscripción</span>
                     </a>
                 </li>

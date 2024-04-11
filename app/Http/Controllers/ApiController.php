@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 use App\Models\{
+    Estudiante,
     Helpers,
     Grupo
 };
@@ -36,14 +37,28 @@ class ApiController extends Controller
             return response()->view('errors.404', compact("errorInfo"), 404);
         }
     }
+
     public function getEstudiante($cedula)
     {
         try {
+
+           
             $estudiante = Helpers::getEstudiante($cedula);
-            return response()->json($estudiante, Response::HTTP_OK);
+            $mensaje = $estudiante->id > 0 ? "Consulta exitosa" : "No hay resultados";
+            $estatus = $estudiante->id > 0  ?  Response::HTTP_OK : Response::HTTP_NOT_FOUND;
+      
+            return response()->json([
+                "mensaje" =>  $mensaje,
+                "estatus" =>  $estatus,
+                "data" => $estudiante
+            ], $estatus);
+
         } catch (\Throwable $th) {
-            $errorInfo = Helpers::getMensajeError($th, "Error en la API al retornar los datos del Estudiante en el método getEstudiante,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            return response()->json([
+                "mensaje" =>  "No hay resultado",
+                "estatus" =>  Response::HTTP_NOT_FOUND,
+                "data" => $th->getMessage()
+            ], Response::HTTP_NOT_FOUND);
         }
     }
 

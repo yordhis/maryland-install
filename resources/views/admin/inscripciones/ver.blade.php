@@ -14,7 +14,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-6">                       
-                        <h2 class="text-white">Grupo {{$grupo->nombre}}</h2>
+                        <h2 class="text-white">Grupo {{ $grupo->nombre }}</h2>
                         <p class="text-white">
                             <b class="text-warning">Nivel:</b> {{$grupo->nivel['nombre']}} <br>
                             <b class="text-warning">Libro:</b> {{$grupo->nivel['libro']}} <br>

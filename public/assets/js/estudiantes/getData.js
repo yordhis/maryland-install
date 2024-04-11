@@ -1,20 +1,24 @@
 if (document.getElementById("buscarEstudiante")) {
     let inputCedula = document.getElementById("cedula"),
         cardDataEstudiante = document.getElementById("dataEstudiante"),
+        elementoPreload = document.getElementById("preload"),
         inputMontoBs = document.getElementById("monto_bs"),
         inputMontoUsd = document.getElementById("monto_usd"),
-        cardCuotaEstudiante = document.getElementById("cuotasEstudiante"),
+        // cardCuotaEstudiante = document.getElementById("cuotasEstudiante"),
         divMetodos = document.getElementById("divMetodos"),
         metodos = document.querySelectorAll(".metodo"),
         btnBuscarEstudiante = document.getElementById("buscarEstudiante"),
         botonSubmit = document.querySelector(".boton") ?? "",
         inputReferencia = document.getElementById("referencia"),
         URLpatname = window.location.pathname,
-        URLhref = window.location.href;
+        URLhref = window.location.href,
+        estudiantes = [];
     
     const log = console.log,
         URL_BASE_API = URLhref.split(URLpatname)[0] + "/api",
         URL_BASE_HOST = URLhref.split(URLpatname)[0],
+        HTTP_OK = 200,
+        HTTP_NOT_FOUND = 200,
         preload = `
             <!-- Growing Color spinnersr -->
             <div class="spinner-grow text-primary" role="status">
@@ -30,27 +34,27 @@ if (document.getElementById("buscarEstudiante")) {
         cardRegistrarEstudiante = `
         <div class="card mb-3 rounded-5 shadow" >
             <div class="row g-0">
-    
-               
-    
                 <div class="col-md-12">
                     <div class="card-body">
-                        <p class="card-text">
-                            <h5 class="card-text text-dark">El Estudiante no esta registrado</h5>
-                            <p class="card-text text-dark">
-                                Ingrese otra cédula o proceda a registrar al estudiante,
-                                haga click en el boton para ir a la sección de registro.
-                            </p>
-                            <div class="d-grid gap-2 mt-3">
-                                <a href="/estudiantes/create" target="_self" class="btn btn-primary" >Ir a Registro de estudiante</a>
-                            </div>
-                        </p>
+                   
                     </div>
                 </div>
     
             </div>
         </div>
         `;
+
+    addEventListener('load', ()=>{
+  
+        if(localStorage.getItem('estudiantes')){
+            estudiantes = JSON.parse( localStorage.getItem('estudiantes') );
+            estudiantes.forEach(estudiante =>{
+                cardDataEstudiante.innerHTML += getCardData(estudiante);
+            });
+            cargerEventosDeBotonEliminar();
+        }
+
+    });
     
     function getEsAprobado(nota) {
         if (nota) {
@@ -83,40 +87,50 @@ if (document.getElementById("buscarEstudiante")) {
             return cardRegistrarEstudiante;
         } else {
             return `
-                <div class="card mb-3 rounded-5 shadow" >
+                <div class="card mb-3" style="max-width: 100%;">
                     <div class="row g-0">
-    
-                        <div class="col-md-2">
-                            <img src="${data["foto"]}" class="img-fluid rounded-start" alt="foto">
+
+                        <div class="col-xs-12 col-md-3">
+                            <img src="${data.foto}" class="img-fluid rounded-start" alt="...">
                         </div>
-    
-                        <div class="col-md-5">
+
+                        <div class="col-xs-12 col-md-6">
                             <div class="card-body">
-                                <p class="card-text">
-                                    <h5 class="card-text text-dark">Estudiante</h5>
-                                    <b class="fs-5 text-primary"> ${data["nombre"]} </b> <br>
-                                    <small class="text-muted fs-6">${data["cedula"]}</small> <br>
-                                    <small class="text-muted fs-6">${data["edad"]} años</small> 
-                                </p>
+                                <h5 class="card-title">Datos personales</h5>
+                                        <p class="card-text" style="font-size: 12px;"> 
+                                            <b>Nombre y apellido:</b> ${data.nombre.toUpperCase()}  <br>
+                                            <b>Cédula o RIF:</b> ${data.nacionalidad}-${data.cedula} <br>
+                                            <b>Teléfono movil:</b> ${data.telefono} <br>
+                                            <b>Correo:</b> ${data.correo} <br>
+                                            <b>Fecha de nacimiento:</b> ${new Date(data.nacimiento).toLocaleDateString('en-US')} <br>
+                                            <b>Edad:</b> ${data.edad} años <br>
+                                            <b>Grado de instrucción:</b> ${data.grado} <br>
+                                            <b>Ocupación:</b> ${data.ocupacion} 
+                                        </p>
+                                
+                                        
+                                        
+                                        <!-- <p class="card-text"><small class="text-muted">Última actualización hace 3 minutos</small></p> -->
                             </div>
                         </div>
-    
-                        <div class="col-md-5">
-                            <div class="card-body">
-                                <p class="card-text">
-                                    <h5 class="card-text text-dark">Contacto</h5>
-                                    <b class="fs-5 text-primary"> ${data["telefono"]} </b> <br>
-                                    <small class="text-muted fs-6">${data["correo"]}</small> <br>
-                                </p>
-                            </div>
+
+                        <div class="col-xs-12 col-md-3">
+                            <ul class="list-group list-group-flush my-2">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <b>Inscriciones realizadas:</b>
+                                    <span class="badge text-bg-primary rounded-pill">${data.inscripciones.length}</span>
+                                </li>
+                            </ul>
+                            <a href="#" class="btn btn-danger btn-eliminar" id="${data.cedula}">
+                                Eliminar
+                            </a>
                         </div>
-    
                     </div>
                 </div>
             `;
         }
     }
-    
+ 
     function getCardCuotas(inscripcion) {
         let cuotas = inscripcion.cuotas,
             esAprobado;
@@ -232,30 +246,37 @@ if (document.getElementById("buscarEstudiante")) {
     
     function getDataEstudiante(cedula) {
         if (cedula.value.length > 6) {
-            cardDataEstudiante.innerHTML = preload;
-            cardCuotaEstudiante.innerHTML = preload;
+            elementoPreload.innerHTML = preload;
+            // cardCuotaEstudiante.innerHTML = preload;
     
             setTimeout(() => {
                 fetch(URL_BASE_API + "/getEstudiante/" + cedula.value)
                     .then((response) => response.json())
                     .then((data) => {
-                        // log(data);
-    
-                        cardDataEstudiante.innerHTML = getCardData(data);
-                        cardCuotaEstudiante.innerHTML = null;
-                        data.inscripciones.forEach((inscripcion) => {
-                            inscripcion.nombre = data.nombre;
-                            // log(inscripcion)
-                            cardCuotaEstudiante.innerHTML +=
-                                getCardCuotas(inscripcion);
-                        });
+                        log(data);
+                        if (data.estatus == HTTP_OK) {
+                            estudiantes.push(data.data);
+                            localStorage.setItem('estudiantes', JSON.stringify(estudiantes));
+                            estudiantes = JSON.parse( localStorage.getItem('estudiantes') );
+                            estudiantes.forEach(estudiante =>{
+                                cardDataEstudiante.innerHTML += getCardData(estudiante);
+                            });
+                            elementoPreload.innerHTML = "";
+                        } else {
+                            cardDataEstudiante.innerHTML += cardRegistrarEstudiante;
+                            elementoPreload.innerHTML = "";
+                        }
+                        setTimeout(()=>{
+                            cargerEventosDeBotonEliminar();
+                        },1000)
+                       
                     })
                     .catch((err) => {
                         log(err);
-                        cardDataEstudiante.innerHTML = cardRegistrarEstudiante;
-                        cardCuotaEstudiante.innerHTML = null;
+                        cardDataEstudiante.innerHTML = err;
+                       
                     });
-            }, 3000);
+            }, 1500);
         }
     }
     
@@ -273,68 +294,100 @@ if (document.getElementById("buscarEstudiante")) {
      * mostrar un total en el monto de divisas
      */
     let montoTotal = 0;
-    cardCuotaEstudiante.addEventListener("click", (e) => {
-        // log(e.target)
-        // log(e.target.value)
-        // log(e.target.nextElementSibling.innerText)
-        if (e.target.localName == "input" && e.target.checked === true) {
-            let text = e.target.nextElementSibling.innerText;
-            cuotaSelect = text.split("|");
-            montoTotal =
-                montoTotal + parseFloat(cuotaSelect[cuotaSelect.length - 1]);
-            inputMontoUsd.value = montoTotal;
-        }
+    // cardCuotaEstudiante.addEventListener("click", (e) => {
+ 
+    //     if (e.target.localName == "input" && e.target.checked === true) {
+    //         let text = e.target.nextElementSibling.innerText;
+    //         cuotaSelect = text.split("|");
+    //         montoTotal =
+    //             montoTotal + parseFloat(cuotaSelect[cuotaSelect.length - 1]);
+    //         inputMontoUsd.value = montoTotal;
+    //     }
     
-        if (e.target.localName == "input" && e.target.checked === false) {
-            let text = e.target.nextElementSibling.innerText;
-            cuotaSelect = text.split("|");
-            montoTotal =
-                montoTotal - parseFloat(cuotaSelect[cuotaSelect.length - 1]);
-            inputMontoUsd.value = montoTotal;
-        }
-    });
+    //     if (e.target.localName == "input" && e.target.checked === false) {
+    //         let text = e.target.nextElementSibling.innerText;
+    //         cuotaSelect = text.split("|");
+    //         montoTotal =
+    //             montoTotal - parseFloat(cuotaSelect[cuotaSelect.length - 1]);
+    //         inputMontoUsd.value = montoTotal;
+    //     }
+    // });
     
     // log(metodos);
-    divMetodos.addEventListener("click", (e) => {
-        // log(e.target);
-    
-        if (e.target.localName == "input" && e.target.checked === true) {
-            // let text = e.target.nextElementSibling.innerText;
-            metodos.forEach((metodo) =>
-                metodo.value != e.target.value
-                    ? (metodo.required = false)
-                    : (metodo.required = true)
-            );
-    
-            if (e.target.value == "PAGO MOVIL") {
-                inputReferencia.required = true;
-                inputMontoBs.required = true;
-                inputMontoUsd.value = 0;
+    if(divMetodos){
+        divMetodos.addEventListener("click", (e) => {
+            // log(e.target);
+        
+            if (e.target.localName == "input" && e.target.checked === true) {
+                // let text = e.target.nextElementSibling.innerText;
+                metodos.forEach((metodo) =>
+                    metodo.value != e.target.value
+                        ? (metodo.required = false)
+                        : (metodo.required = true)
+                );
+        
+                if (e.target.value == "PAGO MOVIL") {
+                    inputReferencia.required = true;
+                    inputMontoBs.required = true;
+                    inputMontoUsd.value = 0;
+                }
+        
+                if (e.target.value == "EFECTIVO") {
+                    inputMontoBs.required = true;
+                    inputMontoUsd.value = 0;
+                }
+        
+                if (e.target.value == "TD") {
+                    inputMontoBs.required = true;
+                    inputMontoUsd.value = 0;
+                }
+        
+                if (e.target.value == "DIVISAS") {
+                    inputMontoUsd.required = true;
+                    inputMontoBs.value = 0;
+                }
             }
-    
-            if (e.target.value == "EFECTIVO") {
-                inputMontoBs.required = true;
-                inputMontoUsd.value = 0;
+        
+            if (e.target.localName == "input" && e.target.checked === false) {
+                // let text = e.target.nextElementSibling.innerText;
+                if (e.target.value == "PAGO MOVIL") {
+                    inputReferencia.required = false;
+                }
             }
+        });
+    }
     
-            if (e.target.value == "TD") {
-                inputMontoBs.required = true;
-                inputMontoUsd.value = 0;
-            }
-    
-            if (e.target.value == "DIVISAS") {
-                inputMontoUsd.required = true;
-                inputMontoBs.value = 0;
-            }
-        }
-    
-        if (e.target.localName == "input" && e.target.checked === false) {
-            // let text = e.target.nextElementSibling.innerText;
-            if (e.target.value == "PAGO MOVIL") {
-                inputReferencia.required = false;
-            }
-        }
-    });
-    
+
+    /** cargar eventos de boton eliminar */
+    function cargerEventosDeBotonEliminar() {
+        let botones = document.querySelectorAll('.btn-eliminar'),
+        nuevaListaDeEstudiantes = [];
+        console.log(botones);
+
+       
+        botones.forEach(boton => {
+            boton.addEventListener('click', (e)=>{
+                console.log(e.target);
+                console.log(e.target.id);
+                elementoPreload.innerHTML = preload;
+                cardDataEstudiante.innerHTML = "";
+                nuevaListaDeEstudiantes = estudiantes.filter(estudiante => estudiante.cedula != e.target.id);
+                setTimeout(()=>{
+                    console.log("--------- NUEVA LISTA  -------- ");
+                    console.log(nuevaListaDeEstudiantes);
+                    localStorage.setItem('estudiantes', JSON.stringify(nuevaListaDeEstudiantes));
+                    estudiantes = nuevaListaDeEstudiantes;
+                   
+                        estudiantes.forEach(estudiante =>{
+                            cardDataEstudiante.innerHTML += getCardData(estudiante);
+                        });
+                        elementoPreload.innerHTML = "";
+                }, 1500);
+            });
+        });
+
+
+    }
+
 }
 

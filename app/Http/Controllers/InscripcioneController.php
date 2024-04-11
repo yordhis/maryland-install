@@ -64,30 +64,8 @@ class InscripcioneController extends Controller
                 $inscripcion['grupo'] = $inscripcion['grupo'][0];
             }
 
-            // Obtenemos toda las cuotas
-            foreach ($inscripciones as $key => $inscripcion) {
-                $inscripcion['cuotas'] = Cuota::where(
-                    [
-                        'cedula_estudiante' => $inscripcion['cedula_estudiante'],
-                        'codigo_grupo' => $inscripcion['codigo_grupo'],
-                    ]
-                )->get();
-                $totalAbonado = 0;
-                foreach ($inscripcion['cuotas'] as $key => $cuota) {
-                    if ($cuota['estatus'] == "1") {
-                        $totalAbonado += $cuota['cuota'];
-                    }
-                }
-                $inscripcion['totalAbonado'] = $totalAbonado;
-                $inscripcion['estatusText'] = $this->data->estatus[$inscripcion['estatus']];
-
-                // activamos para asignar nota
-                $inscripcion['estatusDeAsignacionDeNota'] = 0;
-                $fechaCulminacionDeCurso = Carbon::createMidnightDate(date('Y-m-d'));
-                if ($fechaCulminacionDeCurso->diffInDays($inscripcion['grupo']['fecha_fin'], false) <= 0) {
-                    $inscripcion['estatusDeAsignacionDeNota'] = 1;
-                }
-            }
+     
+        
 
             // return $inscripciones;
             return view('admin.inscripciones.lista', compact('inscripciones', 'notificaciones'));
@@ -98,10 +76,21 @@ class InscripcioneController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * VISTA DE INGRESAR CEDULA DEL ESTUDIANTE
+     * SI EXISTE REDIRECCIONA A PROCESAR INSCRIPCIÓN
+     * SI NO SE DESPLIEGA EL FORMULARIO DE REGISTRO DE ESTUDIANTE
      */
+    public function createEstudiante()
+    {
+        try {
+            
+            $notificaciones = $this->data->notificaciones;
+            return view('admin.inscripciones.crearEstudiante', compact('notificaciones'));
+        } catch (\Throwable $th) {
+            $errorInfo = Helpers::getMensajeError($th, "Error al Consultar Inscripciones en el método create,");
+            return response()->view('errors.404', compact("errorInfo"), 404);
+        }
+    }
     public function create()
     {
         try {
@@ -128,6 +117,7 @@ class InscripcioneController extends Controller
         try {
             $planes = Plane::where("estatus", 1)->get();
             $grupos = Helpers::setMatricula(Grupo::where("estatus", 1)->get());
+
             $estatusCreate = 0;
             $id = 0;
             // el estudiante existe
@@ -184,8 +174,6 @@ class InscripcioneController extends Controller
                     );
             } else {
                 // Cuando el estudiante no esta registrado retorna el boton de registrar estudiante
-              
-
                 $this->data->respuesta['mensaje'] = "¡El estudiante no esta registrado en el sistema, Por favor proceda a registrarlo!";
                 $this->data->respuesta['estatus'] = 404;
                 $respuesta = $this->data->respuesta;
@@ -195,6 +183,7 @@ class InscripcioneController extends Controller
                     compact('request', 'respuesta', 'planes', 'grupos')
                 );
             }
+
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Procesar Inscripción en el método store,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -210,6 +199,7 @@ class InscripcioneController extends Controller
     public function show(Inscripcione $inscripcione)
     {
         try {
+            
             $estudiante = Helpers::getEstudiante($inscripcione['cedula_estudiante']);
             foreach ($estudiante->inscripciones as $inscripcion) {
                 if ($inscripcion->codigo == $inscripcione->codigo) $inscripcione = $inscripcion;

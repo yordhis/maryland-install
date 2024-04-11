@@ -18,7 +18,7 @@
 
                 <div class="card">
                   <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                    <img src="{{ $estudiante->foto }}" alt="Profile" class="rounded-circle">
+                    <img src="{{ asset($estudiante->foto) }}" alt="Profile" class="rounded-circle">
                     <h2>  {{ $estudiante->nombre }}</h2>
                     <h3>{{ $estudiante->edad }} Años</h3>
 
@@ -150,86 +150,52 @@
                       <div class="row">
                         <hr>
                         <div class="col-md-12">
-                          <h3>Datos De Inscripción</h3>
+                          <h3>Incripciones</h3>
                         </div>
 
                         @if(isset($estudiante->inscripciones[0]))
                           @foreach ($estudiante->inscripciones as $inscripcione)
                               
-                            <div class="col-md-12 label"> 
-                              <span class="text-primary">Codigo de inscripción:</span> {{$inscripcione->codigo}} 
-                            </div>
-                            <div class="col-md-12 label"> 
-                              <span class="text-primary">Fecha de Inscripción:</span> {{ isset($inscripcione->fecha) ? date_format(date_create($inscripcione->fecha), "d-m-Y") : "" }} 
-                            </div>
-
-                            <div class="col-md-12 label"> 
-                              {{-- <span class="text-primary">Observación:</span> {{ explode(",", $inscripcione->extras)[4] ? explode(",", $inscripcione->extras)[4] : "No hay observación asignada" }}  --}}
-                            </div>
-
-                            <div class="col-md-12 label mt-2"> 
-                              <hr>
-                              <h3>Grupo de Estudio</h3>
-                            </div>
-
-                            <div class="col-md-12 label"> 
-                              <span class="text-primary">Código del Grupo:</span> {{ $inscripcione->grupo['codigo'] }}
-                            </div>
-
-                            <div class="col-md-12 label"> 
-                              <span class="text-primary">Nombre del grupo:</span> {{ $inscripcione->grupo['nombre'] }}
-                            </div>
-
-                            <div class="col-md-12 label"> 
-                              <span class="text-primary">Nivel:</span> {{"Cod: " . $inscripcione->grupo['nivel']->codigo . " - " .$inscripcione->grupo['nivel']->nombre }}
-                            </div>
-
-                            <div class="col-md-12 label"> 
-                              <span class="text-primary"> <b>Profesor: </b> </span> {{ $inscripcione->grupo['profesor']->nombre }} <br>
-                              <span class="text-primary">C.I.:</span> {{ $inscripcione->grupo['profesor']->nacionalidad . "-" . $inscripcione->grupo['profesor']->cedula }} <br>
-                              <span class="text-primary">Edad:</span> {{ $inscripcione->grupo['profesor']->edad }} Años <br>
-                              <span class="text-primary">Teléfono:</span> {{ $inscripcione->grupo['profesor']->telefono }} <br>
-                              <span class="text-primary">Correo:</span> {{ $inscripcione->grupo['profesor']->correo }}
-                            </div>
-
-                            <div class="col-md-12 label"> 
-                              <span class="text-primary"> <b> Horario de clase: </b></span> <br>
-                              <span class="text-primary">Días:</span> {{ $inscripcione->grupo['dias'] }} <br>
-                              <span class="text-primary">Horas:</span> 
-                              De {{ isset($inscripcione->grupo['hora_inicio']) ? date_format(date_create($inscripcione->grupo['hora_inicio']), 'h:i:a' ) : "" }}
-                              Hasta {{ isset($inscripcione->grupo['hora_fin']) ? date_format(date_create($inscripcione->grupo['hora_fin']), 'h:i:a' ): ""  }}
-                            </div>
-
-                            <div class="col-md-12 label mt-2"> 
-                              <hr>
-                              <h3>Plan de pago</h3>
-                            </div>
-
-                            <div class="col-md-12 label"> 
-                              <span class="text-primary">Plan:</span> {{ $inscripcione->plan->nombre }}
-                            </div>
-
-                            <div class="col-md-12 label"> 
-                              <div class="card">
-                                <div class="card-body">
-                                  <h5 class="card-title">Cuotas</h5>
-                    
-                                  <!-- List group With Icons -->
-                                  <ul class="list-group">
-                                    @foreach ($inscripcione->cuotas as $cuota)
-                                    <li class="list-group-item">
-                                      <i class="{{ $cuota->estatus == 1 ? "bi bi-check-circle me-1 text-success" : "bi bi-exclamation-octagon me-1 text-warning" }}"></i> 
-                                      <a href="{{ $cuota->estatus == 1 ? "/pagos" : "/pagos/$inscripcione->cedula_estudiante/$inscripcione->codigo" }}" target="_self">
-                                        <span class="{{ $cuota->estatus == 1 ? "text-success" : "text-danger" }}"> 
-                                          {{ isset($cuota->fecha) ? date_format(date_create($cuota->fecha), "d-m-Y") : ""}} {{ " | " . $cuota->cuota}}
-                                        </span>
-                                      </a>
-                                    </li>
-                                    @endforeach
-                                  </ul><!-- End List group With Icons -->
-                    
+                            <a class="btn btn-primary" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">
+                              Click para ver | código: {{ $inscripcione->codigo . " - " }} 
+                              @if ($inscripcione->estatus == 3)
+                                  <button type="button" class="btn btn-danger">Finalizado</button>
+                              @else
+                                  <button type="button" class="btn btn-success">En curso</button>
+                              @endif
+                            </a>
+                            <div class="row">
+                              <div class="col">
+                                <div class="collapse multi-collapse" id="multiCollapseExample1">
+                                  <div class="card card-body">
+                                    <div class="col-md-12 label"> 
+                                      <span class="text-primary">Ver inscripción:</span> 
+                                      <a href="{{ route('admin.inscripciones.show', $inscripcione->id) }}"> 
+                                        {{ $inscripcione->codigo . " - " . $inscripcione->fecha . " - " . $inscripcione->estatus }} 
+                                      </a> 
+                                    </div>
+                                    <div class="col-md-12 label"> 
+                                      <span class="text-primary">Ver grupo:</span> 
+                                      <a href="{{ route('admin.grupos.show', $inscripcione->grupo['id']) }}"> 
+                                        {{ $inscripcione->grupo['nombre'] }}
+                                      </a> 
+                                    </div>
+                                    <div class="col-md-12 label"> 
+                                      <span class="text-primary">
+                                        Costo del curso: 
+                                        <b class="fs-3 text-success"> 
+                                          {{ $inscripcione->grupo['nivel']->precio }} 
+                                        </b>
+                                      </span> 
+                                    </div>
+                                    <div class="col-md-12 label"> 
+                                      <span class="text-primary">Abonado: <b class="fs-3">100$</b></span> 
+                                      <span class="text-primary">Pendiente: <b class="fs-3">100$</b></span> 
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
+                           
                             </div>
 
                           @endforeach
@@ -260,7 +226,7 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
           {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
         </div>
       </div>

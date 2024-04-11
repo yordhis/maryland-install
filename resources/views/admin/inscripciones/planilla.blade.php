@@ -65,7 +65,7 @@
                                 <tr class="text-start">
                                     <td colspan="4">
                                         <b>Nombre y Apellido:</b>
-                                        <span> {{ $estudiante->nombre }} </span>
+                                        <span> {{ $estudiante->nombre ?? '' }} </span>
                                     </td>
                                     
                                 </tr>
@@ -119,50 +119,54 @@
                                 </tr>
                                 <!-- End Datos de estudiante -->
                             </tbody>
+                            @if ($estudiante->representantes[0])
                             <thead>
                                 <tr>
                                     <th class="fs-4 text-center" colspan="4">Datos del Representante</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="text-start">
-                                    <td colspan="2">
-                                        <b>Nombre y Apellido:</b>
-                                        <span> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->nombre  : ''}} </span>
-                                    </td>
-                                    <td>
-                                        <b>Cédula:</b>
-                                        <span> {{ count($estudiante->representantes) ? "V-". number_format($estudiante->representantes[0]->cedula, 0, ',', '.') : ''}} </span>
-                                    </td>
-                                    <td>
-                                        <b>Edad:</b>
-                                        <span> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->edad : '' }} </span>
-                                    </td>
-                                </tr>
+                                    <tr class="text-start">
+                                        <td colspan="2">
+                                            <b>Nombre y Apellido: {{ count($estudiante->representantes) }}</b>
+                                            <span> {{ $estudiante->representantes[0]->nombre ?? '' }} </span>
+                                        </td>
+                                        <td>
+                                            <b>Cédula:</b>
+                                            <span> {{ number_format($estudiante->representantes[0]->cedula, 0, ',', '.') ?? ''}} </span>
+                                        </td>
+                                        <td>
+                                            <b>Edad:</b>
+                                            <span> {{ $estudiante->representantes[0]->edad ?? '' }} </span>
+                                        </td>
+                                    </tr>
 
-                                <tr class="text-start">
-                                    <td>
-                                        <b>Teléfono:</b>
-                                        <span> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->telefono : '' }} </span>
-                                    </td>
-                                    <td colspan="3">
-                                        <b>Correo:</b>
-                                        <span> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->correo : '' }}</span>
-                                    </td>
-                                </tr>
-                                <tr class="text-start">
-                                    <td colspan="4">
-                                        <b>Ocupación:</b>
-                                        <span> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->ocupacion : '' }} </span>
-                                    </td>
-                                </tr>
-                                <tr class="text-start">
-                                    <td colspan="4">
-                                        <b>Dirección de habitación:</b>
-                                        <span> {{ count($estudiante->representantes) ? $estudiante->representantes[0]->direccion : '' }} </span>
-                                    </td>
-                                </tr>
-                            </tbody>
+                                    <tr class="text-start">
+                                        <td>
+                                            <b>Teléfono:</b>
+                                            <span> {{  $estudiante->representantes[0]->telefono ?? '' }} </span>
+                                        </td>
+                                        <td colspan="3">
+                                            <b>Correo:</b>
+                                            <span> {{  $estudiante->representantes[0]->correo ?? '' }}</span>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="text-start">
+                                        <td colspan="4">
+                                            <b>Ocupación:</b>
+                                            <span> {{  $estudiante->representantes[0]->ocupacion ?? '' }} </span>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="text-start">
+                                        <td colspan="4">
+                                            <b>Dirección de habitación:</b>
+                                            <span> {{  $estudiante->representantes[0]->direccion ?? '' }} </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                @endif
 
                             <thead>
                                 <tr>

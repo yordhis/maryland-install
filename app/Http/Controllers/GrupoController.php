@@ -141,7 +141,8 @@ class GrupoController extends Controller
                 $grupo->estudiantes[$key] = Helpers::getEstudiante($est->cedula_estudiante);
                 $grupo->estudiantes[$key]['id'] = $est->id; // se le asigna el id asignado en la tabla pibote para poceder a eliminar
             }
-            // return $grupo;
+          
+           
             return view("admin.grupos.ver", compact('grupo', 'notificaciones'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error de Consulta de grupo en el método show,");

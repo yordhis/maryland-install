@@ -43,11 +43,11 @@
                                 @php $contador = 1; @endphp
                                 @foreach ($inscripciones as $inscripcione)
                                     <tr>
-                                        <th scope="row">{{ $contador }}</th>
+                                        <th scope="row">{{ $inscripcione->id }}</th>
                                         <td>{{ $inscripcione->codigo }}</td>
                                         <td>
-                                            {{ $inscripcione->estudiante->nombre }} <br>
-                                            C.I.:{{ number_format($inscripcione->estudiante->cedula, 0, ',', '.') }}
+                                            {{ $inscripcione->estudiante->nombre ?? 'Sin nombre' }} <br>
+                                            C.I.:{{ number_format($inscripcione->cedula_estudiante, 0, ',', '.') }}
                                         </td>
                                         <td>{{ $inscripcione->grupo['nivel']->nombre }}</td>
                                         <td>{{ $inscripcione->grupo['nombre'] }}</td>
@@ -59,12 +59,10 @@
 
 
                                         <td>
-                                            <a href="/inscripciones/{{ $inscripcione->id }}" target="_self">
+                                            <a href=" {{ route('admin.inscripciones.show', $inscripcione->id ) }}">
                                                 <i class="bi bi-eye fs-3"></i>
                                             </a>
-                                            {{-- <a href="/inscripciones/{{$inscripcione->id}}/edit" target="_self">
-                                                    <i class="bi bi-pencil fs-3 text-warning"></i>
-                                                </a> --}}
+                                           
 
                                             @include('admin.inscripciones.partials.modal')
 

@@ -1,20 +1,20 @@
 
         
 <!-- Vertically centered Modal -->
-<a type="button" class="text-warning" data-bs-toggle="modal" data-bs-target="#modalObservacion{{$inscripcione->id}}">
+<a type="button" class="text-warning" data-bs-toggle="modal" data-bs-target="#modalObservacion{{ $inscripcione->id }}">
     <i class="bi bi-pencil fs-3"></i>
 </a>
     
 
 
-<div class="modal fade" id="modalObservacion{{$inscripcione->id}}" tabindex="-1">
+<div class="modal fade" id="modalObservacion{{ $inscripcione->id }}" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
         <div class="modal-header">
         <h5 class="modal-title">Asignar Observación</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="inscripciones/{{$inscripcione->id}}" method="post" target="_self">
+        <form action="{{ route('admin.inscripciones.update', $inscripcione->id) }}" method="post">
             @csrf
             @method('put')
             <div class="modal-body">
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary ">Guardar observación</button>
             </div>
         </form>

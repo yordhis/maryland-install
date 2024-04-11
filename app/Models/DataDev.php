@@ -83,6 +83,7 @@ class DataDev
             "1" => "Activo",
             "2" => "Inactivo",
             "3" => "Completado",
+            "4" => "Pendiente"
         ];
 
         $this->usuario = [

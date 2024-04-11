@@ -25,18 +25,21 @@
                   <p class="text-center text-danger small">Rellene todos los campos </p>
                 </div>
 
-                <form action="/estudiantes/{{$estudiante->id}}" method="post" class="row g-3 needs-validation" target="_self" 
+                <form action=" {{ route('admin.estudiantes.update', $estudiante->id) }}" method="post" class="row g-3 needs-validation" 
                   enctype="multipart/form-data"
                   novalidate>
                  @csrf
                  @method('put')  
                  
-                      
+                      <input type="text" name="urlPrevia"
+                      value="{{$urlPrevia}}"
+                      required>
+
                       <div class="col-12  card my-3">
                         @if ($estudiante->foto)
-                            <img src="{{ asset($estudiante->foto ) }}" class="rounded mx-auto d-block" alt="">                        
+                            <img src="{{ asset($estudiante->foto) }}" class="rounded mx-auto d-block" style="width: 18rem;" alt="">                        
                         @else
-                          <img src="{{ asset('assets/img/avatar.png') }}" class="rounded mx-auto d-block" alt="">                        
+                          <img src="{{ asset('/assets/img/avatar.png') }}" class="rounded mx-auto d-block" alt="">                        
                             
                         @endif
                       </div>

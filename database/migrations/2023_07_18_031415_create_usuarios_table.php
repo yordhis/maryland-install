@@ -19,7 +19,7 @@ class CreateUsuariosTable extends Migration
             $table->string('clave');
             $table->integer('rol')->default(2);
             $table->text('remember_token')->nullable();
-            $table->string('foto')->default('/storage/fotos/default.jpg');
+            $table->string('foto')->default('/assets/fotos/default.jpg');
             $table->timestamps();
         });
     }

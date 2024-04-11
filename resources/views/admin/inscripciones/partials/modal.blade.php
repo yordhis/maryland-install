@@ -14,14 +14,14 @@
         <h5 class="modal-title">Asignar nota</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="notas/{{$inscripcione->id}}" method="post" target="_self">
+        <form action=" {{ route( 'admin.notas.update', $inscripcione->id ) }}" method="post" >
             @csrf
             @method('put')
             <div class="modal-body">
                 <div class="col-12">
                 <p>
                     Esta nota será asignada a la inscripción del Nivel <b>{{$inscripcione->grupo['nivel']->nombre}}</b> <br>
-                    del estudiante <b> {{$inscripcione->estudiante->nombre}}</b>.
+                    del estudiante <b> {{ $inscripcione->estudiante->nombre ?? ''}}</b>.
                 </p>
                     
                     <label for="yourPassword" class="form-label">Ingrese nota</label>
@@ -41,11 +41,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <small class="text-danger">{{ $inscripcione->estatusDeAsignacionDeNota ? ""
-                : "No se puede asignar nota porque el curso no a culminado y culmina " . $inscripcione->grupo['fecha_fin'] }} </small>
+                <small class="text-danger"></small>
               
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary {{ $inscripcione->estatusDeAsignacionDeNota ? "": "disabled" }}">Asignar nota</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary">Asignar nota</button>
             </div>
         </form>
     </div>

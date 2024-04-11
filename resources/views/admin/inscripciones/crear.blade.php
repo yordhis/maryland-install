@@ -24,7 +24,7 @@
                                     <p class="text-center text-danger small">Rellene todos los campos</p>
                                 </div>
 
-                                <form action="/inscripciones" method="post" class="row g-3 needs-validation" target="_self"
+                                <form action="{{ route('admin.inscripciones.store') }}" method="post" class="row g-3 needs-validation" 
                                     enctype="multipart/form-data" novalidate>
                                     @csrf
                                     @method('post')
@@ -48,7 +48,7 @@
                                         <label for="yourPassword" class="form-label">Cédula del estudiante</label>
                                         <div class="input-group has-validation">
                                             <span class="input-group-text text-white bg-primary" id="inputGroupPrepend">
-                                                <a href="#" target="_self" class="text-white fs-5"
+                                                <a href="#"  class="text-white fs-5"
                                                     id="buscarEstudiante">
                                                     <i class="bi bi-search"></i>
                                                 </a>
