@@ -23,6 +23,7 @@ btnAddRepre.addEventListener('click', (e) => {
     btnAddRepre.classList.add('text-warning');
     displayElemento(representanteElemento, false);
 });
+
 btnAddDifi.addEventListener('click', (e) => {
     e.preventDefault; 
     btnAddDifi.classList.add('text-warning');
@@ -38,11 +39,10 @@ closeRepre.addEventListener('click', (e)=>{
     displayElemento(representanteElemento, true);
     btnAddRepre.classList.replace('text-warning', 'text-primary');
 });
+
 closeDifi.addEventListener('click', (e)=>{
     displayElemento(dificultadElemento, true)
     btnAddDifi.classList.replace('text-warning', 'text-primary');
 });
-
-
 
 const displayElemento = (elemento, accion) => elemento.hidden=accion;

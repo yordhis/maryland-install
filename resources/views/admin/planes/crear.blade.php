@@ -27,7 +27,7 @@
 
 
 
-                                <form action="/planes" method="post" class="row g-3 needs-validation" target="_self"
+                                <form action="{{ route('admin.planes.store') }}" method="post" class="row g-3 needs-validation" 
                                     enctype="multipart/form-data" novalidate>
                                     @csrf
                                     @method('post')
@@ -56,7 +56,7 @@
                                             required>
                                         <div class="invalid-feedback">Por favor, Ingrese nombre del plan!</div>
                                     </div>
-
+                                    {{-- 
                                     <div class="col-4">
                                         <label for="yourPassword" class="form-label">Cantidad de cuotas</label>
                                         <input type="number" name="cantidad_cuotas" class="form-control" id="yourUsername"
@@ -83,7 +83,7 @@
                                         <div class="invalid-feedback">
                                             Por favor, Seleccione plazo de pago!
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="col-12">
                                         <label for="yourPassword" class="form-label">Decripcion del plan</label>

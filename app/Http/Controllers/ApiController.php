@@ -42,7 +42,6 @@ class ApiController extends Controller
     {
         try {
 
-           
             $estudiante = Helpers::getEstudiante($cedula);
             $mensaje = $estudiante->id > 0 ? "Consulta exitosa" : "No hay resultados";
             $estatus = $estudiante->id > 0  ?  Response::HTTP_OK : Response::HTTP_NOT_FOUND;

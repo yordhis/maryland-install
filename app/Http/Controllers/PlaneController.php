@@ -10,6 +10,8 @@ use App\Models\{
 
 use App\Http\Requests\StorePlaneRequest;
 use App\Http\Requests\UpdatePlaneRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PlaneController extends Controller
 {
@@ -25,16 +27,24 @@ class PlaneController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
+            $codigo = Helpers::getCodigo('planes');
             $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
             $respuesta = $this->data->respuesta;
-            $planes = Plane::where('estatus', 1)->get();
+
+            if($request->filtro){
+                $planes = Plane::where('codigo', $request->filtro)
+                ->orWhere('nombre', 'like', "%{$request->filtro}%")
+                ->orderBy('id', 'desc')
+                ->paginate(5);
+            }else{
+                $planes = Plane::orderBy('id', 'desc')->paginate(5);
+            }
             return view(
                 'admin.planes.lista',
-                compact('planes', 'notificaciones', 'usuario', 'respuesta')
+                compact('planes', 'notificaciones', 'respuesta', 'request', 'codigo')
             );
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error de consula en el método index,");
@@ -69,25 +79,34 @@ class PlaneController extends Controller
     public function store(StorePlaneRequest $request)
     {
         try {
-            $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
+   
             $estatusCreate = 0;
-            $datoExiste = Helpers::datoExiste($request, ["planes" => ["nombre", "", "nombre"]]);
-            if (!$datoExiste) {
-                $estatusCreate = Plane::create($request->all());
-            }
-
-            $mensaje = $this->data->respuesta['mensaje'] = $estatusCreate ? "El Plan se guardo correctamente."
+            // $datoExiste = Helpers::datoExiste($request, ["planes" => ["nombre", "", "nombre"]]);
+            // if (!$datoExiste) {
+                // }
+                
+            $estatusCreate = Plane::create($request->all());
+            
+            $mensaje = $estatusCreate ? "El Plan se guardo correctamente."
                 : "El nombre del Plan Ya existe, Cambie el nombre.";
-            $estatus = $this->data->respuesta['estatus'] = $estatusCreate ? 200
-                : 301;
-            $respuesta = $this->data->respuesta;
 
-            return $estatusCreate ? redirect()->route('admin.planes.index', compact('mensaje', 'estatus'))
-                : view('admin.planes.crear', compact('request', 'notificaciones', 'usuario', 'respuesta'));
+            $estatus = $estatusCreate ? 200
+                : 301;
+
+       
+
+            return redirect( url()->previous() )->with([
+                "mensaje" =>   $mensaje,
+                "estatus" =>   $estatus
+            ]);
+
         } catch (\Throwable $th) {
-            $errorInfo = Helpers::getMensajeError($th, "Error al intentar registrar un plan en el método store,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            $mensaje = Helpers::getMensajeError($th, "Error al intentar registrar un plan en el método store,");
+            return redirect( url()->previous() )->with([
+                "mensaje" =>   $mensaje,
+                "estatus" =>   404
+            ]);
+          
         }
     }
 
@@ -99,7 +118,10 @@ class PlaneController extends Controller
      */
     public function show(Plane $plane)
     {
-        return redirect()->route('admin.planes.index');
+        return redirect( url()->previous() )->with([
+            "mensaje" =>   "Este método no esta disponible",
+            "estatus" =>   301
+        ]);
     }
 
     /**
@@ -112,8 +134,8 @@ class PlaneController extends Controller
     {
         try {
             $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
-            return view('admin.planes.editar', compact('notificaciones', 'usuario', 'plane'));
+            $urlPrevious = url()->previous();
+            return view('admin.planes.editar', compact('notificaciones', 'plane', 'urlPrevious'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error de consula en el método edit,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -131,7 +153,7 @@ class PlaneController extends Controller
     {
         try {
             $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
+
             $estatusUpdate = $plane->update($request->all());
            
             $mensaje = $this->data->respuesta['mensaje'] = $estatusUpdate ? "El Plan se Actualizó correctamente."
@@ -140,8 +162,12 @@ class PlaneController extends Controller
                 : 404;
             $respuesta = $this->data->respuesta;
 
-            return $estatusUpdate ? redirect()->route('admin.planes.index', compact('mensaje', 'estatus'))
-                : view('admin.planes.editar', compact('request', 'notificaciones', 'usuario', 'respuesta'));   
+            return redirect( $request->urlPrevious )->with([
+                "mensaje" =>   $mensaje,
+                "estatus" =>   $estatus
+            ]);
+            // return $estatusUpdate ? redirect()->route('admin.planes.index', compact('mensaje', 'estatus'))
+            //     : view('admin.planes.editar', compact('request', 'notificaciones', 'usuario', 'respuesta'));   
          
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al intentar actualizar Plan en el método update,");
@@ -158,13 +184,18 @@ class PlaneController extends Controller
     public function destroy(Plane $plane)
     {
         try {
-            $plane->update(["estatus" => 0]);
-            $mensaje = "El Plan se Eliminó correctamente.";
-            $estatus = 200;
-            return redirect()->route( 'admin.planes.index', compact('mensaje', 'estatus') );
+            
+            $plane->delete();
+            return redirect( url()->previous() )->with([
+                "mensaje" =>  "El Plan se Eliminó correctamente.",
+                "estatus" =>  200
+            ]);
         } catch (\Throwable $th) {
-            $errorInfo = Helpers::getMensajeError($th, "Error de al intentar Eliminar un nivel,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            $mensaje = Helpers::getMensajeError($th, "Error de al intentar Eliminar un nivel,");
+            return redirect( url()->previous() )->with([
+                "mensaje" =>   $mensaje ,
+                "estatus" =>  404
+            ]);
         }
     }
 }

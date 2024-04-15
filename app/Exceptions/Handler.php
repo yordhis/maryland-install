@@ -65,19 +65,19 @@ class Handler extends ExceptionHandler
         $this->renderable(function (NotFoundHttpException $e, $request) {
             // dd($e);
             $errorInfo = Helpers::getMensajeError($e, "Error de consula,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            return redirect()->back(301, ["mensaje" => $errorInfo]);
         });
 
         $this->renderable(function (RouteNotFoundException $e, $request) {
             // dd($e);
             $errorInfo = Helpers::getMensajeError($e, "La ruta solicitada no esta definida,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            return redirect()->back(301, ["mensaje" => $errorInfo]);
         });
 
         $this->renderable(function (ViewException $e, $request) {
             // dd($e);
             $errorInfo = Helpers::getMensajeError($e, "Error de datos de la Vista,");
-            return response()->view('errors.404', compact("errorInfo"), Response::HTTP_NOT_FOUND);
+            return redirect()->back(361, ["mensaje" => $errorInfo]);
         });
     }
 

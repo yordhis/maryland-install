@@ -24,7 +24,8 @@ class UpdatePlaneRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "nombre" => "required | max:255",
+            "descripcion" =>  "required | max:255"
         ];
     }
 }

@@ -24,7 +24,8 @@ class StorePlaneRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "nombre" => "required | max:255 | unique:planes",
+            "descripcion" =>  "required | max:255"
         ];
     }
 }

@@ -38,6 +38,8 @@
  <script src="{{ asset('assets/js/partials/alert.js') }}"></script>
 
  <script> 
+   
+
   try {
         const dataTable = new simpleDatatables.DataTable("#datatable", {
             searchable: true,
@@ -52,7 +54,9 @@
                 noResults: "Ningún resultado coincide con su consulta de búsqueda",
             },
         })
+
   } catch (error) {
         console.log(error)
+        
   }
 </script>

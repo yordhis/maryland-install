@@ -16,10 +16,10 @@
             ¿Esta seguro que desea eliminar el plan <span class="text-danger fs-5">{{$plane->nombre}}</span>? 
         </div>
         <div class="modal-footer">
-            <form action="planes/{{$plane->id}}" method="post" target="_self">
+            <form action="{{ route('admin.planes.destroy', $plane->id) }}" method="post">
             @csrf
             @method('delete')
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="submit" class="btn btn-primary">Si, proceder a eliminar.</button>
             </form>
         </div>

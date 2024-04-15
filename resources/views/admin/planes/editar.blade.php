@@ -21,17 +21,19 @@
                             <div class="card-body">
 
                                 <div class=" pb-2">
-                                    <h5 class="card-title text-center pb-0 fs-2">Crear Nivel</h5>
+                                    <h5 class="card-title text-center pb-0 fs-2">Editar plan de pago</h5>
                                     <p class="text-center text-danger small">Rellene todos los campos</p>
                                 </div>
 
 
 
 
-                                <form action="/planes/{{ $plane->id }}" method="post" class="row g-3 needs-validation"
-                                    target="_self" enctype="multipart/form-data" novalidate>
+                                <form action="{{ route('admin.planes.update', $plane->id) }}" method="post"
+                                    class="row g-3 needs-validation" enctype="multipart/form-data" novalidate>
                                     @csrf
                                     @method('put')
+
+                                    <input type="hidden" name="urlPrevious" value="{{ old('urlPrevious') ?? $urlPrevious }}">
 
                                     <div class="col-12">
                                         <label for="yourUsername" class="form-label">Código
@@ -45,48 +47,32 @@
                                                 id="yourUsername" value="{{ $plane->codigo }}" readonly required>
                                             <div class="invalid-feedback">Por favor, ingrese codigo! </div>
                                         </div>
+                                        @error('codigo')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     <div class="col-12">
                                         <label for="yourPassword" class="form-label">Nombre del plan</label>
                                         <input type="text" name="nombre" class="form-control" id="yourUsername"
-                                            placeholder="Ingrese nombre del nivel" value="{{ $plane->nombre }}" required>
+                                            placeholder="Ingrese nombre del nivel" value="{{ old('nombre') ?? $plane->nombre }}" required>
                                         <div class="invalid-feedback">Por favor, Ingrese nombre del plan!</div>
+
+                                        @error('nombre')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
-                                    <div class="col-4">
-                                        <label for="yourPassword" class="form-label">Cantidad de cuotas</label>
-                                        <input type="number" name="cantidad_cuotas" class="form-control" id="yourUsername"
-                                            placeholder="Ingrese costo del nivel" value="{{ $plane->cantidad_cuotas }}"
-                                            required>
-                                        <div class="invalid-feedback">Por favor, Ingrese cantidad de cuotas!</div>
-                                    </div>
-
-                                    <div class="col-8">
-                                        <label for="validationCustom04" class="form-label">Plazo de pago</label>
-                                        <select name="plazo" class="form-select" id="validationCustom04" required>
-                                            <option selected disabled value="">Seleccione cantidad de dias</option>
-                                            @if (isset($plane->plazo))
-                                                <option value="{{ $plane->plazo }}" selected>{{ $plane->plazo }} Días
-                                                </option>
-                                            @endif
-                                            <option value="1">1 Día</option>
-                                            <option value="7">7 Días</option>
-                                            <option value="15">15 Días</option>
-                                            <option value="30">30 Días</option>
-                                            <option value="45">45 Días</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Por favor, Seleccione plazo de pago!
-                                        </div>
-                                    </div>
 
                                     <div class="col-12">
                                         <label for="yourPassword" class="form-label">Decripcion del plan</label>
                                         <input type="text" name="descripcion" class="form-control" id="yourUsername"
-                                            placeholder="Ingrese la descripción del plan." value="{{ $plane->descripcion }}"
+                                            placeholder="Ingrese la descripción del plan." value="{{ old('descripcion') ?? $plane->descripcion }}"
                                             required>
                                         <div class="invalid-feedback">Por favor, Ingrese la descripción del plan!</div>
+                                        @error('descripcion')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
 

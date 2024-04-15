@@ -113,7 +113,7 @@ $subcategoria = 'LISTA';
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.niveles.create') }}" 
+                    <a href="{{ route('admin.planes.create') }}" 
                         class="{{ $categoria == 'PLANES' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
                         <i class="bi bi-circle"></i><span>Crear</span>
                     </a>
