@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTotalColumnToInscripciones extends Migration
+class AddColumnToPagos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddTotalColumnToInscripciones extends Migration
      */
     public function up()
     {
-        Schema::table('inscripciones', function (Blueprint $table) {
-            $table->double('total', 11)->default(0);
-            $table->double('abono', 11)->default(0);
+        Schema::table('pagos', function (Blueprint $table) {
+            $table->string('codigo_inscripcion', 55)->nullable();
         });
     }
 
@@ -26,9 +25,8 @@ class AddTotalColumnToInscripciones extends Migration
      */
     public function down()
     {
-        Schema::table('inscripciones', function (Blueprint $table) {
-            $table->dropColumn('total');
-            $table->dropColumn('abono');
+        Schema::table('pagos', function (Blueprint $table) {
+            $table->dropColumn('codigo_inscripcion');
         });
     }
 }

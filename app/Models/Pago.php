@@ -19,6 +19,7 @@ class Pago extends Model
         'metodo', 
         'monto', 
         'referencia', 
-        'estatus' 
+        'codigo_inscripcion', 
+        'estatus'
     ];
 }

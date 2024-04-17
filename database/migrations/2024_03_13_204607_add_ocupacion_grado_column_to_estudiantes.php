@@ -14,8 +14,8 @@ class AddOcupacionGradoColumnToEstudiantes extends Migration
     public function up()
     {
         Schema::table('estudiantes', function (Blueprint $table) {
-            $table->string('ocupacion', 255)->after('direccion');
-            $table->string('grado', 255)->after('direccion');
+            $table->string('ocupacion', 255)->after('direccion')->nullable();
+            $table->string('grado', 255)->after('direccion')->nullable();
         });
     }
 
