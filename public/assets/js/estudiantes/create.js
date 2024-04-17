@@ -1,15 +1,17 @@
-let representanteElemento = document.getElementById('agregar-representante'),
-dificultadElemento = document.getElementById('agregar-dificultad'),
-btnAddRepre = document.getElementById('addRepre'),
+let btnAddRepre = document.getElementById('addRepre'),
 btnAddDifi = document.getElementById('addDifi');
 closeRepre = document.getElementById('closeRepre'),
 closeDifi = document.getElementById('closeDifi'),
 formCreate = document.forms[1];
 
-representanteElemento.hidden = true;
-dificultadElemento.hidden = true;
-
-console.log(formCreate);
+if(document.getElementById('agregar-representante')){
+    representanteElemento = document.getElementById('agregar-representante');
+    representanteElemento.hidden = true;
+}
+if(document.getElementById('agregar-dificultad')){
+    dificultadElemento = document.getElementById('agregar-dificultad');
+    dificultadElemento.hidden = true;
+}
 
 btnAddRepre.addEventListener('click', (e) => {
     e.preventDefault; 

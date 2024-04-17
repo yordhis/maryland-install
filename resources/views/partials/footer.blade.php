@@ -12,8 +12,9 @@
     </div>
   </footer><!-- End Footer -->
  
- 
+
  <!-- Vendor JS Files -->
+ <script src="{{ asset('assets/js/main.js') }}" defer></script>
  <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
  <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
  <script src="{{ asset('assets/vendor/chart.js/chart.umd.js') }}"></script>
@@ -24,39 +25,19 @@
  <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
 
  {{-- simple data table --}}
- <script src="{{ asset('assets/js/simple-datatables.js') }}"></script>
+ {{-- <script src="{{ asset('assets/js/simple-datatables.js') }}"></script> --}}
  
  <!-- Template Main JS File -->
- <script src="{{ asset('assets/js/main.js') }}"></script>
- <script src="{{ asset('assets/js/estudiantes/create.js') }}"></script>
- <script src="{{ asset('assets/js/estudiantes/delete.js') }}"></script>
- <script src="{{ asset('assets/js/estudiantes/editar.js') }}"></script>
- <script src="{{ asset('assets/js/estudiantes/getData.js') }}"></script>
- <script src="{{ asset('assets/js/grupos/getDataGrupo.js') }}"></script>
- <script src="{{ asset('assets/js/representantes/getRepresentante.js') }}"></script>
- {{-- <script src="{{ asset('assets/js/partials/sidebar.js') }}"></script> --}}
- <script src="{{ asset('assets/js/partials/alert.js') }}"></script>
 
- <script> 
-   
-
-  try {
-        const dataTable = new simpleDatatables.DataTable("#datatable", {
-            searchable: true,
-            fixedHeight: false,
-            labels: {
-                placeholder: "Buscar...",
-                searchTitle: "Buecar",
-                pageTitle: "Pagina {page}",
-                perPage: "Entradas por página",
-                noRows: "No hay resultados",
-                info: "Página {start} a {end} de {rows} páginas",
-                noResults: "Ningún resultado coincide con su consulta de búsqueda",
-            },
-        })
-
-  } catch (error) {
-        console.log(error)
-        
-  }
-</script>
+ <script src="{{ asset('assets/js/partials/alert.js') }}" defer></script>
+ 
+ {{-- 
+  <script src="{{ asset('assets/js/estudiantes/create.js') }}" defer></script>
+ <script src="{{ asset('assets/js/main.js') }}" defer></script>
+ <script src="{{ asset('assets/js/estudiantes/delete.js') }}" defer></script>
+ <script src="{{ asset('assets/js/estudiantes/editar.js') }}" defer></script>
+ <script src="{{ asset('assets/js/estudiantes/getData.js') }}" defer></script>
+ <script src="{{ asset('assets/js/grupos/getDataGrupo.js') }}" defer></script>
+ <script src="{{ asset('assets/js/representantes/getRepresentante.js') }}" defer></script> --}}
+ {{-- <script src="{{ asset('assets/js/partials/sidebar.js') }}" defer></script> 
+ --}}

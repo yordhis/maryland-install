@@ -17,6 +17,8 @@ class Inscripcione extends Model
         "nota",
         "fecha",
         "extras",
+        "total",
+        "abono",
         "estatus"
     ];
 }

@@ -94,7 +94,7 @@
                                                         value="{{ $request->cedula ?? old('cedula') }}" required>
                                                     <div class="invalid-feedback">Por favor, Ingrese número de cédula!</div>
                                                     @error('cedula')
-                                                        {{ $message }}
+                                                    <div class="text-danger"> {{ $message }} </div>
                                                     @enderror
                                                 </div>
 
@@ -108,7 +108,7 @@
                                                     <div class="invalid-feedback">Por favor, Ingrese número de teléfono!
                                                     </div>
                                                     @error('telefono')
-                                                        {{ $message }}
+                                                    <div class="text-danger">  {{ $message }} </div>
                                                     @enderror
                                                 </div>
 
@@ -132,7 +132,7 @@
                                                     <div class="invalid-feedback">Por favor, ingrese fecha de nacimiento!
                                                     </div>
                                                     @error('nacimiento')
-                                                        {{ $message }}
+                                                       <div class="text-danger"> {{ $message }} </div>
                                                     @enderror
                                                 </div>
 
@@ -143,7 +143,7 @@
                                                         value="{{ $request->edad ?? old('edad') }}" required>
                                                     <div class="invalid-feedback">Por favor, Ingrese edad!</div>
                                                     @error('edad')
-                                                        {{ $message }}
+                                                       <div class="text-danger"> {{ $message }} </div>
                                                     @enderror
                                                 </div>
 
@@ -155,7 +155,7 @@
                                                         value="{{ $request->direccion ?? old('direccion') }}" required>
                                                     <div class="invalid-feedback">Por favor, Ingrese dirección!</div>
                                                     @error('direccion')
-                                                        {{ $message }}
+                                                       <div class="text-danger"> {{ $message }} </div>
                                                     @enderror
                                                 </div>
 
@@ -167,7 +167,7 @@
                                                     <div class="invalid-feedback">Por favor, Ingrese grado de estudio!
                                                     </div>
                                                     @error('grado')
-                                                        {{ $message }}
+                                                       <div class="text-danger"> {{ $message }} </div>
                                                     @enderror
                                                 </div>
                                                 <div class="col-12">
@@ -178,7 +178,7 @@
                                                         value="{{ $request->ocupacion ?? old('ocupacion') }}" required>
                                                     <div class="invalid-feedback">Por favor, Ingrese ocupación!</div>
                                                     @error('ocupacion')
-                                                        {{ $message }}
+                                                       <div class="text-danger"> {{ $message }} </div>
                                                     @enderror
                                                 </div>
 
@@ -359,11 +359,14 @@
                                             <span class="input-group-text" id="inputGroupPrepend">
                                                 <i class="bi bi-credit-card"></i>
                                             </span>
+
                                             <input type="text" class="form-control" name="cedula_estudiante"
                                                 id="cedula" aria-describedby="inputGroupPrepend"
                                                 placeholder="Ingrese número de identificación." required>
+
                                             <button class="input-group-text btn btn-primary" type="submit"
                                                 id="buscarEstudiante">Cargar</button>
+
                                             <div class="invalid-feedback">
                                                 Por favor ingrese número de identificación.
                                             </div>
@@ -388,4 +391,9 @@
             </div>
 
         </section>
+
+        <script src="{{ asset('assets/js/master.js') }}" defer></script>
+        <script src="{{ asset('assets/js/estudiantes/componentes/AccordionComponente.js') }}" defer></script>
+        <script src="{{ asset('assets/js/estudiantes/agregarPlanilla.js') }}" defer></script>
+        <script src="{{ asset('assets/js/representantes/getRepresentante.js') }}" defer></script>
     @endsection

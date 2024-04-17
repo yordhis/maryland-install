@@ -33,13 +33,14 @@
 {{-- <link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet"> --}}
 
 {{-- estilos de data table --}}
-<link href="{{ asset('assets/css/simple-datatables.css') }}" rel="stylesheet">
+{{-- <link href="{{ asset('assets/css/simple-datatables.css') }}" rel="stylesheet"> --}}
 
 <!-- Template Main CSS File -->
 <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/css/personalizado.css') }}" rel="stylesheet">
+<link href="{{ asset('/css/jquery-confirm.css') }}" rel="stylesheet">
+<script src="{{ asset('js/jquery.min.js') }}" defer></script>
+<script src="{{ asset('js/jquery-confirm.js') }}" defer></script>
 
-{{-- Jquery-confirm --}}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+
 

@@ -28,7 +28,7 @@
                                     enctype="multipart/form-data" novalidate>
                                     @csrf
                                     @method('post')
-
+                                    {{-- Código de la inscripción --}}
                                     <div class="col-12">
                                         <label for="yourUsername" class="form-label">Número de control
                                             <span class=" text-primary">(Es automático)</span>
@@ -44,32 +44,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-12">
-                                        <label for="yourPassword" class="form-label">Cédula del estudiante</label>
-                                        <div class="input-group has-validation">
-                                            <span class="input-group-text text-white bg-primary" id="inputGroupPrepend">
-                                                <a href="#"  class="text-white fs-5"
-                                                    id="buscarEstudiante">
-                                                    <i class="bi bi-search"></i>
-                                                </a>
-                                            </span>
-                                            <input type="text" name="cedula_estudiante" class="form-control fs-5"
-                                                id="cedula" value="{{ $request->cedula_estudiante ?? '' }}"
-                                                placeholder="Ingrese Cédula del estudiante" required>
-                                            <div class="invalid-feedback">Por favor, Ingrese cédula del estudiante!</div>
-                                        </div>
-                                    </div>
-
                                     {{-- Mostramos la tarjeta informativa del estudiante --}}
-                                    <div id="dataEstudiante">
-
+                                    <span id="preload_inscriciones"></span>
+                                    <div class="col-12" id="dataEstudiante">
                                     </div>{{-- ##FIN la tarjeta informativa del estudiante --}}
 
-                                    {{-- Mostramos las cuotas pendiente del estudiante --}}
-                                    <div id="cuotasEstudiante">
-
-                                    </div>{{-- ##FIN cuotas pendiente del estudiante --}}
-
+                                  
+                                    {{-- Planes de pago --}}
                                     <div class="col-6">
                                         <label for="validationCustom04" class="form-label">Asigne Plan de pago</label>
                                         <select name="codigo_plan" class="form-select" id="validationCustom04" required>
@@ -78,13 +59,10 @@
                                             @foreach ($planes as $plane)
                                                 @isset($request->codigo_plan)
                                                     @if ($plane->codigo == $request->codigo_plan)
-                                                        <option value="{{ $plane->codigo }}" selected>{{ $plane->nombre }} -
-                                                            Cuotas:
-                                                            {{ $plane->cantidad_cuotas }}</option>
+                                                        <option value="{{ $plane->codigo }}" selected>{{ $plane->nombre }} </option>
                                                     @endif
                                                 @endisset
-                                                <option value="{{ $plane->codigo }}">{{ $plane->nombre }} - Cuotas:
-                                                    {{ $plane->cantidad_cuotas }}</option>
+                                                <option value="{{ $plane->codigo }}">{{ $plane->nombre }} </option>
                                             @endforeach
 
                                         </select>
@@ -93,7 +71,7 @@
                                         </div>
                                     </div>
 
-
+                                    {{-- Fecha de inscripción --}}
                                     <div class="col-6">
                                         <label for="yourPassword" class="form-label">Fecha de inscripción </label>
                                         <input type="date" name="fecha" class="form-control" id="yourUsername"
@@ -101,6 +79,7 @@
                                         <div class="invalid-feedback">Por favor, Ingrese Fecha de inscripción!</div>
                                     </div>
 
+                                    {{-- Grupos de estudio --}}
                                     <div class="col-12">
                                         <label for="validationCustom04" class="form-label">Asigne Grupo de Estudio</label>
                                         <select name="codigo_grupo" class="form-select" id="codigo_grupo" required>
@@ -128,6 +107,19 @@
 
                                     </div>{{-- ##FIN Mostramos los datos del grupo --}}
 
+                                    <div class="col-sm-12">
+                                        <h3>
+                                            Procesar pago
+                                           <button type="button" class="btn btn-success">
+                                            Agregar pago
+                                           </button>
+                                        </h3>
+                                        <hr>
+                                    </div>
+                                
+                                    <div id="formasDePagos">
+                                        
+                                    </div>
 
                                     {{-- Datos Extras --}}
                                     <div class="col-sm-12">
@@ -208,4 +200,11 @@
             </div>
 
         </section>
+        
+        <script src="{{ asset('assets/js/master.js') }}" defer></script>
+        <script src="{{ asset('assets/js/estudiantes/componentes/AccordionComponente.js') }}" defer></script>
+        <script src="{{ asset('assets/js/pagos/componentes/FormPagoComponente.js') }}" defer></script>
+        <script src="{{ asset('assets/js/pagos/componentes/ListaAbonoComponente.js') }}" defer></script>
+        <script src="{{ asset('assets/js/inscripciones/create.js') }}" defer></script>
+        <script src="{{ asset('assets/js/grupos/getDataGrupo.js') }}" defer></script>
     @endsection

@@ -13,6 +13,7 @@
   </footer><!-- End Footer -->
 
   
+
  
  <!-- Vendor JS Files -->
  <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
