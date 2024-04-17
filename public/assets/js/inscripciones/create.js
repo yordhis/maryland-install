@@ -1,6 +1,7 @@
 let cardDataEstudiante = document.getElementById("dataEstudiante"),
     elementoPreload = document.getElementById("preload_inscriciones"),
     elementoFormasDePagos = document.getElementById("formasDePagos"),
+    inputEstudiantes = document.getElementById("estudiantes"),
     estudiantes = [],
     abonos = {
         metodo: "",
@@ -18,6 +19,7 @@ let cardDataEstudiante = document.getElementById("dataEstudiante"),
 
 /** Cargar tarjetas añadidas de estudiantes */
 const hanledLoad = async () => {
+    inputEstudiantes.value=""
     elementoPreload.innerHTML = preload;
 
     if (localStorage.getItem('estudiantes')) {
@@ -25,8 +27,13 @@ const hanledLoad = async () => {
 
         estudiantes = JSON.parse(localStorage.getItem('estudiantes'));
 
-        await estudiantes.forEach(estudiante => {
+        await estudiantes.forEach((estudiante, index) => {
             cardDataEstudiante.innerHTML += AccordionComponente(estudiante);
+            if(index == 0){
+                inputEstudiantes.value += estudiante.cedula;
+            }else{
+                inputEstudiantes.value +=  "," + estudiante.cedula ; 
+            }
         });
         await cargerEventosDeBotonEliminar();
 

@@ -2,6 +2,7 @@
     let inputCedula = document.getElementById("cedula"),
         cardDataEstudiante = document.getElementById("dataEstudiante"),
         elementoPreload = document.getElementById("preload_inscriciones"),
+        botonProcesarInscripcion = document.getElementById("botonProcesarInscripcion"),
         // inputMontoBs = document.getElementById("monto_bs"),
         // inputMontoUsd = document.getElementById("monto_usd"),
         // cardCuotaEstudiante = document.getElementById("cuotasEstudiante"),
@@ -18,18 +19,26 @@
 
     /** Cargar tarjetas añadidas de estudiantes */
     const hanledLoad = async () => {
-        if (localStorage.getItem('estudiantes')) {
+        log(botonProcesarInscripcion)
+        estudiantes = JSON.parse(localStorage.getItem('estudiantes'));
+        if (estudiantes.length) {
+            
+            botonProcesarInscripcion.classList.remove('invisible');
+            botonProcesarInscripcion.classList.add('visible');
             cardDataEstudiante.innerHTML="";
 
-            estudiantes = JSON.parse(localStorage.getItem('estudiantes'));
-
+            log(estudiantes)
             await estudiantes.forEach(estudiante => {
                 cardDataEstudiante.innerHTML += AccordionComponente(estudiante);
             });
             
             await cargerEventosDeBotonEliminar();
 
+            botonProcesarInscripcion.disabled = false;
             elementoPreload.innerHTML = "";
+        }else{
+            
+            botonProcesarInscripcion.classList.add('invisible');
         }
     };
 

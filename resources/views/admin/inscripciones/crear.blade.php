@@ -45,9 +45,14 @@
                                     </div>
 
                                     {{-- Mostramos la tarjeta informativa del estudiante --}}
+                                    <h3>Estudiantes</h3>
                                     <span id="preload_inscriciones"></span>
                                     <div class="col-12" id="dataEstudiante">
                                     </div>{{-- ##FIN la tarjeta informativa del estudiante --}}
+                                    <div class="input-group has-validation">
+                                        <input type="text" class="invisible" name="estudiantes" id="estudiantes" required>
+                                        <div class="invalid-feedback">Debe cargar estudiantes a la planilla de inscripción </div>
+                                    </div>
 
                                   
                                     {{-- Planes de pago --}}

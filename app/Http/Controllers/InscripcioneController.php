@@ -64,8 +64,8 @@ class InscripcioneController extends Controller
                 $inscripcion['grupo'] = $inscripcion['grupo'][0];
             }
 
-     
-        
+
+
 
             // return $inscripciones;
             return view('admin.inscripciones.lista', compact('inscripciones', 'notificaciones'));
@@ -83,7 +83,7 @@ class InscripcioneController extends Controller
     public function createEstudiante()
     {
         try {
-            
+
             $notificaciones = $this->data->notificaciones;
             return view('admin.inscripciones.crearEstudiante', compact('notificaciones'));
         } catch (\Throwable $th) {
@@ -91,13 +91,14 @@ class InscripcioneController extends Controller
             return response()->view('errors.404', compact("errorInfo"), 404);
         }
     }
+
     public function create()
     {
         try {
             $codigo = Helpers::getCodigo('inscripciones');
             $planes = Plane::where("estatus", 1)->get();
             $grupos = Helpers::setMatricula(Grupo::where("estatus", 1)->get());
-            
+
             $notificaciones = $this->data->notificaciones;
             return view('admin.inscripciones.crear', compact('planes', 'grupos', 'codigo', 'notificaciones'));
         } catch (\Throwable $th) {
@@ -115,75 +116,72 @@ class InscripcioneController extends Controller
     public function store(StoreInscripcioneRequest $request)
     {
         try {
+            /** Datos para la vista */
             $planes = Plane::where("estatus", 1)->get();
             $grupos = Helpers::setMatricula(Grupo::where("estatus", 1)->get());
 
-            $estatusCreate = 0;
-            $id = 0;
-            // el estudiante existe
-            $estudianteExiste = Helpers::datoExiste($request, [
-                "estudiantes" => [
-                    "cedula",
-                    "",
+            /** Convertimos los estudiantes a un array */
+            $request['estudiantes'] = explode(',', $request->estudiantes);
+
+            /** Declaramos variables globales */
+            $estatusCreate = false;
+            $idInscripciones = [];
+
+            /** Buscamos en el grupo asignado si el estudiante ya esta incluido */
+            $datoExiste = Helpers::datoExiste($request, [
+                "inscripciones" => [
+                    "cedula_estudiante",
+                    "AND codigo_grupo = {$request['codigo_grupo']}",
                     "cedula_estudiante",
                 ],
             ]);
-            // validamos si los datos del estudiante estan en el sistema
-            if ($estudianteExiste) {
+            /** Validamos si este estudiante ya esta inscrito en ese grupo de estudio */
+            if (!$datoExiste) {
+                // Estraemos los datos extras de la planilla de inscripcion
+                $request['extras'] = implode(',', Helpers::getArrayInputs($request->request, 'ext'));
 
-                // Validamos si este estudiante ya esta inscrito en ese grupo de estudio
-                $datoExiste = Helpers::datoExiste($request, [
-                    "inscripciones" => [
-                        "cedula_estudiante",
-                        "AND codigo_grupo = {$request['codigo_grupo']}",
-                        "cedula_estudiante",
-                    ],
-                ]);
+                /** Registramos la incripcion */
+                foreach ($request->estudiantes as $key => $cedulaEstudiante) {
+                    $estatusCreate = Inscripcione::create([
+                        "codigo" => $request->codigo, 
+                        "cedula_estudiante" => $cedulaEstudiante,
+                        "codigo_grupo" => $request->codigo_grupo, 
+                        "codigo_plan" => $request->codigo_plan,
+                        "fecha" => $request->fecha ,
+                        "extras" => $request->extras,
+                        "total" => $request->total ?? 0,
+                        "abono" => $request->abono ?? 0,
+                    ]);
 
-                if (!$datoExiste) {
-                    // Estraemos los datos extras de la planilla de inscripcion
-                    $request['extras'] = implode(',', Helpers::getArrayInputs($request->request, 'ext'));
+                    array_push( $idInscripciones, $estatusCreate->id );
 
-                    // Registramos la incripcion
-                    $estatusCreate = Inscripcione::create($request->all());
-                    
-                    $id =  $estatusCreate->id;
-                    // Asignamos al estudiante al grupo
                     GrupoEstudiante::create([
-                        "cedula_estudiante" => $request->cedula_estudiante,
+                        "cedula_estudiante" => $cedulaEstudiante,
                         "codigo_grupo" => $request->codigo_grupo,
                     ]);
-                    
-                    // Creamos las cuotas y registramos
-                    Helpers::registrarCuotas(Helpers::getCuotas($request));
-                    
                 }
 
-
-                $mensaje = $this->data->respuesta['mensaje'] = $estatusCreate ? "¡La inscripción del estudiante se proceso correctamente!"
-                    : "El estudiante ya esta inscrito en este grupo de estudio (Código del grupo: {$datoExiste->codigo_grupo} - {$datoExiste->cedula_estudiante})";
-
-                $estatus = $this->data->respuesta['estatus'] = $estatusCreate ? 200 : 301;
-
-                $respuesta = $this->data->respuesta;
-                $notificaciones = $this->data->notificaciones;
-                return $estatusCreate ? redirect("inscripciones/{$id}?mensaje={$mensaje}&estatus={$estatus}")
-                    : view(
-                        'admin.inscripciones.crear',
-                        compact('request', 'respuesta', 'planes', 'grupos', 'notificaciones')
-                    );
-            } else {
-                // Cuando el estudiante no esta registrado retorna el boton de registrar estudiante
-                $this->data->respuesta['mensaje'] = "¡El estudiante no esta registrado en el sistema, Por favor proceda a registrarlo!";
-                $this->data->respuesta['estatus'] = 404;
-                $respuesta = $this->data->respuesta;
-
-                return view(
-                    'admin.inscripciones.crear',
-                    compact('request', 'respuesta', 'planes', 'grupos')
-                );
+              
             }
 
+
+            $mensaje = $this->data->respuesta['mensaje'] = $estatusCreate ? "¡La inscripción del estudiante se proceso correctamente!"
+                : "El estudiante ya esta inscrito en este grupo de estudio (Código del grupo: {$datoExiste->codigo_grupo} - {$datoExiste->cedula_estudiante})";
+
+            $estatus = $this->data->respuesta['estatus'] = $estatusCreate ? 200 : 301;
+
+            $respuesta = $this->data->respuesta;
+            $notificaciones = $this->data->notificaciones;
+
+            return $idInscripciones;
+            return $estatusCreate ? redirect("inscripciones/{$id}")->with([
+                "mensaje" => $mensaje,
+                "estatus" => $estatus
+            ])
+                : view(
+                    'admin.inscripciones.crear',
+                    compact('request', 'respuesta', 'planes', 'grupos', 'notificaciones')
+                );
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Procesar Inscripción en el método store,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -199,12 +197,12 @@ class InscripcioneController extends Controller
     public function show(Inscripcione $inscripcione)
     {
         try {
-            
+
             $estudiante = Helpers::getEstudiante($inscripcione['cedula_estudiante']);
             foreach ($estudiante->inscripciones as $inscripcion) {
                 if ($inscripcion->codigo == $inscripcione->codigo) $inscripcione = $inscripcion;
             }
-            $inscripcione = Helpers::setFechasHorasNormalizadas($inscripcione); 
+            $inscripcione = Helpers::setFechasHorasNormalizadas($inscripcione);
             $notificaciones = $this->data->notificaciones;
             return view('admin.inscripciones.planilla', compact('estudiante', 'inscripcione', 'notificaciones'));
         } catch (\Throwable $th) {
@@ -224,9 +222,9 @@ class InscripcioneController extends Controller
             foreach ($estudiante->inscripciones as $inscripcion) {
                 if ($inscripcion->codigo == $codigo) $inscripcione = $inscripcion;
             }
-           
-            $inscripcione = Helpers::setFechasHorasNormalizadas($inscripcione); 
-         
+
+            $inscripcione = Helpers::setFechasHorasNormalizadas($inscripcione);
+
             //     return view('admin.inscripciones.planillapdf', 
             //     compact(
             //        'inscripcione', 
@@ -275,15 +273,13 @@ class InscripcioneController extends Controller
             $estatusUpdate = $inscripcione->update(["extras" => $datosExtras]);
             $estudiante = Helpers::getEstudiante($inscripcione->cedula_estudiante);
 
-            $mensaje = $this->data->respuesta['mensaje'] = $estatusUpdate 
-            ? "¡La Oservación de la planilla de inscripción del estudiante {$estudiante->nombre} de cédula: {$estudiante->cedula} se proceso correctamente!" 
-            : "La observación No registro correctamente, por favor vuelva a intentar y si el error persiste llame a soporte.";
+            $mensaje = $this->data->respuesta['mensaje'] = $estatusUpdate
+                ? "¡La Oservación de la planilla de inscripción del estudiante {$estudiante->nombre} de cédula: {$estudiante->cedula} se proceso correctamente!"
+                : "La observación No registro correctamente, por favor vuelva a intentar y si el error persiste llame a soporte.";
             $estatus = $this->data->respuesta['estatus'] = $estatusUpdate ? 200 : 404;
             $respuesta = $this->data->respuesta;
 
             return redirect("inscripciones/?mensaje={$mensaje}&estatus={$estatus}");
-
-
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Actulizar la Oservación de la Planilla de Inscripción en el método update,");
             return response()->view('errors.404', compact("errorInfo"), 404);

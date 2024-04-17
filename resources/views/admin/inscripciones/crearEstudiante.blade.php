@@ -381,7 +381,8 @@
                         </div>{{-- ##FIN la tarjeta informativa del estudiante --}}
 
                         <a href="{{ route('admin.inscripciones.create') }}" 
-                            class="btn btn-success">
+                            class="btn btn-success" id="botonProcesarInscripcion"
+                        >
                             Procesar inscripción
                             <i class="bi bi-arrow-right"></i>
                         </a>
