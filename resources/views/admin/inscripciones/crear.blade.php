@@ -38,7 +38,7 @@
                                                 <i class="bi bi-upc-scan"></i>
                                             </span>
                                             <input type="text" name="codigo" class="form-control fs-5 text-danger"
-                                                id="yourUsername" value="{{ $codigo ?? $request->codigo }}" readonly
+                                                id="codigo" value="" 
                                                 required>
                                             <div class="invalid-feedback">Por favor, ingrese codigo! </div>
                                         </div>
@@ -50,7 +50,7 @@
                                     <div class="col-12" id="dataEstudiante">
                                     </div>{{-- ##FIN la tarjeta informativa del estudiante --}}
                                     <div class="input-group has-validation">
-                                        <input type="text" class="invisible" name="estudiantes" id="estudiantes" required>
+                                        <input type="text" class="form-control" name="estudiantes" id="estudiantes" required>
                                         <div class="invalid-feedback">Debe cargar estudiantes a la planilla de inscripción </div>
                                     </div>
 
@@ -210,6 +210,7 @@
         <script src="{{ asset('assets/js/estudiantes/componentes/AccordionComponente.js') }}" defer></script>
         <script src="{{ asset('assets/js/pagos/componentes/FormPagoComponente.js') }}" defer></script>
         <script src="{{ asset('assets/js/pagos/componentes/ListaAbonoComponente.js') }}" defer></script>
+        <script src="{{ asset('assets/js/inscripciones/inscripcionController.js') }}" defer></script>
         <script src="{{ asset('assets/js/inscripciones/create.js') }}" defer></script>
         <script src="{{ asset('assets/js/grupos/getDataGrupo.js') }}" defer></script>
     @endsection

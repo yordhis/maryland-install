@@ -75,7 +75,35 @@
                                         @enderror
                                     </div>
 
-
+                                    <div class="col-sm-4 col-xs-12 ">
+                                        <label for="yourPassword" class="form-label">Cantidad de cuotas</label>
+                                        <input type="number" name="cantidad_cuotas" class="form-control" id="yourUsername"
+                                            placeholder="Ingrese cantidad de cuotas"
+                                            value="{{ old('cantidad_cuotas') ?? $plane->cantidad_cuotas }}" 
+                                            required>
+                                        <div class="invalid-feedback">Por favor, Ingrese cantidad de cuotas!</div>
+                                    </div>
+                
+                                    <div class="col-sm-8 col-xs-12">
+                                        <label for="validationCustom04" class="form-label">Plazo de pago</label>
+                                        <select name="plazo" class="form-select" id="validationCustom04" required>
+                                            @if (isset($plane->plazo))
+                                              <option value="{{$plane->plazo }}" selected>{{ $plane->plazo }} Días</option>
+                                        
+                                            @endif
+                                
+                
+                                            <option value="">Seleccione cantidad de dias</option>
+                                            <option value="1">1 Días</option>
+                                            <option value="7">7 Días</option>
+                                            <option value="15">15 Días</option>
+                                            <option value="30">30 Días</option>
+                                            <option value="45">45 Días</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Por favor, Seleccione plazo de pago!
+                                        </div>
+                                    </div> 
 
 
                                     <div class="col-12">

@@ -1,5 +1,4 @@
 const AccordionComponente = (data) => {
-    log(data)
     return `
         <div class="d-flex d-inline">
             <div class="accordion accordion-flush mb-2" id="accordionFlushExample${data.cedula}">

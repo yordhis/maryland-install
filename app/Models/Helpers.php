@@ -19,6 +19,7 @@ use App\Models\{
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -29,6 +30,16 @@ class Helpers extends Model
     public static $estudiantes;
     public static $fechaCuota;
 
+    /** Respuesta JSON */
+    public static function getRespuestaJson($mensaje, $data = [], $estatus = Response::HTTP_OK)
+    {
+        return response()->json([
+            "mensaje" => $mensaje,
+            "data" => $data,
+            "estatus" => $estatus
+        ], $estatus);
+    }
+    
     public static function destroyData($cedulaEstudiante, $codigoGrupo, $autorizado)
     {
         // Si el codigo grupo es null se elimina todo ya que se esta eliminando el estudiante por completo
@@ -70,7 +81,7 @@ class Helpers extends Model
                     "cedula_estudiante" => $cedulaEstudiante
                 ])->delete();
             }
-        }else{
+        } else {
             // Eliminamos Las cuotas relacionads al estudiante en ese grupo
             if ($autorizado['cuotas']) {
                 Cuota::where([
@@ -78,7 +89,7 @@ class Helpers extends Model
                     "codigo_grupo" => $codigoGrupo,
                 ])->delete();
             }
-    
+
             // Eliminamos los pagos relacionads al estudiante en ese grupo e inscripcion
             if ($autorizado['pagos']) {
                 Pago::where([
@@ -253,12 +264,12 @@ class Helpers extends Model
 
 
     /** Esta funcion retorna el siguiente codigo de la tabla solicitada */
-    public static function getCodigo($table)
+    public static function getCodigo($table, $incrementar = 0)
     {
         $ultimoCodigo = DB::table($table)->max('codigo');
         $code = Carbon::now();
         $code->year($ultimoCodigo);
-        $code->setYear($code->year + 1);
+        $code->setYear($code->year + 1 + $incrementar);
         $codigo = explode("-", $code->toDateString())[0];
         return $codigo;
     }
@@ -358,9 +369,9 @@ class Helpers extends Model
     public static function getEstudiantes($filtro = ["campo" => "estatus", "filtro" => 1])
     {
 
-        $estudiantes = Estudiante::where( $filtro['campo'], 'like', "%{$filtro['filtro']}%" )->orderBy('id', 'desc')->paginate(12);
+        $estudiantes = Estudiante::where($filtro['campo'], 'like', "%{$filtro['filtro']}%")->orderBy('id', 'desc')->paginate(12);
         foreach ($estudiantes as $key => $estudiante) {
-            $estudiantes[$key] = self::getEstudiante($estudiante->cedula);
+            $estudiantes[$key] = self::getEstudiante($estudiante->cedula)[0];
         }
 
         return $estudiantes;
@@ -369,31 +380,32 @@ class Helpers extends Model
     public static function getEstudiante($cedula)
     {
         if (isset($cedula)) {
-             $estudiante = Estudiante::where([
+            $estudiante = Estudiante::where([
                 "cedula" => $cedula,
                 "estatus" => 1
-            ])->get()[0];
+            ])->get();
 
-            if (isset($estudiante)) {
-                $estudiante;
+            if (count($estudiante)) {
 
-                /** Obrenemos los representantes */
-                    $estudiante['representantes'] = RepresentanteEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
-                    if (count($estudiante['representantes'])) {
-                        foreach ($estudiante['representantes'] as $key => $repre) {
-                            $estudiante['representantes'][$key] = Representante::find($repre->id);
-                        }
-                    }else{
-                        $estudiante['representantes'] = [];
-                    }
+                /** Obrenemos el representante */
+                    $estudiante[0]['representantes'] = self::addDatosDeRelacion(
+                        RepresentanteEstudiante::where('cedula_estudiante', $estudiante[0]->cedula)->get(),
+                        [
+                            "representantes" => "cedula_representante",
+                        ]
+                    );
+             
+                    // if(count($representante)) $estudiante[0]['representante'] = $representante[0];
+                    // else $estudiante[0]['representante'] = [];
+    
                 /** CIERRE Obrenemos los representantes */
 
                 /** Obtenemos las dificultades de apredizaje del estudiante */
-                $estudiante['dificultades'] = DificultadEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
+                $estudiante[0]['dificultades'] = DificultadEstudiante::where('cedula_estudiante', $estudiante[0]->cedula)->get();
 
 
                 /** Obtenemos todos los datos de inscripción del estudiante */
-                $inscripciones = Inscripcione::where("cedula_estudiante", $estudiante->cedula)->orderBy('fecha', 'desc')->get();
+                $inscripciones = Inscripcione::where("cedula_estudiante", $estudiante[0]->cedula)->orderBy('fecha', 'desc')->get();
                 if (count($inscripciones)) {
 
                     $inscripciones = Helpers::addDatosDeRelacion(
@@ -404,12 +416,14 @@ class Helpers extends Model
                         ]
                     );
                 }
-                $estudiante['inscripciones'] = $inscripciones;
+                
+                $estudiante[0]['inscripciones'] = $inscripciones;
 
 
-                if (count($estudiante['inscripciones'])) {
-                    
-                    foreach ($estudiante['inscripciones'] as $key => $inscripcion) {
+                if (count($estudiante[0]['inscripciones'])) {
+
+                    foreach ($estudiante[0]['inscripciones'] as $key => $inscripcion) {
+
                         $inscripcion['grupo'] = Helpers::addDatosDeRelacion(
                             Helpers::setConvertirObjetoParaArreglo($inscripcion['grupo']),
                             [
@@ -417,6 +431,7 @@ class Helpers extends Model
                                 "profesores" => "cedula_profesor",
                             ]
                         );
+
                         $inscripcion['grupo'] = $inscripcion['grupo'][0];
                     }
 
@@ -440,9 +455,9 @@ class Helpers extends Model
                     // }
 
                     // formateamos la cedula
-                    $estudiante->cedulaFormateada = number_format($estudiante->cedula, 0, ',', '.');
+                    $estudiante[0]->cedulaFormateada = number_format($estudiante[0]->cedula, 0, ',', '.');
                 }
-            }else{
+            } else {
                 $estudiante = [];
             }
         } else {

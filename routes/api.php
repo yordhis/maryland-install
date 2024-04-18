@@ -34,6 +34,7 @@ use App\Http\Controllers\{
 //     Route::$httpRequest( "/{$model}/{$action}", [UsuarioController::class, 'index'] );
 // });
 
+Route::get('/getCodigoInscripcion/{incrementar}', [ApiController::class, 'getCodigoInscripcion']);
 Route::get('/getEstudiante/{cedula}', [ApiController::class, 'getEstudiante']);
 Route::get('/getRepresentante/{cedula}', [ApiController::class, 'getRepresentante']);
 Route::get('/grupo/{codigo}', [ApiController::class, 'getGrupo']);

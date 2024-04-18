@@ -43,7 +43,6 @@ class EstudianteController extends Controller
     {
         if($request->filtro){
             $estudiantes =  Helpers::getEstudiantes($request);
-            
         }else{
             $estudiantes =  Helpers::getEstudiantes();
         }

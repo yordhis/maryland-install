@@ -21,6 +21,9 @@
     const hanledLoad = async () => {
         log(botonProcesarInscripcion)
         estudiantes = JSON.parse(localStorage.getItem('estudiantes'));
+
+        if(estudiantes == null) estudiantes = [];
+
         if (estudiantes.length) {
             
             botonProcesarInscripcion.classList.remove('invisible');
@@ -37,7 +40,8 @@
             botonProcesarInscripcion.disabled = false;
             elementoPreload.innerHTML = "";
         }else{
-            
+            elementoPreload.innerHTML = "";
+            cardDataEstudiante.innerHTML = "";
             botonProcesarInscripcion.classList.add('invisible');
         }
     };
@@ -53,6 +57,8 @@
                     .then((response) => response.json())
                     .then((data) => {
                         if (data.estatus == HTTP_OK) {
+                            log(data)
+                            log(estudiantes)
                             let capturado = estudiantes.filter(estudiante => estudiante.cedula == data.data.cedula);
                             
                             if (capturado.length) {
@@ -70,7 +76,6 @@
                                     action: function(){
                                         estudiantes.push(data.data);
                                         localStorage.setItem('estudiantes', JSON.stringify(estudiantes));
-                                        estudiantes = JSON.parse(localStorage.getItem('estudiantes'));
                                         inputCedula.value="";
                                         inputCedula.focus();
                                         hanledLoad();
@@ -83,6 +88,7 @@
 
                             return $.alert({
                                 title: "¡Alerta!",
+                                type:"orange",
                                 content: data.mensaje,
                                 action: elementoPreload.innerHTML = ""
                             })

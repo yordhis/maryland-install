@@ -43,8 +43,8 @@
                             <th scope="col">#</th>
                             <th scope="col">Código</th>
                             <th scope="col">Nombre</th>
-                            {{-- <th scope="col">Cantidad de cuotas</th>
-                                    <th scope="col">Plazo de días</th> --}}
+                            <th scope="col">Cantidad de cuotas</th>
+                            <th scope="col">Plazo de días</th>
                             <th scope="col">Descripcion del plan</th>
                             <th scope="col">Acciones</th>
                         </tr>
@@ -56,8 +56,8 @@
                                 <th scope="row">{{ $plane->id }}</th>
                                 <td>{{ $plane->codigo }}</td>
                                 <td>{{ $plane->nombre }}</td>
-                                {{-- <td>{{ $plane->cantidad_cuotas }}</td>
-                                        <td>{{ $plane->plazo }} Dias</td> --}}
+                                <td>{{ $plane->cantidad_cuotas }}</td>
+                                <td>{{ $plane->plazo }} Dias</td>
                                 <td class="text-break">{{ $plane->descripcion }}</td>
 
                                 <td>
@@ -79,7 +79,7 @@
                     <tfoot>
                         <tr>
 
-                            <td colspan="5" class="text-center table-secondary">
+                            <td colspan="7" class="text-center table-secondary">
                                 Total de planes: {{ $planes->total() }}
                                 <br>
                             </td>

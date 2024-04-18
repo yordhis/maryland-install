@@ -174,7 +174,7 @@ class InscripcioneController extends Controller
             $notificaciones = $this->data->notificaciones;
 
             return $idInscripciones;
-            return $estatusCreate ? redirect("inscripciones/{$id}")->with([
+            return $estatusCreate ? redirect("inscripciones/{$idInscripciones}")->with([
                 "mensaje" => $mensaje,
                 "estatus" => $estatus
             ])
