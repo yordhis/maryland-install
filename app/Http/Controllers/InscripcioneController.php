@@ -49,136 +49,134 @@ class InscripcioneController extends Controller
             $codigoDePago = Helpers::getCodigo('pagos');
             $conceptos = Concepto::where("estatus", 1)->get();
 
-            if($request->filtro){
+            if ($request->filtro) {
                 $inscripciones = Inscripcione::join('grupos', 'grupos.codigo', '=', 'inscripciones.codigo_grupo')
-                ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
-                ->join('planes', 'planes.codigo', '=', 'inscripciones.codigo_plan')
-                ->join('profesores', 'profesores.cedula', '=', 'grupos.cedula_profesor')
-                ->join('niveles', 'niveles.codigo', '=', 'grupos.codigo_nivel')
-                ->select(
-                    'inscripciones.id', 
-                    'inscripciones.codigo', 
-                    'inscripciones.cedula_estudiante', 
-                    'inscripciones.codigo_grupo', 
-                    'inscripciones.codigo_plan', 
-                    'inscripciones.nota', 
-                    'inscripciones.extras', 
-                    'inscripciones.total', 
-                    'inscripciones.abono', 
-                    'inscripciones.fecha', 
-                    'inscripciones.estatus', 
-                    'grupos.codigo_nivel',
-                    'grupos.cedula_profesor',
-                    'grupos.nombre as grupo_nombre',
-                    'grupos.dias as grupo_dias',
-                    'grupos.hora_inicio as grupo_hora_inicio',
-                    'grupos.hora_fin as grupo_hora_fin',
-                    'grupos.fecha_inicio as grupo_fecha_inicio',
-                    'grupos.fecha_fin as grupo_fecha_fin',
-                    'profesores.nombre as grupo_profesor_nombre',
-                    'profesores.nacionalidad as grupo_profesor_nacionalidad',
-                    'profesores.edad as grupo_profesor_edad',
-                    'profesores.telefono as grupo_profesor_telefono',
-                    'niveles.nombre as nivel_nombre',
-                    'niveles.precio as nivel_precio',
-                    'niveles.libro as nivel_libro',
-                    'niveles.duracion as nivel_duracion',
-                    'niveles.tipo_duracion as nivel_tipo_duracion',
-                    'planes.nombre as plan_nombre',
-                    'planes.cantidad_cuotas as plan_cantidad_cuotas',
-                    'planes.plazo as plan_plazo',
-                    'planes.descripcion as plan_descripcion',
-                    'estudiantes.nombre as estudiante_nombre',
-                    'estudiantes.nacionalidad as estudiante_nacionalidad',
-                    'estudiantes.telefono as estudiante_telefono',
-                    'estudiantes.correo as estudiante_correo',
-                    'estudiantes.nacimiento as estudiante_nacimiento',
-                    'estudiantes.edad as estudiante_edad',
-                    'estudiantes.direccion as estudiante_direccion',
-                    'estudiantes.grado as estudiante_grado',
-                    'estudiantes.ocupacion as estudiante_ocupacion',
-                    'estudiantes.foto as estudiante_foto'
-                )
-                ->where('inscripciones.codigo', $request->filtro)
-                ->orWhere('inscripciones.cedula_estudiante', 'like', "%{$request->filtro}%")
-                ->orderBy('inscripciones.codigo' , 'desc')
-                ->paginate(12);
-                // $inscripciones = Inscripcione::where('codigo', $request->filtro)
-                // ->orWhere('cedula_estudiante', 'like', "%{$request->filtro}%")
-                // ->get();
+                    ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
+                    ->join('planes', 'planes.codigo', '=', 'inscripciones.codigo_plan')
+                    ->join('profesores', 'profesores.cedula', '=', 'grupos.cedula_profesor')
+                    ->join('niveles', 'niveles.codigo', '=', 'grupos.codigo_nivel')
+                    ->select(
+                        'inscripciones.id',
+                        'inscripciones.codigo',
+                        'inscripciones.cedula_estudiante',
+                        'inscripciones.codigo_grupo',
+                        'inscripciones.codigo_plan',
+                        'inscripciones.nota',
+                        'inscripciones.extras',
+                        'inscripciones.total',
+                        'inscripciones.abono',
+                        'inscripciones.fecha',
+                        'inscripciones.estatus',
+                        'grupos.codigo_nivel',
+                        'grupos.cedula_profesor',
+                        'grupos.nombre as grupo_nombre',
+                        'grupos.dias as grupo_dias',
+                        'grupos.hora_inicio as grupo_hora_inicio',
+                        'grupos.hora_fin as grupo_hora_fin',
+                        'grupos.fecha_inicio as grupo_fecha_inicio',
+                        'grupos.fecha_fin as grupo_fecha_fin',
+                        'profesores.nombre as grupo_profesor_nombre',
+                        'profesores.nacionalidad as grupo_profesor_nacionalidad',
+                        'profesores.edad as grupo_profesor_edad',
+                        'profesores.telefono as grupo_profesor_telefono',
+                        'niveles.nombre as nivel_nombre',
+                        'niveles.precio as nivel_precio',
+                        'niveles.libro as nivel_libro',
+                        'niveles.duracion as nivel_duracion',
+                        'niveles.tipo_duracion as nivel_tipo_duracion',
+                        'planes.nombre as plan_nombre',
+                        'planes.cantidad_cuotas as plan_cantidad_cuotas',
+                        'planes.plazo as plan_plazo',
+                        'planes.descripcion as plan_descripcion',
+                        'estudiantes.nombre as estudiante_nombre',
+                        'estudiantes.nacionalidad as estudiante_nacionalidad',
+                        'estudiantes.telefono as estudiante_telefono',
+                        'estudiantes.correo as estudiante_correo',
+                        'estudiantes.nacimiento as estudiante_nacimiento',
+                        'estudiantes.edad as estudiante_edad',
+                        'estudiantes.direccion as estudiante_direccion',
+                        'estudiantes.grado as estudiante_grado',
+                        'estudiantes.ocupacion as estudiante_ocupacion',
+                        'estudiantes.foto as estudiante_foto'
+                    )
+                    ->where('inscripciones.codigo', $request->filtro)
+                    ->orWhere('inscripciones.cedula_estudiante', 'like', "%{$request->filtro}%")
+                    ->orderBy('inscripciones.codigo', 'desc')
+                    ->paginate(12);
+            } else {
 
-            }else{
-            
                 $inscripciones = Inscripcione::join('grupos', 'grupos.codigo', '=', 'inscripciones.codigo_grupo')
-                ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
-                ->join('planes', 'planes.codigo', '=', 'inscripciones.codigo_plan')
-                ->join('profesores', 'profesores.cedula', '=', 'grupos.cedula_profesor')
-                ->join('niveles', 'niveles.codigo', '=', 'grupos.codigo_nivel')
-                ->select(
-                    'inscripciones.id', 
-                    'inscripciones.codigo', 
-                    'inscripciones.cedula_estudiante', 
-                    'inscripciones.codigo_grupo', 
-                    'inscripciones.codigo_plan', 
-                    'inscripciones.nota', 
-                    'inscripciones.extras', 
-                    'inscripciones.total', 
-                    'inscripciones.abono', 
-                    'inscripciones.fecha', 
-                    'inscripciones.estatus', 
-                    'grupos.codigo_nivel',
-                    'grupos.cedula_profesor',
-                    'grupos.nombre as grupo_nombre',
-                    'grupos.dias as grupo_dias',
-                    'grupos.hora_inicio as grupo_hora_inicio',
-                    'grupos.hora_fin as grupo_hora_fin',
-                    'grupos.fecha_inicio as grupo_fecha_inicio',
-                    'grupos.fecha_fin as grupo_fecha_fin',
-                    'profesores.nombre as grupo_profesor_nombre',
-                    'profesores.nacionalidad as grupo_profesor_nacionalidad',
-                    'profesores.edad as grupo_profesor_edad',
-                    'profesores.telefono as grupo_profesor_telefono',
-                    'niveles.nombre as nivel_nombre',
-                    'niveles.precio as nivel_precio',
-                    'niveles.libro as nivel_libro',
-                    'niveles.duracion as nivel_duracion',
-                    'niveles.tipo_duracion as nivel_tipo_duracion',
-                    'planes.nombre as plan_nombre',
-                    'planes.cantidad_cuotas as plan_cantidad_cuotas',
-                    'planes.plazo as plan_plazo',
-                    'planes.descripcion as plan_descripcion',
-                    'estudiantes.nombre as estudiante_nombre',
-                    'estudiantes.nacionalidad as estudiante_nacionalidad',
-                    'estudiantes.telefono as estudiante_telefono',
-                    'estudiantes.correo as estudiante_correo',
-                    'estudiantes.nacimiento as estudiante_nacimiento',
-                    'estudiantes.edad as estudiante_edad',
-                    'estudiantes.direccion as estudiante_direccion',
-                    'estudiantes.grado as estudiante_grado',
-                    'estudiantes.ocupacion as estudiante_ocupacion',
-                    'estudiantes.foto as estudiante_foto'
-                )
-                ->orderBy('inscripciones.codigo' , 'desc')
-                ->paginate(12);
+                    ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
+                    ->join('planes', 'planes.codigo', '=', 'inscripciones.codigo_plan')
+                    ->join('profesores', 'profesores.cedula', '=', 'grupos.cedula_profesor')
+                    ->join('niveles', 'niveles.codigo', '=', 'grupos.codigo_nivel')
+                    ->select(
+                        'inscripciones.id',
+                        'inscripciones.codigo',
+                        'inscripciones.cedula_estudiante',
+                        'inscripciones.codigo_grupo',
+                        'inscripciones.codigo_plan',
+                        'inscripciones.nota',
+                        'inscripciones.extras',
+                        'inscripciones.total',
+                        'inscripciones.abono',
+                        'inscripciones.fecha',
+                        'inscripciones.estatus',
+                        'grupos.codigo_nivel',
+                        'grupos.cedula_profesor',
+                        'grupos.nombre as grupo_nombre',
+                        'grupos.dias as grupo_dias',
+                        'grupos.hora_inicio as grupo_hora_inicio',
+                        'grupos.hora_fin as grupo_hora_fin',
+                        'grupos.fecha_inicio as grupo_fecha_inicio',
+                        'grupos.fecha_fin as grupo_fecha_fin',
+                        'profesores.nombre as grupo_profesor_nombre',
+                        'profesores.nacionalidad as grupo_profesor_nacionalidad',
+                        'profesores.edad as grupo_profesor_edad',
+                        'profesores.telefono as grupo_profesor_telefono',
+                        'niveles.nombre as nivel_nombre',
+                        'niveles.precio as nivel_precio',
+                        'niveles.libro as nivel_libro',
+                        'niveles.duracion as nivel_duracion',
+                        'niveles.tipo_duracion as nivel_tipo_duracion',
+                        'planes.nombre as plan_nombre',
+                        'planes.cantidad_cuotas as plan_cantidad_cuotas',
+                        'planes.plazo as plan_plazo',
+                        'planes.descripcion as plan_descripcion',
+                        'estudiantes.nombre as estudiante_nombre',
+                        'estudiantes.nacionalidad as estudiante_nacionalidad',
+                        'estudiantes.telefono as estudiante_telefono',
+                        'estudiantes.correo as estudiante_correo',
+                        'estudiantes.nacimiento as estudiante_nacimiento',
+                        'estudiantes.edad as estudiante_edad',
+                        'estudiantes.direccion as estudiante_direccion',
+                        'estudiantes.grado as estudiante_grado',
+                        'estudiantes.ocupacion as estudiante_ocupacion',
+                        'estudiantes.foto as estudiante_foto'
+                    )
+                    ->orderBy('inscripciones.codigo', 'desc')
+                    ->paginate(12);
             }
             foreach ($inscripciones as $key => $inscripcion) {
                 $inscripcion['cuotas'] = Cuota::where([
                     'codigo_inscripcion' => $inscripcion->codigo,
                     'cedula_estudiante' => $inscripcion->cedula_estudiante
-                    ])->get();
+                ])->get();
                 $inscripcion['proxima_fecha_pago'] = $inscripcion['cuotas']->where('estatus', 0)->min('fecha') ?? 'PAGADO';
             }
             // return $inscripciones;
-            return view('admin.inscripciones.lista', 
-                        compact(
-                                'inscripciones', 
-                                'notificaciones', 
-                                'respuesta', 
-                                'request', 
-                                'codigoDePago',
-                                'conceptos',
-                                'metodos'
-                        ));
+            return view(
+                'admin.inscripciones.lista',
+                compact(
+                    'inscripciones',
+                    'notificaciones',
+                    'respuesta',
+                    'request',
+                    'codigoDePago',
+                    'conceptos',
+                    'metodos'
+                )
+            );
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar Inscripciones en el método index,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -213,15 +211,14 @@ class InscripcioneController extends Controller
             $grupos = Helpers::setMatricula(Grupo::where("estatus", 1)->get());
 
             return view('admin.inscripciones.crear', compact('planes', 'grupos', 'codigo', 'notificaciones', 'respuesta'));
-
         } catch (\Throwable $th) {
-            
+
             $mensaje = Helpers::getMensajeError($th, "Error al Consultar Inscripciones en el método create,");
             $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
             return  redirect()->route('admin.inscripciones.index')->with([
-                        "mensaje" => $mensaje,
-                        "estatus" => $estatus
-                    ]);
+                "mensaje" => $mensaje,
+                "estatus" => $estatus
+            ]);
         }
     }
 
@@ -240,7 +237,7 @@ class InscripcioneController extends Controller
             $estudiantes = explode(',', $request->estudiantes);
             $codigos = explode(',', $request->codigo);
             $datosCuotas = Helpers::getInputsEnArray($request, ['monto_', 'fecha_']);
-            
+
             /** Declaramos variables globales */
             $estatusCreate = false;
             $estudianteCapturado = [];
@@ -253,9 +250,9 @@ class InscripcioneController extends Controller
                     "cedula_estudiante" => $cedula,
                     "codigo_grupo" =>  $request->codigo_grupo
                 ])->get();
-                if(count($capturado)){
+                if (count($capturado)) {
                     array_push(
-                        $estudianteCapturado, 
+                        $estudianteCapturado,
                         $capturado
                     );
 
@@ -264,7 +261,7 @@ class InscripcioneController extends Controller
             }
 
             /** Cambiamos el mensaje de estudiantes encontrados */
-            if(count($estudianteCapturado) > 1) $preMensaje = "Los estudiantes ya están registrados en el grupo seleccionado.";
+            if (count($estudianteCapturado) > 1) $preMensaje = "Los estudiantes ya están registrados en el grupo seleccionado.";
 
             /** Validamos si este estudiante ya esta inscrito en ese grupo de estudio */
             if (count($estudianteCapturado) == 0) {
@@ -273,13 +270,13 @@ class InscripcioneController extends Controller
 
                 /** Registramos la incripcion, asignamosel grupo y registramos las cuotas */
                 foreach ($estudiantes as $keyCedula => $cedulaEstudiante) {
-                    
+
                     $estatusCreate = Inscripcione::create([
-                        "codigo" => $codigos[$keyCedula] ?? $codigos[0], 
+                        "codigo" => $codigos[$keyCedula] ?? $codigos[0],
                         "cedula_estudiante" => $cedulaEstudiante,
-                        "codigo_grupo" => $request->codigo_grupo, 
+                        "codigo_grupo" => $request->codigo_grupo,
                         "codigo_plan" => $request->codigo_plan,
-                        "fecha" => $request->fecha ,
+                        "fecha" => $request->fecha,
                         "extras" => $request->extras,
                         "total" => floatval($request->total) ?? 0
                     ]);
@@ -290,7 +287,7 @@ class InscripcioneController extends Controller
                     ]);
 
                     foreach ($datosCuotas as $cuota) {
-                       
+
                         Cuota::create([
                             "cedula_estudiante" => $cedulaEstudiante,
                             "codigo_inscripcion" => $codigos[$keyCedula] ?? $codigos[0],
@@ -299,32 +296,29 @@ class InscripcioneController extends Controller
                         ]);
                     }
                 }
-
-              
             }
 
-        
+
             $mensaje = $this->data->respuesta['mensaje'] = $estatusCreate ? "¡La inscripción del estudiante se proceso correctamente!"
                 : "{$preMensaje} {$mensajeDeEstudiantesCapturados}";
 
             $estatus = $this->data->respuesta['estatus'] = $estatusCreate ? 200 : 301;
-          
-            return $estatusCreate   ? redirect()->route('admin.inscripciones.index')->with([
-                                        "mensaje" => $mensaje,
-                                        "estatus" => $estatus
-                                        ])
-                                    : redirect()->route('admin.inscripciones.create')->with([
-                                        "mensaje" => $mensaje,
-                                        "estatus" => $estatus
-                                    ]);
 
+            return $estatusCreate   ? redirect()->route('admin.inscripciones.index')->with([
+                "mensaje" => $mensaje,
+                "estatus" => $estatus
+            ])
+                : redirect()->route('admin.inscripciones.create')->with([
+                    "mensaje" => $mensaje,
+                    "estatus" => $estatus
+                ]);
         } catch (\Throwable $th) {
             $mensaje = Helpers::getMensajeError($th, "Error al Procesar Inscripción en el método store,");
             $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
             return  redirect()->route('admin.inscripciones.create')->with([
-                        "mensaje" => $mensaje,
-                        "estatus" => $estatus
-                    ]);
+                "mensaje" => $mensaje,
+                "estatus" => $estatus
+            ]);
         }
     }
 
@@ -355,31 +349,93 @@ class InscripcioneController extends Controller
     {
 
         try {
-            $notificaciones = $this->data->notificaciones;
-            $inscripcione = [];
-            $data = new DataDev();
-            $estudiante = Helpers::getEstudiante($cedula);
-            foreach ($estudiante->inscripciones as $inscripcion) {
-                if ($inscripcion->codigo == $codigo) $inscripcione = $inscripcion;
+            $estudiantes=[];
+            $inscripciones = Inscripcione::join('grupos', 'grupos.codigo', '=', 'inscripciones.codigo_grupo')
+            ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
+            ->join('planes', 'planes.codigo', '=', 'inscripciones.codigo_plan')
+            ->join('profesores', 'profesores.cedula', '=', 'grupos.cedula_profesor')
+            ->join('niveles', 'niveles.codigo', '=', 'grupos.codigo_nivel')
+            ->select(
+                'inscripciones.id', 
+                'inscripciones.codigo', 
+                'inscripciones.cedula_estudiante', 
+                'inscripciones.codigo_grupo', 
+                'inscripciones.codigo_plan', 
+                'inscripciones.nota', 
+                'inscripciones.extras', 
+                'inscripciones.total', 
+                'inscripciones.abono', 
+                'inscripciones.fecha', 
+                'inscripciones.estatus', 
+                'grupos.codigo_nivel',
+                'grupos.cedula_profesor',
+                'grupos.nombre as grupo_nombre',
+                'grupos.dias as grupo_dias',
+                'grupos.hora_inicio as grupo_hora_inicio',
+                'grupos.hora_fin as grupo_hora_fin',
+                'grupos.fecha_inicio as grupo_fecha_inicio',
+                'grupos.fecha_fin as grupo_fecha_fin',
+                'profesores.nombre as grupo_profesor_nombre',
+                'profesores.nacionalidad as grupo_profesor_nacionalidad',
+                'profesores.edad as grupo_profesor_edad',
+                'profesores.telefono as grupo_profesor_telefono',
+                'niveles.nombre as nivel_nombre',
+                'niveles.precio as nivel_precio',
+                'niveles.libro as nivel_libro',
+                'niveles.duracion as nivel_duracion',
+                'niveles.tipo_duracion as nivel_tipo_duracion',
+                'planes.nombre as plan_nombre',
+                'planes.cantidad_cuotas as plan_cantidad_cuotas',
+                'planes.plazo as plan_plazo',
+                'planes.descripcion as plan_descripcion',
+                'estudiantes.nombre as estudiante_nombre',
+                'estudiantes.nacionalidad as estudiante_nacionalidad',
+                'estudiantes.telefono as estudiante_telefono',
+                'estudiantes.correo as estudiante_correo',
+                'estudiantes.nacimiento as estudiante_nacimiento',
+                'estudiantes.edad as estudiante_edad',
+                'estudiantes.direccion as estudiante_direccion',
+                'estudiantes.grado as estudiante_grado',
+                'estudiantes.ocupacion as estudiante_ocupacion',
+                'estudiantes.foto as estudiante_foto'
+            )
+            ->where('inscripciones.codigo', $codigo)
+            ->orderBy('inscripciones.codigo' , 'desc')
+            ->get();
+
+            foreach ($inscripciones as $key => $inscripcion) {
+                array_push( $estudiantes, Helpers::getEstudiante($inscripcion->cedula_estudiante)[0] );
             }
+            /** normalizar fecha y horas */
+            Helpers::setFechasHorasNormalizadas($inscripciones[0]);
 
-            $inscripcione = Helpers::setFechasHorasNormalizadas($inscripcione);
+            /**
+             * [0] = ¿promoción? @values si o no
+             * [1] = explique @values @string
+             * [2] = ¿Se entrego material? @values si o no
+             * [3] = ¿cómo se enteró del curso? @values @string
+             * [4] = observación @values @string
+             */
+            $inscripciones[0]->extras = explode(',', $inscripciones[0]->extras);
 
-            //     return view('admin.inscripciones.planillapdf', 
+         
+            // return view(
+            //     'admin.inscripciones.planillapdf',
             //     compact(
-            //        'inscripcione', 
-            //        'estudiante'
-            //    ));
+            //         'inscripciones',
+            //         'estudiantes'
+            //     )
+            // );
             // Se genera el pdf
             $pdf = PDF::loadView(
                 'admin.inscripciones.planillapdf',
                 compact(
-                    'inscripcione',
-                    'estudiante',
-                    'notificaciones'
+                    'inscripciones',
+                    'estudiantes',
+                  
                 )
             );
-            return $pdf->download("{$inscripcione->codigo}-{$inscripcione->cedula_estudiante}-{$inscripcione->fecha}.pdf");
+            return $pdf->download("{$inscripciones[0]->codigo}-{$inscripciones[0]->cedula_estudiante}-{$inscripciones[0]->fecha}.pdf");
         } catch (\Throwable $th) {
             dd();
         }

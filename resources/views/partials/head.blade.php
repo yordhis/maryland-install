@@ -37,7 +37,7 @@
 
 <!-- Template Main CSS File -->
 <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
-<link href="{{ asset('assets/css/personalizado.css') }}" rel="stylesheet">
+{{-- <link href="{{ asset('assets/css/personalizado.css') }}" rel="stylesheet"> --}}
 <link href="{{ asset('/css/jquery-confirm.css') }}" rel="stylesheet">
 <script src="{{ asset('js/jquery.min.js') }}" defer></script>
 <script src="{{ asset('js/jquery-confirm.js') }}" defer></script>

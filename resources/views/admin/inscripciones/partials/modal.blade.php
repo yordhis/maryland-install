@@ -5,8 +5,6 @@
     <i class="bi bi-journal-plus fs-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Asignar nota"></i>
 </a>
     
-
-
 <div class="modal fade" id="verticalycentered{{$inscripcion->id}}" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">

@@ -24,7 +24,11 @@ class StorePagoRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "formas_pagos_1" => "required",
+            "monto_1" => "required",
+            "abono" => "required",
+            "codigo_pago" => "required",
+            "codigo_inscripcion" => "required",
         ];
     }
 }

@@ -78,6 +78,7 @@
                                     @endif
 
                                 
+                                    @include('admin.inscripciones.partials.modalimprir')
                                     @include('admin.inscripciones.partials.modalEliminar')
                                     @include('admin.inscripciones.partials.modal')
 

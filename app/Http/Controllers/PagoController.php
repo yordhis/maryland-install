@@ -9,12 +9,14 @@ use App\Models\{
     Concepto,
     Helpers,
     DataDev,
+    FormaDePago,
     Grupo,
     Inscripcione
 };
 use Barryvdh\DomPDF\Facade\PDF;
 use App\Http\Requests\StorePagoRequest;
 use App\Http\Requests\UpdatePagoRequest;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Request;
 
@@ -72,7 +74,7 @@ class PagoController extends Controller
 
     public function getPagoEstudiante($request, $codigoInscripcion)
     {
-     
+
         try {
             $notificaciones = $this->data->notificaciones;
             $metodos = $this->data->metodosPagos;
@@ -94,72 +96,80 @@ class PagoController extends Controller
      */
     public function store(StorePagoRequest $request)
     {
-       
+
         try {
-            return $request;
-            // configuramos las cuotas, metodos y monto para ser almacenados
-            $cuotas = Helpers::getArrayInputs($request->request, 'cuo') ?  Helpers::getArrayInputs($request->request, 'cuo') : [0];
-            $codigoGrupo = count(Cuota::where('id', $cuotas[0])->get()) ? Cuota::where('id', $cuotas[0])->get()[0]->codigo_grupo : 0;
+            
+            /** Obtenemos el abono */
+            $abono = floatval($request->abono);
+            $estatusPago = false;
 
-            $metodos = Helpers::getArrayInputs($request->request, 'met');
-            $monto = Helpers::getArrayInputs($request->request, 'mon');
-            $request['id_cuota'] = implode(',', $cuotas);
-            $request['metodo'] = implode(',', $metodos);
-            $request['monto'] = implode(',', $monto);
-            $request['codigo_grupo'] =  $codigoGrupo;
-            $estatusPago = 0;
-            $id = 0;
-            // Se registra el pago
-            $estatusPago = Pago::create($request->all());
+            /** registrar el pago */
+            $estatusPago = Pago::create([
+                'codigo' => $request->codigo_pago,
+                'cedula_estudiante' => $request->cedula_estudiante,
+                'codigo_inscripcion' => $request->codigo_inscripcion,
+                'concepto' => $request->concepto,
+                'fecha' => $request->fecha
+            ]);
 
-            if ($estatusPago) {
-                // Asignamos el id para renderizar
-                $id =  $estatusPago->id;
-
-                // Actualizar las cuotas pagadas
-                foreach ($cuotas as $cuota) {
-                    Cuota::where(["id" => $cuota])->update(["estatus" => 1]);
-                }
-                // verificamos si todas las cuotas fueron pagadas
-                // Para actualizar el estatus de la inscripcion del estudiante
-                // a completado
-                $cuotas = Cuota::where([
-                    "cedula_estudiante" => $request['cedula_estudiante'],
-                    "codigo_grupo" => $request['codigo_grupo']
-                ])->get();
-
-                $contador = 0;
-
-                // Contamos las cuotas pagadas
-                foreach ($cuotas as $cuota) {
-                    if ($cuota['estatus'] == 1) $contador++;
-                }
-
-                // Comparamos si las cuotyas pagadas son igual alas cuotas creadas
-                // para cambiar el estatus de la inscripcion
-                if ($contador == count($cuotas)) {
-                    Inscripcione::where([
-                        "cedula_estudiante" => $request['cedula_estudiante'],
-                        "codigo_grupo" => $request['codigo_grupo']
-                    ])->update(["estatus" => 3]);
+            /** registrar las formas de pago */
+            for ($i=1; $i <= 3; $i++) { 
+                if($request["formas_pagos_".$i] != 0 && $request["monto_".$i] > 0){
+                    FormaDePago::create([
+                        'codigo_pago' => $request->codigo_pago, 
+                        'metodo' => $request["formas_pagos_".$i], 
+                        'monto' => $request["monto_".$i], 
+                        'tasa' => $request["tasa_".$i], 
+                        'referencia' => $request["referencia_".$i]
+                    ]);
                 }
             }
+
+            /** Actualizar las cuotas */
+            $cuotas = Cuota::where( 'codigo_inscripcion', $request->codigo_inscripcion )->get();
+            foreach ($cuotas as $key => $cuota) {
+
+                if($cuota->cuota > 0 && $abono > 0){
+                    if($cuota->cuota > $abono){
+                        $cuota->update([
+                            "cuota" => $cuota->cuota - $abono
+                        ]);
+                        $abono = 0;
+                    }else{
+                        $abono = $abono - $cuota->cuota;
+                        $cuota->update([
+                            "cuota" => 0,
+                            "estatus" => 1,
+                        ]);
+                    }
+
+                    
+
+                }
+            }
+
+            /** Actualizar la planilla de inscripcion en el campo ABONO */
+            $inscripcion = Inscripcione::where('codigo', $request->codigo_inscripcion)->get();
+            Inscripcione::where('codigo', $request->codigo_inscripcion)->update([
+                "abono" => $request->abono + $inscripcion[0]->abono
+            ]);
+
+            $mensaje = $estatusPago ? "¡El Pago del estudiante se proceso correctamente!"
+                                    : "No se pudo procesar el pago, por favor vuelva a intentar.";
+
+            $estatus = $estatusPago ? Response::HTTP_OK : Response::HTTP_UNAUTHORIZED;
+
+            return back()->with([
+                "mensaje" => $mensaje,
+                "estatus" => $estatus
+            ]);
             
-            $mensaje = $this->data->respuesta['mensaje'] = $estatusPago ? "¡El Pago del estudiante se proceso correctamente!"
-                : "No se pudo procesar el pago, por favor vuelva a intentar.";
-
-            $estatus = $this->data->respuesta['estatus'] = $estatusPago ? 201 : 301;
-
-            $respuesta = $this->data->respuesta;
-
-            return $estatusPago ? redirect("pagos/{$id}?mensaje={$mensaje}&estatus={$estatus}&codigoInscripcion={$request->codigoInscripcion}")
-                : view(
-                    'admin.pagos.crear',
-                    compact('request', 'respuesta', 'planes', 'grupos')
-                );
         } catch (\Throwable $th) {
-            $errorInfo = Helpers::getMensajeError($th, "Error al Consultar datos de pago del estudiante en el método getPagoEstudiante,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            $errorInfo = Helpers::getMensajeError($th, "Error al registarr pago del estudiante en el método store,");
+            return back()->with([
+                "mensaje" => $errorInfo,
+                "estatus" => Response::HTTP_INTERNAL_SERVER_ERROR
+            ]);
         }
     }
 
@@ -219,16 +229,22 @@ class PagoController extends Controller
         }
     }
 
-    public function recibopdf($request)
+    public function recibopdf($cedulaEstudiante, $codigoInscripcion)
     {
         try {
             // obtenemos los datos del pago
-            $pago = count(Pago::where('id', $request)->get())  ? Pago::where('id', $request)->get()[0] : false;
+            $pagos = Pago::where([
+                "cedula_estudiante" => $cedulaEstudiante,
+                "codigo_inscripcion" => $codigoInscripcion
+            ])->get();
+            
+            foreach ($pagos as $key => $pago) {
+               $pago->formas_pagos = FormaDePago::where('codigo_pago', $pago->codigo)->get();
+            }
 
-            if ($pago) {
-                $notificaciones = $this->data->notificaciones;
-                $usuario = $this->data->usuario;
-                $metodos = $this->data->metodosPagos;
+                return $pagos;
+            if (count($pagos)) {
+           
                 $pago['estudiante'] = Helpers::getEstudiante($pago->cedula_estudiante);
                 $pago->id_cuota = explode(",", $pago->id_cuota);
                 $pago->monto = explode(",", $pago->monto);
@@ -265,18 +281,17 @@ class PagoController extends Controller
                         }
                     }
                 }
-
+              
                 // Codigo para previsualizar el pdf
-                // return view('admin.pagos.recibopdf',  compact('pago', 'metodos'));
+                return view('admin.pagos.recibopdf',  compact('pago', 'metodos'));
                 // Se genera el pdf
-                $pdf = PDF::loadView('admin.pagos.recibopdf', compact('pago', 'metodos', 'notificaciones'));
-                return $pdf->download("{$pago->cedula_estudiante}-{$pago->fecha}.pdf");
+                // $pdf = PDF::loadView('admin.pagos.recibopdf', compact('pago', 'metodos', 'notificaciones'));
+                // return $pdf->download("{$pago->cedula_estudiante}-{$pago->fecha}.pdf");
             } else {
-                // en caso de que el recibo no existe redireccionamos a la lista de pago 
-                // con un mensaje
-                $mensaje  = "El recibo de pago no existe, por favor vuelva a intentar.";
-                $estatus  = 301;
-                return redirect("pagos?mensaje={$mensaje}&estatus={$estatus}");
+                return back()->with([
+                    "mensaje" => "El recibo de pago no existe, por favor vuelva a intentar.",
+                    "estatus" => Response::HTTP_UNAUTHORIZED,
+                ]);
             }
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Generar PDF del Pago del estudiante en el método recibopdf,");
@@ -292,7 +307,7 @@ class PagoController extends Controller
      */
     public function edit(Pago $pago)
     {
-       return redirect("pagos");
+        return redirect("pagos");
     }
 
     /**
@@ -316,7 +331,7 @@ class PagoController extends Controller
     public function destroy(Pago $pago)
     {
         try {
-     
+
             // Cambiamos de estado las cuotas del pago
             $pago->id_cuota = explode(",", $pago->id_cuota);
             if ($pago->id_cuota[0] > 0) {
@@ -332,7 +347,6 @@ class PagoController extends Controller
             $mensaje = "El Pago del estudiante se eliminó correctamente.";
             $estatus = 200;
             return redirect("pagos?mensaje={$mensaje}&estatus={$estatus}");
-
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Eliminar el Pago del estudiante en el método destroy,");
             return response()->view('errors.404', compact("errorInfo"), 404);

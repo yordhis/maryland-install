@@ -28,7 +28,7 @@
                             <span class="input-group-text text-white bg-primary" id="inputGroupPrepend">
                                 <i class="bi bi-upc-scan"></i>
                             </span>
-                            <input type="text" name="codigo" class="form-control fs-5 text-danger" id="yourUsername"
+                            <input type="text" name="codigo_pago" class="form-control fs-5 text-danger" id="codigo_pago"
                                 value="{{ $codigoDePago }}" readonly required>
                             <div class="invalid-feedback">Por favor, ingrese codigo! </div>
                         </div>
@@ -43,7 +43,7 @@
                             <span class="input-group-text text-white bg-primary" id="inputGroupPrepend">
                                 <i class="bi bi-upc-scan"></i>
                             </span>
-                            <input type="text" name="codigo" class="form-control fs-5 text-danger" id="yourUsername"
+                            <input type="text" name="codigo_inscripcion" class="form-control fs-5 text-danger" id="codigo_inscripcion"
                                 value="{{ $inscripcion->codigo }}" readonly required>
                             <div class="invalid-feedback">Por favor, ingrese codigo! </div>
                         </div>
@@ -58,7 +58,7 @@
                                 <i class="bi bi-people"></i>
 
                             </span>
-                            <input type="text" name="cedula_estudiante" class="form-control fs-5" id="cedula"
+                            <input type="text" name="cedula_estudiante" class="form-control fs-5" id="cedula_estudiante"
                                 value="{{ $inscripcion->cedula_estudiante ?? '' }}"
                                 placeholder="Ingrese Cédula del estudiante" readonly required>
                             <div class="invalid-feedback">Por favor, Ingrese cédula del estudiante!</div>
@@ -80,10 +80,16 @@
                         <label for="validationCustom04" class="form-label">Asigne concepto de pago</label>
                         <select name="concepto" class="form-select" id="validationCustom04" required>
                             <option selected disabled value="">Seleccione Concepto</option>
-
+                            @if (old('concepto'))
+                            <option value="{{ old('concepto') }}" selected>
+                                {{ old('concepto') }}
+                            </option>
+                            @endif
                             @foreach ($conceptos as $concepto)
-                                <option value="{{ $concepto->descripcion }}">{{ $concepto->codigo }} -
-                                    {{ $concepto->descripcion }}</option>
+                                <option value="{{  $concepto->codigo . " - " .$concepto->descripcion }}">
+                                    {{ $concepto->codigo }} -
+                                    {{ $concepto->descripcion }}
+                                </option>
                             @endforeach
 
                         </select>
@@ -104,10 +110,10 @@
 
                     {{-- Total de abono --}}
                     <div class="col-xs-12 col-sm-6">
-                        <label for="yourPassword" class="form-label">Monto abonado</label>
+                        <label for="yourPassword" class="form-label">Monto ha abonar </label>
                         <input type="text" name="abono"
                             class="form-control border border-success text-success fs-3" id="total"
-                            value="{{ $inscripcion->abono }}" readonly>
+                            value="0" readonly>
                         <div class="invalid-feedback">Monto total</div>
                     </div>
 
@@ -128,7 +134,7 @@
                                 <select class="form-select formas" id="formas_pagos_{{ $i }}" name="formas_pagos_{{ $i }}"
                                     aria-label="Formas de pago">
     
-                                    <option value="0" selected>Seleccione forma de pago</option>
+                                    <option selected disabled>Seleccione forma de pago</option>
                                     @foreach ($metodos as $metodo)
                                         <option value="{{ $metodo }}">{{ $metodo }}</option>
                                     @endforeach
@@ -167,18 +173,7 @@
                             <hr>
                             
                         @endfor
-          
-
-
-                    {{-- Boton agregar forma de pago  --}}
-                    {{-- <div class="col-xs-12 col-sm-2">
-                        <button type="button" class="btn btn-success">
-                           <i class="bi bi-plus fs-3"></i>
-                        </button>
-                    </div> --}}
-
-
-
+                    
                     <div class="col-12">
                         <button class="btn btn-primary w-100" type="submit">Procesar pago</button>
                     </div>
