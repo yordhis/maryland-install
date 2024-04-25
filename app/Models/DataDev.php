@@ -29,34 +29,21 @@ class DataDev
                 "301" => "alert-warning",
                 "401" => "alert-warning",
                 "404" => "alert-danger",
+                "500" => "alert-danger"
             ],
             "icono" => [
                 "200" => "bi bi-check-circle me-1",
                 "201" => "bi bi-check-circle me-1",
                 "301" => "bi bi-exclamation-triangle me-1",
                 "401" => "bi bi-exclamation-octagon me-1",
-                "404" => "bi bi-exclamation-octagon me-1"
+                "404" => "bi bi-exclamation-octagon me-1",
+                "500" => "bi bi-exclamation-octagon me-1"
             ]
         ];
 
-        $this->metodosPagos = [
-            [
-                "metodo" => "TD",
-                "activo" => false           
-            ],
-            [
-                "metodo" => "EFECTIVO",
-                "activo" => false           
-            ],
-            [
-                "metodo" => "PAGO MOVIL",
-                "activo" => false           
-            ],
-            [
-                "metodo" => "DIVISAS",
-                "activo" => false           
-            ]
-        ];
+        $this->metodosPagos = [ "TD", "TC", "EFECTIVO", "PAGO MOVIL", "DIVISAS", "TRANSFERENCIA", "ZELLE", "BIO PAGO", "OTRO" ];
+            
+        
         $this->dias = [
             "Lunes",
             "Martes",
@@ -86,10 +73,6 @@ class DataDev
             "4" => "Pendiente"
         ];
 
-        $this->usuario = [
-            "nombre" => "admin",
-            "rol" => "administrador",
-        ];
      }
 
 

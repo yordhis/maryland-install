@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Lista de Asignacion de notas')
+@section('title', 'Lista de Inscripciones')
 
 @section('content')
 
-    @isset($respuesta['activo'])
+    @if (session('mensaje'))
         @include('partials.alert')
-    @endisset
+    @endif
 
     <div id="alert"></div>
 
@@ -15,82 +15,125 @@
 
 
 
-            <div class="col-sm-12">
-                <h2> Lista de Asignación de Notas</h2>
+            <div class="col-sm-6 col-xs-12">
+                <h2> Lista de Inscripciones </h2>
             </div>
-
-            <div class="col-lg-12">
-
-                <div class="card">
-                    <div class="card-body table-responsive">
-
-                        <!-- Table with stripped rows -->
-
-                        <table class="table datatable ">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">N° Inscripción</th>
-                                    <th scope="col">Estudiante</th>
-                                    <th scope="col">Nivel de Estudio</th>
-                                    <th scope="col">Grupo de Estudio</th>
-                                    <th scope="col">Fecha de C. del curso</th>
-                                    <th scope="col">Estatus de incripción</th>
-                                    <th scope="col">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php $contador = 1; @endphp
-                                @foreach ($inscripciones as $inscripcione)
-                                    <tr>
-                                        <th scope="row">{{ $inscripcione->id }}</th>
-                                        <td>{{ $inscripcione->codigo }}</td>
-                                        <td>
-                                            {{ $inscripcione->estudiante->nombre ?? 'Sin nombre' }} <br>
-                                            C.I.:{{ number_format($inscripcione->cedula_estudiante, 0, ',', '.') }}
-                                        </td>
-                                        <td>{{ $inscripcione->grupo['nivel']->nombre }}</td>
-                                        <td>{{ $inscripcione->grupo['nombre'] }}</td>
-                                        <td>{{ $inscripcione->grupo['fecha_fin'] }}</td>
-                                        <td>
-                                            {{ $inscripcione->estatusText }} <br>
-                                            Nota: {{ $inscripcione->nota ?? 0 }}
-                                        </td>
-
-
-                                        <td>
-                                            <a href=" {{ route('admin.inscripciones.show', $inscripcione->id ) }}">
-                                                <i class="bi bi-eye fs-3"></i>
-                                            </a>
-                                           
-
-                                            @include('admin.inscripciones.partials.modal')
-
-                                            @include('admin.inscripciones.partials.modalEliminar')
-
-                                            @include('admin.inscripciones.partials.modalEditar')
-
-                                        </td>
-                                    </tr>
-                                    @php $contador++; @endphp
-                                @endforeach
-
-                            </tbody>
-                        </table>
-
-                        <!-- End Table with stripped rows -->
-
+            <div class="col-sm-6 col-xs-12">
+                <form action="{{ route('admin.inscripciones.index') }}" method="post">
+                    @csrf
+                    @method('get')
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="filtro" placeholder="Buscar" aria-label="Filtrar"
+                            aria-describedby="button-addon2" required>
+                        <button class="btn btn-primary" type="submit" id="button-addon2">
+                            <i class="bi bi-search"></i>
+                        </button>
                     </div>
-                </div>
+                </form>
+            </div>
+
+            <div class="col-lg-12 table-responsive">
+                <!-- Table with stripped rows -->
+
+                <table class="table table-hover  bg-white mt-2">
+                    <thead>
+                        <tr class="bg-primary text-white">
+                            <th scope="col">#</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Estudiante</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Abonado</th>
+                            <th scope="col">Pendientes</th>
+                            <th scope="col">Proximo pago</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach ($inscripciones as $inscripcion)
+                            <tr>
+                                <th scope="row">{{ $inscripcion->id }}</th>
+                                <td>{{ $inscripcion->codigo }}</td>
+                                <td>
+                                    {{ $inscripcion->estudiante_nombre ?? 'Sin nombre' }} <br>
+                                    C.I.:{{ number_format($inscripcion->cedula_estudiante, 0, ',', '.') }}
+                                </td>
+                                <td class="fs-5 table-info">{{ number_format($inscripcion->total, 2, ',', '.') }} $</td>
+                                <td class="fs-5 table-success">{{ number_format($inscripcion->abono, 2, ',', '.') }} $</td>
+                                <td class="fs-5 table-danger">
+                                    {{ number_format($inscripcion->total - $inscripcion->abono, 2, ',', '.') }} $</td>
+                                <td class="fs-5">
+                                    @if ($inscripcion->proxima_fecha_pago == 'PAGADO')
+                                        <i class='bi bi-check2-square text-success fs-4'></i>
+                                        {{ $inscripcion->proxima_fecha_pago }}
+                                    @else
+                                        @include('admin.inscripciones.partials.modalcuotas')
+                                    @endif
+                                </td>
+
+                                <td>
+
+                                    @if ($inscripcion->proxima_fecha_pago != 'PAGADO')
+                                        @include('admin.inscripciones.partials.modalpagar')
+                                    @endif
+
+                                
+                                    @include('admin.inscripciones.partials.modalEliminar')
+                                    @include('admin.inscripciones.partials.modal')
+
+
+                                </td>
+                            </tr>
+                        @endforeach
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+
+                            <td colspan="8" class="text-center table-secondary">
+                                Total de inscripciones: {{ $inscripciones->total() }} | 
+                                <a href="{{ route('admin.inscripciones.index') }}"
+                                   class="text-primary" >
+                                    Ver todo
+                                </a>
+                                <br>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <!-- End Table with stripped rows -->
 
             </div>
 
+            <div class="col-sm-6 col-xs-12">
+                {{ $inscripciones->appends(['filtro' => $request->filtro])->links() }}
+            </div>
 
+            <div class="col-sm-6 col-xs-12 text-end">
+                <a href="{{ route('admin.inscripciones.createEstudiante') }}" class="btn btn-primary">Procesar
+                    inscripción</a>
+                <br>
 
+                @if ($errors->any())
+                    <div class="alert alert-danger text-start">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </div>
         </div>
+
+
+
     </section>
 
-    
+
+    <script src="{{ asset('assets/js/master.js') }}" defer></script>
+    <script src="{{ asset('assets/js/pagos/create.js') }}" defer></script>
 
 
 @endsection

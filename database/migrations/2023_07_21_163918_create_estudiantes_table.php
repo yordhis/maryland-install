@@ -23,6 +23,8 @@ class CreateEstudiantesTable extends Migration
             $table->string('nacimiento', 100)->nullable();
             $table->integer('edad')->nullable();
             $table->text('direccion')->nullable();
+            $table->string('ocupacion', 255)->nullable();
+            $table->string('grado', 255)->nullable();
             $table->string('foto')->default('/assets/img/avatar.png');
             $table->boolean('estatus')->default(true);
 

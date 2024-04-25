@@ -62,23 +62,23 @@ class Handler extends ExceptionHandler
         // });
 
 
-        $this->renderable(function (NotFoundHttpException $e, $request) {
-            // dd($e);
-            $errorInfo = Helpers::getMensajeError($e, "Error de consula,");
-            return redirect()->back(301, ["mensaje" => $errorInfo]);
-        });
+        // $this->renderable(function (NotFoundHttpException $e, $request) {
+        //     // dd($e);
+        //     $errorInfo = Helpers::getMensajeError($e, "Error de consula,");
+        //     return redirect()->back(301, ["mensaje" => $errorInfo]);
+        // });
 
-        $this->renderable(function (RouteNotFoundException $e, $request) {
-            // dd($e);
-            $errorInfo = Helpers::getMensajeError($e, "La ruta solicitada no esta definida,");
-            return redirect()->back(301, ["mensaje" => $errorInfo]);
-        });
+        // $this->renderable(function (RouteNotFoundException $e, $request) {
+        //     // dd($e);
+        //     $errorInfo = Helpers::getMensajeError($e, "La ruta solicitada no esta definida,");
+        //     return redirect()->back(301, ["mensaje" => $errorInfo]);
+        // });
 
-        $this->renderable(function (ViewException $e, $request) {
-            // dd($e);
-            $errorInfo = Helpers::getMensajeError($e, "Error de datos de la Vista,");
-            return redirect()->back(361, ["mensaje" => $errorInfo]);
-        });
+        // $this->renderable(function (ViewException $e, $request) {
+        //     // dd($e);
+        //     $errorInfo = Helpers::getMensajeError($e, "Error de datos de la Vista,");
+        //     return redirect()->back(361, ["mensaje" => $errorInfo]);
+        // });
     }
 
     

@@ -115,10 +115,16 @@ class EstudianteController extends Controller
         $notificaciones =  $this->data->notificaciones;
 
 
-        if(stripos(url()->previous(), '/inscripciones/estudiante')) return redirect()->route('admin.inscripciones.createEstudiante', compact('mensaje', 'estatus'));
+        if(stripos(url()->previous(), '/inscripciones/estudiante')) return redirect()->route('admin.inscripciones.createEstudiante')->with([
+            'mensaje'=> $mensaje, 
+            'estatus'=> $estatus
+        ]);
   
 
-        return $estatusCreate ? redirect()->route('admin.estudiantes.index', compact('mensaje', 'estatus'))
+        return $estatusCreate ? redirect()->route('admin.estudiantes.index')->with([
+                                'mensaje'=> $mensaje, 
+                                'estatus'=> $estatus
+                            ])
             : view('admin.estudiantes.crear', compact('respuesta', 'request', 'notificaciones'));
     }
 
@@ -182,9 +188,10 @@ class EstudianteController extends Controller
             }
             
             // Editar cedula
-            
-            if($estudiante->cedula != $request->cedula){
-                Helpers::updateCedula($estudiante->cedula, $request->cedula);
+            if(!empty($request->cedula)){
+                if($estudiante->cedula != $request->cedula){
+                    Helpers::updateCedula($estudiante->cedula, $request->cedula);
+                }
             }
 
             // Actualizamos los datos de lestudiante

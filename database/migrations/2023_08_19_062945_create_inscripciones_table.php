@@ -23,6 +23,8 @@ class CreateInscripcionesTable extends Migration
             $table->string("fecha", 55)->nullable();
             $table->text("extras")->nullable();
             $table->string("estatus", 55)->default(1);
+            $table->double('total', 11)->default(0);
+            $table->double('abono', 11)->default(0);
             $table->timestamps();
         });
     }

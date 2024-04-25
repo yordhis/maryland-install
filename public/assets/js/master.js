@@ -52,7 +52,5 @@ const quitarFormato = (numeroString) =>{
 };
 
 const quitarComaAlFinal = async (input) => {
-    log(input)
-    log(input.value)
     input.value = input.value.slice(0, input.value.length - 1);
 };  

@@ -34,7 +34,9 @@ use App\Http\Controllers\{
 //     Route::$httpRequest( "/{$model}/{$action}", [UsuarioController::class, 'index'] );
 // });
 
-Route::get('/getCodigoInscripcion/{incrementar}', [ApiController::class, 'getCodigoInscripcion']);
-Route::get('/getEstudiante/{cedula}', [ApiController::class, 'getEstudiante']);
-Route::get('/getRepresentante/{cedula}', [ApiController::class, 'getRepresentante']);
-Route::get('/grupo/{codigo}', [ApiController::class, 'getGrupo']);
+Route::get('/getCodigoInscripcion/{incrementar}', [ApiController::class, 'getCodigoInscripcion'])->name('api.getCodigoInscripcion');
+Route::get('/getEstudiante/{cedula}', [ApiController::class, 'getEstudiante'])->name('api.getEstudiante');
+Route::get('/getRepresentante/{cedula}', [ApiController::class, 'getRepresentante'])->name('api.getRepresentante');
+Route::get('/grupo/{codigo}', [ApiController::class, 'getGrupo'])->name('api.getGrupo');
+Route::get('/plan/{codigo}', [ApiController::class, 'getPlan'])->name('api.getPlan');
+Route::post('/createCuotas', [ApiController::class, 'createCuotas'])->name('api.createCuotas');

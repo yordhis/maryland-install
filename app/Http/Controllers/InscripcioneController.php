@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreInscripcioneRequest;
 use App\Http\Requests\UpdateInscripcioneRequest;
 use App\Models\{
+    Concepto,
     DataDev,
     Cuota,
     Grupo,
@@ -16,8 +17,12 @@ use App\Models\{
 };
 use Barryvdh\DomPDF\Facade\PDF;
 use Carbon\Carbon;
+use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class InscripcioneController extends Controller
 {
@@ -32,43 +37,148 @@ class InscripcioneController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(HttpRequest $request)
     {
         try {
             // Retorna la lista de inscripciones
             // donde el estatus es 3 = completado que hace referencia a que los pagos de
             // de la inscripción estan listo
             $notificaciones = $this->data->notificaciones;
+            $respuesta = $this->data->respuesta;
+            $metodos = $this->data->metodosPagos;
+            $codigoDePago = Helpers::getCodigo('pagos');
+            $conceptos = Concepto::where("estatus", 1)->get();
 
-            // Obtenemos todas las inscripciones que poseen el estatus completado
-            $inscripciones = Helpers::addDatosDeRelacion(
-                Inscripcione::where("estatus", ">=", 1)
-                    ->orderBy('codigo', 'desc')
-                    ->get(),
-                [
-                    "estudiantes" => "cedula_estudiante",
-                    "grupos" => "codigo_grupo",
-                    "planes" => "codigo_plan",
-                ]
-            );
+            if($request->filtro){
+                $inscripciones = Inscripcione::join('grupos', 'grupos.codigo', '=', 'inscripciones.codigo_grupo')
+                ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
+                ->join('planes', 'planes.codigo', '=', 'inscripciones.codigo_plan')
+                ->join('profesores', 'profesores.cedula', '=', 'grupos.cedula_profesor')
+                ->join('niveles', 'niveles.codigo', '=', 'grupos.codigo_nivel')
+                ->select(
+                    'inscripciones.id', 
+                    'inscripciones.codigo', 
+                    'inscripciones.cedula_estudiante', 
+                    'inscripciones.codigo_grupo', 
+                    'inscripciones.codigo_plan', 
+                    'inscripciones.nota', 
+                    'inscripciones.extras', 
+                    'inscripciones.total', 
+                    'inscripciones.abono', 
+                    'inscripciones.fecha', 
+                    'inscripciones.estatus', 
+                    'grupos.codigo_nivel',
+                    'grupos.cedula_profesor',
+                    'grupos.nombre as grupo_nombre',
+                    'grupos.dias as grupo_dias',
+                    'grupos.hora_inicio as grupo_hora_inicio',
+                    'grupos.hora_fin as grupo_hora_fin',
+                    'grupos.fecha_inicio as grupo_fecha_inicio',
+                    'grupos.fecha_fin as grupo_fecha_fin',
+                    'profesores.nombre as grupo_profesor_nombre',
+                    'profesores.nacionalidad as grupo_profesor_nacionalidad',
+                    'profesores.edad as grupo_profesor_edad',
+                    'profesores.telefono as grupo_profesor_telefono',
+                    'niveles.nombre as nivel_nombre',
+                    'niveles.precio as nivel_precio',
+                    'niveles.libro as nivel_libro',
+                    'niveles.duracion as nivel_duracion',
+                    'niveles.tipo_duracion as nivel_tipo_duracion',
+                    'planes.nombre as plan_nombre',
+                    'planes.cantidad_cuotas as plan_cantidad_cuotas',
+                    'planes.plazo as plan_plazo',
+                    'planes.descripcion as plan_descripcion',
+                    'estudiantes.nombre as estudiante_nombre',
+                    'estudiantes.nacionalidad as estudiante_nacionalidad',
+                    'estudiantes.telefono as estudiante_telefono',
+                    'estudiantes.correo as estudiante_correo',
+                    'estudiantes.nacimiento as estudiante_nacimiento',
+                    'estudiantes.edad as estudiante_edad',
+                    'estudiantes.direccion as estudiante_direccion',
+                    'estudiantes.grado as estudiante_grado',
+                    'estudiantes.ocupacion as estudiante_ocupacion',
+                    'estudiantes.foto as estudiante_foto'
+                )
+                ->where('inscripciones.codigo', $request->filtro)
+                ->orWhere('inscripciones.cedula_estudiante', 'like', "%{$request->filtro}%")
+                ->orderBy('inscripciones.codigo' , 'desc')
+                ->paginate(12);
+                // $inscripciones = Inscripcione::where('codigo', $request->filtro)
+                // ->orWhere('cedula_estudiante', 'like', "%{$request->filtro}%")
+                // ->get();
 
-            // Obtenemos los datos del  grupo de la inscripcion
-            foreach ($inscripciones as $key => $inscripcion) {
-                $inscripcion['grupo'] = Helpers::addDatosDeRelacion(
-                    Helpers::setConvertirObjetoParaArreglo($inscripcion['grupo']),
-                    [
-                        "niveles" => "codigo_nivel",
-                        "profesores" => "cedula_profesor",
-                    ]
-                );
-                $inscripcion['grupo'] = $inscripcion['grupo'][0];
+            }else{
+            
+                $inscripciones = Inscripcione::join('grupos', 'grupos.codigo', '=', 'inscripciones.codigo_grupo')
+                ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
+                ->join('planes', 'planes.codigo', '=', 'inscripciones.codigo_plan')
+                ->join('profesores', 'profesores.cedula', '=', 'grupos.cedula_profesor')
+                ->join('niveles', 'niveles.codigo', '=', 'grupos.codigo_nivel')
+                ->select(
+                    'inscripciones.id', 
+                    'inscripciones.codigo', 
+                    'inscripciones.cedula_estudiante', 
+                    'inscripciones.codigo_grupo', 
+                    'inscripciones.codigo_plan', 
+                    'inscripciones.nota', 
+                    'inscripciones.extras', 
+                    'inscripciones.total', 
+                    'inscripciones.abono', 
+                    'inscripciones.fecha', 
+                    'inscripciones.estatus', 
+                    'grupos.codigo_nivel',
+                    'grupos.cedula_profesor',
+                    'grupos.nombre as grupo_nombre',
+                    'grupos.dias as grupo_dias',
+                    'grupos.hora_inicio as grupo_hora_inicio',
+                    'grupos.hora_fin as grupo_hora_fin',
+                    'grupos.fecha_inicio as grupo_fecha_inicio',
+                    'grupos.fecha_fin as grupo_fecha_fin',
+                    'profesores.nombre as grupo_profesor_nombre',
+                    'profesores.nacionalidad as grupo_profesor_nacionalidad',
+                    'profesores.edad as grupo_profesor_edad',
+                    'profesores.telefono as grupo_profesor_telefono',
+                    'niveles.nombre as nivel_nombre',
+                    'niveles.precio as nivel_precio',
+                    'niveles.libro as nivel_libro',
+                    'niveles.duracion as nivel_duracion',
+                    'niveles.tipo_duracion as nivel_tipo_duracion',
+                    'planes.nombre as plan_nombre',
+                    'planes.cantidad_cuotas as plan_cantidad_cuotas',
+                    'planes.plazo as plan_plazo',
+                    'planes.descripcion as plan_descripcion',
+                    'estudiantes.nombre as estudiante_nombre',
+                    'estudiantes.nacionalidad as estudiante_nacionalidad',
+                    'estudiantes.telefono as estudiante_telefono',
+                    'estudiantes.correo as estudiante_correo',
+                    'estudiantes.nacimiento as estudiante_nacimiento',
+                    'estudiantes.edad as estudiante_edad',
+                    'estudiantes.direccion as estudiante_direccion',
+                    'estudiantes.grado as estudiante_grado',
+                    'estudiantes.ocupacion as estudiante_ocupacion',
+                    'estudiantes.foto as estudiante_foto'
+                )
+                ->orderBy('inscripciones.codigo' , 'desc')
+                ->paginate(12);
             }
-
-
-
-
+            foreach ($inscripciones as $key => $inscripcion) {
+                $inscripcion['cuotas'] = Cuota::where([
+                    'codigo_inscripcion' => $inscripcion->codigo,
+                    'cedula_estudiante' => $inscripcion->cedula_estudiante
+                    ])->get();
+                $inscripcion['proxima_fecha_pago'] = $inscripcion['cuotas']->where('estatus', 0)->min('fecha') ?? 'PAGADO';
+            }
             // return $inscripciones;
-            return view('admin.inscripciones.lista', compact('inscripciones', 'notificaciones'));
+            return view('admin.inscripciones.lista', 
+                        compact(
+                                'inscripciones', 
+                                'notificaciones', 
+                                'respuesta', 
+                                'request', 
+                                'codigoDePago',
+                                'conceptos',
+                                'metodos'
+                        ));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar Inscripciones en el método index,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -85,7 +195,8 @@ class InscripcioneController extends Controller
         try {
 
             $notificaciones = $this->data->notificaciones;
-            return view('admin.inscripciones.crearEstudiante', compact('notificaciones'));
+            $respuesta = $this->data->respuesta;
+            return view('admin.inscripciones.crearEstudiante', compact('notificaciones', 'respuesta'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar Inscripciones en el método create,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -95,15 +206,22 @@ class InscripcioneController extends Controller
     public function create()
     {
         try {
+            $respuesta = $this->data->respuesta;
+            $notificaciones = $this->data->notificaciones;
             $codigo = Helpers::getCodigo('inscripciones');
             $planes = Plane::where("estatus", 1)->get();
             $grupos = Helpers::setMatricula(Grupo::where("estatus", 1)->get());
 
-            $notificaciones = $this->data->notificaciones;
-            return view('admin.inscripciones.crear', compact('planes', 'grupos', 'codigo', 'notificaciones'));
+            return view('admin.inscripciones.crear', compact('planes', 'grupos', 'codigo', 'notificaciones', 'respuesta'));
+
         } catch (\Throwable $th) {
-            $errorInfo = Helpers::getMensajeError($th, "Error al Consultar Inscripciones en el método create,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            
+            $mensaje = Helpers::getMensajeError($th, "Error al Consultar Inscripciones en el método create,");
+            $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
+            return  redirect()->route('admin.inscripciones.index')->with([
+                        "mensaje" => $mensaje,
+                        "estatus" => $estatus
+                    ]);
         }
     }
 
@@ -116,75 +234,97 @@ class InscripcioneController extends Controller
     public function store(StoreInscripcioneRequest $request)
     {
         try {
-            /** Datos para la vista */
-            $planes = Plane::where("estatus", 1)->get();
-            $grupos = Helpers::setMatricula(Grupo::where("estatus", 1)->get());
 
             /** Convertimos los estudiantes a un array */
-            $request['estudiantes'] = explode(',', $request->estudiantes);
-
+            $datosCuotas = [];
+            $estudiantes = explode(',', $request->estudiantes);
+            $codigos = explode(',', $request->codigo);
+            $datosCuotas = Helpers::getInputsEnArray($request, ['monto_', 'fecha_']);
+            
             /** Declaramos variables globales */
             $estatusCreate = false;
-            $idInscripciones = [];
+            $estudianteCapturado = [];
+            $mensajeDeEstudiantesCapturados = "";
+            $preMensaje = "El estudiante ya esta inscrito en este grupo de estudio.";
 
             /** Buscamos en el grupo asignado si el estudiante ya esta incluido */
-            $datoExiste = Helpers::datoExiste($request, [
-                "inscripciones" => [
-                    "cedula_estudiante",
-                    "AND codigo_grupo = {$request['codigo_grupo']}",
-                    "cedula_estudiante",
-                ],
-            ]);
+            foreach ($estudiantes as $key => $cedula) {
+                $capturado = Inscripcione::where([
+                    "cedula_estudiante" => $cedula,
+                    "codigo_grupo" =>  $request->codigo_grupo
+                ])->get();
+                if(count($capturado)){
+                    array_push(
+                        $estudianteCapturado, 
+                        $capturado
+                    );
+
+                    $mensajeDeEstudiantesCapturados .= "(Código del grupo: {$capturado[0]->codigo_grupo} - Estudiante: {$capturado[0]->cedula_estudiante})";
+                }
+            }
+
+            /** Cambiamos el mensaje de estudiantes encontrados */
+            if(count($estudianteCapturado) > 1) $preMensaje = "Los estudiantes ya están registrados en el grupo seleccionado.";
+
             /** Validamos si este estudiante ya esta inscrito en ese grupo de estudio */
-            if (!$datoExiste) {
+            if (count($estudianteCapturado) == 0) {
                 // Estraemos los datos extras de la planilla de inscripcion
                 $request['extras'] = implode(',', Helpers::getArrayInputs($request->request, 'ext'));
 
-                /** Registramos la incripcion */
-                foreach ($request->estudiantes as $key => $cedulaEstudiante) {
+                /** Registramos la incripcion, asignamosel grupo y registramos las cuotas */
+                foreach ($estudiantes as $keyCedula => $cedulaEstudiante) {
+                    
                     $estatusCreate = Inscripcione::create([
-                        "codigo" => $request->codigo, 
+                        "codigo" => $codigos[$keyCedula] ?? $codigos[0], 
                         "cedula_estudiante" => $cedulaEstudiante,
                         "codigo_grupo" => $request->codigo_grupo, 
                         "codigo_plan" => $request->codigo_plan,
                         "fecha" => $request->fecha ,
                         "extras" => $request->extras,
-                        "total" => $request->total ?? 0,
-                        "abono" => $request->abono ?? 0,
+                        "total" => floatval($request->total) ?? 0
                     ]);
-
-                    array_push( $idInscripciones, $estatusCreate->id );
 
                     GrupoEstudiante::create([
                         "cedula_estudiante" => $cedulaEstudiante,
                         "codigo_grupo" => $request->codigo_grupo,
                     ]);
+
+                    foreach ($datosCuotas as $cuota) {
+                       
+                        Cuota::create([
+                            "cedula_estudiante" => $cedulaEstudiante,
+                            "codigo_inscripcion" => $codigos[$keyCedula] ?? $codigos[0],
+                            "fecha" =>  $cuota['fecha'],
+                            "cuota" => $cuota['monto'], // monto
+                        ]);
+                    }
                 }
 
               
             }
 
-
+        
             $mensaje = $this->data->respuesta['mensaje'] = $estatusCreate ? "¡La inscripción del estudiante se proceso correctamente!"
-                : "El estudiante ya esta inscrito en este grupo de estudio (Código del grupo: {$datoExiste->codigo_grupo} - {$datoExiste->cedula_estudiante})";
+                : "{$preMensaje} {$mensajeDeEstudiantesCapturados}";
 
             $estatus = $this->data->respuesta['estatus'] = $estatusCreate ? 200 : 301;
+          
+            return $estatusCreate   ? redirect()->route('admin.inscripciones.index')->with([
+                                        "mensaje" => $mensaje,
+                                        "estatus" => $estatus
+                                        ])
+                                    : redirect()->route('admin.inscripciones.create')->with([
+                                        "mensaje" => $mensaje,
+                                        "estatus" => $estatus
+                                    ]);
 
-            $respuesta = $this->data->respuesta;
-            $notificaciones = $this->data->notificaciones;
-
-            return $idInscripciones;
-            return $estatusCreate ? redirect("inscripciones/{$idInscripciones}")->with([
-                "mensaje" => $mensaje,
-                "estatus" => $estatus
-            ])
-                : view(
-                    'admin.inscripciones.crear',
-                    compact('request', 'respuesta', 'planes', 'grupos', 'notificaciones')
-                );
         } catch (\Throwable $th) {
-            $errorInfo = Helpers::getMensajeError($th, "Error al Procesar Inscripción en el método store,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            $mensaje = Helpers::getMensajeError($th, "Error al Procesar Inscripción en el método store,");
+            $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
+            return  redirect()->route('admin.inscripciones.create')->with([
+                        "mensaje" => $mensaje,
+                        "estatus" => $estatus
+                    ]);
         }
     }
 
@@ -307,8 +447,11 @@ class InscripcioneController extends Controller
             $inscripcione->delete();
 
             $mensaje = "Datos de Inscripción Eliminado correctamente.";
-            $estatus = 200;
-            return redirect()->route('admin.inscripciones.index', compact('mensaje', 'estatus'));
+            $estatus = Response::HTTP_OK;
+            return redirect()->route('admin.inscripciones.index')->with([
+                "mensaje" => $mensaje,
+                "estatus" => $estatus
+            ]);
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Eliminar datos de Inscripción en el método destroy,");
             return response()->view('errors.404', compact("errorInfo"), 404);

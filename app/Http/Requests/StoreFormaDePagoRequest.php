@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreInscripcioneRequest extends FormRequest
+class StoreFormaDePagoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StoreInscripcioneRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,12 +24,7 @@ class StoreInscripcioneRequest extends FormRequest
     public function rules()
     {
         return [
-            "codigo" => "required",
-            "estudiantes" => "required", // ceddulas
-            "codigo_grupo" => "required",
-            "codigo_plan"=> "required",
-            "fecha" => "required",
-            "total" => "required"
+            //
         ];
     }
 }

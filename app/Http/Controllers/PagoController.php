@@ -96,7 +96,7 @@ class PagoController extends Controller
     {
        
         try {
-         
+            return $request;
             // configuramos las cuotas, metodos y monto para ser almacenados
             $cuotas = Helpers::getArrayInputs($request->request, 'cuo') ?  Helpers::getArrayInputs($request->request, 'cuo') : [0];
             $codigoGrupo = count(Cuota::where('id', $cuotas[0])->get()) ? Cuota::where('id', $cuotas[0])->get()[0]->codigo_grupo : 0;

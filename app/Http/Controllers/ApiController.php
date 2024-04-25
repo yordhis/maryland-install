@@ -8,39 +8,64 @@ use Illuminate\Http\Response;
 use App\Models\{
     Estudiante,
     Helpers,
-    Grupo
+    Grupo,
+    Plane
 };
+use Carbon\Carbon;
 
 class ApiController extends Controller
 {
 
+    /** Crear las cuotas */
+    public function createCuotas(Request $request)
+    {
+        try {
+            $cuotas = [];
+            $montoPorCuota = $request->nivel['precio'] / $request->plan['cantidad_cuotas'];
+    
+            for ($i = 0; $i < $request->plan['cantidad_cuotas']; $i++) {
+                $fecha = Carbon::now("America/Caracas");
+                $fecha = $fecha->add($i*$request->plan['plazo'], 'day');
+                array_push($cuotas, [
+                    "id" => $i+1,
+                    "fecha" => $fecha,
+                    "monto" => $montoPorCuota
+                ]);
+            }
+            return Helpers::getRespuestaJson('consulta con exito',  $cuotas);
+      
+        } catch (\Throwable $th) {
+            return Helpers::getRespuestaJson('¡Error interno!',  $th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        
+    }
+
     /** Obtenemos un nuevo codigo de inscripcion */
-    public function getCodigoInscripcion($incrementar = 0){
+    public function getCodigoInscripcion($incrementar)
+    {
         try {
             $codigo = Helpers::getCodigo('inscripciones', intval($incrementar));
             return Helpers::getRespuestaJson("Consulta de nuevo código exitosa", $codigo);
         } catch (\Throwable $th) {
-            return Helpers::getRespuestaJson("¡Error interno!: " . $th->getMessage(), $codigo, Response::HTTP_INTERNAL_SERVER_ERROR);
+            return Helpers::getRespuestaJson("¡Error interno!: " . $th->getMessage(), $codigo);
         }
     }
 
     public function getRepresentante($cedula)
     {
         try {
-            
+
             $representante = Helpers::getRepresentante($cedula);
             $mensaje = count($representante) ? "Consulta exitosa" : "No hay resultados";
             $estatus = count($representante) ?  Response::HTTP_OK : Response::HTTP_NOT_FOUND;
-            if(count($representante)) $representante = $representante[0];
+            if (count($representante)) $representante = $representante[0];
             return Helpers::getRespuestaJson($mensaje, $representante, $estatus);
-            
         } catch (\Throwable $th) {
             return Helpers::getRespuestaJson(
-                "¡Error interno!:" . $th->getMessage(), 
-                [], 
+                "¡Error interno!:" . $th->getMessage(),
+                [],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
-           
         }
     }
 
@@ -51,14 +76,28 @@ class ApiController extends Controller
 
             $mensaje = count($estudiante) ? "Consulta exitosa" : "No hay resultados";
             $estatus = count($estudiante) ?  Response::HTTP_OK : Response::HTTP_NOT_FOUND;
-            if(count($estudiante)) $estudiante = $estudiante[0];
-            return Helpers::getRespuestaJson($mensaje, $estudiante,$estatus);
-
+            if (count($estudiante)) $estudiante = $estudiante[0];
+            return Helpers::getRespuestaJson($mensaje, $estudiante, $estatus);
         } catch (\Throwable $th) {
             return Helpers::getRespuestaJson("¡Error interno!: " .  $th->getMessage(), [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
+
+    public function getPlan($codigo)
+    {
+        try {
+            $plan = Plane::where('codigo', $codigo)->get();
+            $mensaje = count($plan) ? "Consulta exitosa" : "No hay resultados";
+            $estatus = count($plan) ? Response::HTTP_OK : Response::HTTP_NOT_FOUND;
+
+            if (count($plan)) $plan = $plan[0];
+
+            return Helpers::getRespuestaJson($mensaje, $plan, $estatus);
+        } catch (\Throwable $th) {
+            return Helpers::getRespuestaJson("¡Error interno!: " .  $th->getMessage(), [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 
     public function getGrupo($codigo)
     {
@@ -70,14 +109,11 @@ class ApiController extends Controller
             $mensaje = count($grupo) ? "Consulta exitosa" : "No hay resultados";
             $estatus = count($grupo) ? Response::HTTP_OK : Response::HTTP_NOT_FOUND;
 
-            if(count($grupo)) $grupo = Helpers::setMAtricula($grupo)[0];
+            if (count($grupo)) $grupo = Helpers::setMAtricula($grupo)[0];
 
             return Helpers::getRespuestaJson($mensaje, $grupo, $estatus);
-           
         } catch (\Throwable $th) {
             return Helpers::getRespuestaJson("¡Error interno!: " .  $th->getMessage(), [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-    
 }

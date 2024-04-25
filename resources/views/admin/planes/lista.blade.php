@@ -80,7 +80,11 @@
                         <tr>
 
                             <td colspan="7" class="text-center table-secondary">
-                                Total de planes: {{ $planes->total() }}
+                                Total de planes: {{ $planes->total() }} | 
+                                <a href="{{ route('admin.planes.index') }}"
+                                   class="text-primary" >
+                                    Ver todo
+                                </a>
                                 <br>
                             </td>
                         </tr>

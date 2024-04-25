@@ -10,7 +10,7 @@ class Cuota extends Model
     use HasFactory;
     protected $fillable = [ 
         'cedula_estudiante',
-        'codigo_grupo',
+        'codigo_inscripcion',
         'fecha',
         'cuota',
         'estatus'

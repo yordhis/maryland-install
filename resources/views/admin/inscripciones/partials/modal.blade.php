@@ -1,33 +1,33 @@
 
         
 <!-- Vertically centered Modal -->
-<a type="button" class="text-success" data-bs-toggle="modal" data-bs-target="#verticalycentered{{$inscripcione->id}}">
-    <i class="bi bi-journal-plus fs-3"></i>
+<a type="button" class="text-success" data-bs-toggle="modal" data-bs-target="#verticalycentered{{$inscripcion->id}}">
+    <i class="bi bi-journal-plus fs-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Asignar nota"></i>
 </a>
     
 
 
-<div class="modal fade" id="verticalycentered{{$inscripcione->id}}" tabindex="-1">
+<div class="modal fade" id="verticalycentered{{$inscripcion->id}}" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
         <div class="modal-header">
         <h5 class="modal-title">Asignar nota</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action=" {{ route( 'admin.notas.update', $inscripcione->id ) }}" method="post" >
+        <form action=" {{ route( 'admin.notas.update', $inscripcion->id ) }}" method="post" >
             @csrf
             @method('put')
             <div class="modal-body">
                 <div class="col-12">
                 <p>
-                    Esta nota será asignada a la inscripción del Nivel <b>{{$inscripcione->grupo['nivel']->nombre}}</b> <br>
-                    del estudiante <b> {{ $inscripcione->estudiante->nombre ?? ''}}</b>.
+                    Esta nota será asignada a la inscripción del Nivel <b>{{$inscripcion->nivel_nombre}}</b> <br>
+                    del estudiante <b> {{ $inscripcion->estudiante_nombre ?? ''}}</b>.
                 </p>
                     
                     <label for="yourPassword" class="form-label">Ingrese nota</label>
                     <input type="text" name="nota" class="form-control" id="yourUsername" 
                     placeholder="Ingrese nota del estudiante"
-                    value="{{ explode("/", $inscripcione->nota)[0] ?? "" }}"
+                    value="{{ explode("/", $inscripcion->nota)[0] ?? "" }}"
                     required>
                     <div class="invalid-feedback">Por favor, Ingrese nota!</div>
                 </div>
@@ -35,7 +35,7 @@
                     <label for="yourPassword" class="form-label">Ingrese Sobre cuanto se evaluó</label>
                     <input type="text" name="notaMaxima" class="form-control" id="yourUsername" 
                     placeholder="Ingrese sobre cuanto se evaluó."
-                    value="{{ explode("/", $inscripcione->nota)[1] ?? "" }}"
+                    value="{{ explode("/", $inscripcion->nota)[1] ?? "" }}"
                     required>
                     <div class="invalid-feedback">Por favor, Ingrese sobre cuanto se evaluó!</div>
                 </div>

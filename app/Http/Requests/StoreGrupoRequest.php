@@ -24,7 +24,14 @@ class StoreGrupoRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'codigo' => "required",
+            'nombre' => "required",
+            'codigo_nivel' => "required",
+            'cedula_profesor' => "required",
+            'hora_inicio' => "required",
+            'hora_fin' => "required",
+            'fecha_inicio' => "required",
+            'fecha_fin' => "required",
         ];
     }
 }

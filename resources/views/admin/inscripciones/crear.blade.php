@@ -4,9 +4,9 @@
 
 
 @section('content')
-    @isset($respuesta)
+    @if (session('mensaje'))
         @include('partials.alert')
-    @endisset
+    @endif
     <div id="alert"></div>
 
     <div class="container">
@@ -24,10 +24,19 @@
                                     <p class="text-center text-danger small">Rellene todos los campos</p>
                                 </div>
 
-                                <form action="{{ route('admin.inscripciones.store') }}" method="post" class="row g-3 needs-validation" 
-                                    enctype="multipart/form-data" novalidate>
+                                <form action="{{ route('admin.inscripciones.store') }}" method="post"
+                                    class="row g-3 needs-validation" enctype="multipart/form-data" novalidate>
                                     @csrf
                                     @method('post')
+                                    {{-- Fecha de inscripción --}}
+                                    <div class="col-12">
+                                        <label for="yourPassword" class="form-label">Fecha de inscripción </label>
+                                        <input type="date" name="fecha" class="form-control text-danger fs-3"
+                                            id="fechaDeInscripcion" placeholder="Ingrese fecha de pago."
+                                            value="{{ date('Y-m-d') }}" required>
+                                        <div class="invalid-feedback">Por favor, Ingrese Fecha de inscripción!</div>
+                                    </div>
+
                                     {{-- Código de la inscripción --}}
                                     <div class="col-12">
                                         <label for="yourUsername" class="form-label">Número de control
@@ -38,8 +47,11 @@
                                                 <i class="bi bi-upc-scan"></i>
                                             </span>
                                             <input type="text" name="codigo" class="form-control fs-5 text-danger"
-                                                id="codigo" value="" 
-                                                required>
+                                                id="codigo" value="" readonly required>
+
+                                            <button type="button" class="btn btn-primary input-group-text"
+                                                id="botonAgruparCodigos">Agrupar</button>
+
                                             <div class="invalid-feedback">Por favor, ingrese codigo! </div>
                                         </div>
                                     </div>
@@ -50,43 +62,21 @@
                                     <div class="col-12" id="dataEstudiante">
                                     </div>{{-- ##FIN la tarjeta informativa del estudiante --}}
                                     <div class="input-group has-validation">
-                                        <input type="text" class="form-control" name="estudiantes" id="estudiantes" required>
-                                        <div class="invalid-feedback">Debe cargar estudiantes a la planilla de inscripción </div>
-                                    </div>
-
-                                  
-                                    {{-- Planes de pago --}}
-                                    <div class="col-6">
-                                        <label for="validationCustom04" class="form-label">Asigne Plan de pago</label>
-                                        <select name="codigo_plan" class="form-select" id="validationCustom04" required>
-                                            <option value="">Seleccione Plan de pago</option>
-
-                                            @foreach ($planes as $plane)
-                                                @isset($request->codigo_plan)
-                                                    @if ($plane->codigo == $request->codigo_plan)
-                                                        <option value="{{ $plane->codigo }}" selected>{{ $plane->nombre }} </option>
-                                                    @endif
-                                                @endisset
-                                                <option value="{{ $plane->codigo }}">{{ $plane->nombre }} </option>
-                                            @endforeach
-
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Por favor, Seleccione Plan de pago!
+                                        <input type="text" class="form-control" name="estudiantes" id="estudiantes"
+                                            required>
+                                        <div class="invalid-feedback">Debe cargar estudiantes a la planilla de inscripción
                                         </div>
                                     </div>
 
-                                    {{-- Fecha de inscripción --}}
-                                    <div class="col-6">
-                                        <label for="yourPassword" class="form-label">Fecha de inscripción </label>
-                                        <input type="date" name="fecha" class="form-control" id="yourUsername"
-                                            placeholder="Ingrese fecha de pago." value="{{ date('Y-m-d') }}" required>
-                                        <div class="invalid-feedback">Por favor, Ingrese Fecha de inscripción!</div>
+                                    <div class="col-sm-12">
+                                        <h3>
+                                            Asigne Grupo de Estudio
+                                        </h3>
+                                        <hr>
                                     </div>
-
                                     {{-- Grupos de estudio --}}
                                     <div class="col-12">
-                                        <label for="validationCustom04" class="form-label">Asigne Grupo de Estudio</label>
+                                        {{-- <label for="validationCustom04" class="form-label"></label> --}}
                                         <select name="codigo_grupo" class="form-select" id="codigo_grupo" required>
                                             <option selected disabled value="">Seleccione Grupo</option>
 
@@ -108,23 +98,51 @@
                                     </div>
 
                                     {{-- Mostramos los datos del grupo --}}
-                                    <div id="grupoData">
-
-                                    </div>{{-- ##FIN Mostramos los datos del grupo --}}
+                                    <div id="grupoData"></div>{{-- ##FIN Mostramos los datos del grupo --}}
 
                                     <div class="col-sm-12">
                                         <h3>
-                                            Procesar pago
-                                           <button type="button" class="btn btn-success">
-                                            Agregar pago
-                                           </button>
+                                            Plan de pago
                                         </h3>
                                         <hr>
                                     </div>
-                                
-                                    <div id="formasDePagos">
-                                        
+                                    {{-- Planes de pago --}}
+                                    <div class="col-12">
+                                        {{-- <label for="validationCustom04" class="form-label">Seleccione plan de pago</label> --}}
+                                        <select name="codigo_plan" class="form-select" id="planes" required>
+                                            <option value="">Seleccione Plan de pago</option>
+
+                                            @foreach ($planes as $plane)
+                                                @isset($request->codigo_plan)
+                                                    @if ($plane->codigo == $request->codigo_plan)
+                                                        <option value="{{ $plane->codigo }}" selected>
+                                                            {{ $plane->nombre }} - {{ $plane->plazo }}
+                                                        </option>
+                                                    @endif
+                                                @endisset
+                                                <option value="{{ $plane->codigo }}">
+                                                    {{ $plane->nombre }} - Plazo: {{ $plane->plazo }} Días - Cuotas:
+                                                    {{ $plane->cantidad_cuotas }}
+                                                </option>
+                                            @endforeach
+
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Por favor, Seleccione Plan de pago!
+                                        </div>
                                     </div>
+
+                                    <div id="elementPlan"></div>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-primary text-white"> Total a pagar </span>
+
+                                        <input type="text" placeholder="Ingrese monto a cobrar" id="total"
+                                            name="total" value="0" class="form-control fs-2">
+
+                                        <i class="input-group-text bg-primary text-white bi bi-currency-dollar"></i>
+                                    </div>
+
+                                    <div id="formasDePagos"></div>
 
                                     {{-- Datos Extras --}}
                                     <div class="col-sm-12">
@@ -134,6 +152,7 @@
                                         </h3>
                                         <hr>
                                     </div>
+
                                     <div class="col-12">
                                         <label for="yourPassword" class="form-label">¿Promoción? </label>
                                         <div class="form-check form-check-inline">
@@ -143,6 +162,7 @@
                                                 Si
                                             </label>
                                         </div>
+
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="ext_promo" value="no"
                                                 id="flexRadioDefault2" checked>
@@ -150,6 +170,7 @@
                                                 No
                                             </label>
                                         </div>
+
                                         <div class="input-group mb-3 form-check-inline">
                                             <span class="input-group-text bg-primary text-white"
                                                 id="inputGroup-sizing-sm">Explique</span>
@@ -159,6 +180,7 @@
                                     </div>
 
                                     <div class="col-12">
+
                                         <label for="yourPassword" class="form-label">¿Se entrego material? </label>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="ext_material"
@@ -167,6 +189,7 @@
                                                 Si
                                             </label>
                                         </div>
+
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="ext_material"
                                                 value="no" id="flexRadioDefault2" checked>
@@ -174,12 +197,14 @@
                                                 No
                                             </label>
                                         </div>
+
                                         <div class="input-group mb-3 form-check-inline">
                                             <span class="input-group-text bg-primary text-white"
                                                 id="inputGroup-sizing-sm">¿Como se entero del curso?</span>
                                             <input type="text" class="form-control" name="ext_alcanzado"
                                                 aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                         </div>
+
                                         <div class="input-group mb-3 form-check-inline">
                                             <span class="input-group-text bg-primary text-white"
                                                 id="inputGroup-sizing-sm">Observación</span>
@@ -205,12 +230,17 @@
             </div>
 
         </section>
-        
+
         <script src="{{ asset('assets/js/master.js') }}" defer></script>
         <script src="{{ asset('assets/js/estudiantes/componentes/AccordionComponente.js') }}" defer></script>
         <script src="{{ asset('assets/js/pagos/componentes/FormPagoComponente.js') }}" defer></script>
         <script src="{{ asset('assets/js/pagos/componentes/ListaAbonoComponente.js') }}" defer></script>
         <script src="{{ asset('assets/js/inscripciones/inscripcionController.js') }}" defer></script>
         <script src="{{ asset('assets/js/inscripciones/create.js') }}" defer></script>
-        <script src="{{ asset('assets/js/grupos/getDataGrupo.js') }}" defer></script>
+        <script src="{{ asset('assets/js/grupos/componentes/TarjetaGrupo.js') }}" defer></script>
+        <script src="{{ asset('assets/js/grupos/grupoController.js') }}" defer></script>
+        <script src="{{ asset('assets/js/grupos/index.js') }}" defer></script>
+        <script src="{{ asset('assets/js/planes/componentes/InputCuota.js') }}" defer></script>
+        <script src="{{ asset('assets/js/planes/planController.js') }}" defer></script>
+        <script src="{{ asset('assets/js/planes/index.js') }}" defer></script>
     @endsection

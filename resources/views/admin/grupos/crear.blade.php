@@ -26,7 +26,7 @@
 
 
 
-                                <form action="/grupos" method="post" class="row g-3 needs-validation" target="_self"
+                                <form action="{{ route('admin.grupos.store') }}" method="post" class="row g-3 needs-validation"
                                     enctype="multipart/form-data" novalidate>
                                     @csrf
                                     @method('post')

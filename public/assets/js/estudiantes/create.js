@@ -2,6 +2,8 @@ let btnAddRepre = document.getElementById('addRepre'),
 btnAddDifi = document.getElementById('addDifi');
 closeRepre = document.getElementById('closeRepre'),
 closeDifi = document.getElementById('closeDifi'),
+inputEdadEstudiante = document.getElementById('edad_estudiante'),
+inputFechaNacimiento = document.getElementById('fecha_nacimiento'),
 formCreate = document.forms[1];
 
 if(document.getElementById('agregar-representante')){
@@ -13,12 +15,25 @@ if(document.getElementById('agregar-dificultad')){
     dificultadElemento.hidden = true;
 }
 
+/** Ecuchamos los eventos */
+inputFechaNacimiento.addEventListener("change", (e)=>{
+    let cumpleanio = e.target.value.split('-');
+    let fechaActual = new Date();
+
+    if( fechaActual.getMonth() + 1 >= parseInt(cumpleanio[1]) 
+        && fechaActual.getDate() >= parseInt(cumpleanio[2])){
+            
+        inputEdadEstudiante.value = fechaActual.getFullYear() - parseInt(e.target.value.split('-')[0]);
+    }else{
+        inputEdadEstudiante.value = fechaActual.getFullYear() - parseInt(e.target.value.split('-')[0]) - 1;
+    }
+})
+
 btnAddRepre.addEventListener('click', (e) => {
     e.preventDefault; 
     for (const input of formCreate) {
         if (input.name.includes('rep_')) {
             input.required=true
-            console.log(input.name);
         }
     }
 
@@ -39,12 +54,12 @@ closeRepre.addEventListener('click', (e)=>{
         }
     }
     displayElemento(representanteElemento, true);
-    btnAddRepre.classList.replace('text-warning', 'text-primary');
+    btnAddRepre.classList.replace('text-warning', 'text-white');
 });
 
 closeDifi.addEventListener('click', (e)=>{
     displayElemento(dificultadElemento, true)
-    btnAddDifi.classList.replace('text-warning', 'text-primary');
+    btnAddDifi.classList.replace('text-warning', 'text-white');
 });
 
 const displayElemento = (elemento, accion) => elemento.hidden=accion;

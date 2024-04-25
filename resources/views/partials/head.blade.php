@@ -6,7 +6,7 @@
 {{-- SEO --}}
 <meta content="" name="description">
 <meta content="" name="keywords">
-{{-- <base href="http://academiamaryland.com/" target="objetivo"> --}}
+
 <!-- Favicons -->
 <link href="{{ asset('assets/img/logo-img-circulo.png') }}" rel="icon">
 <link href="{{ asset('assets/img/logo-img-circulo.png') }}" rel="apple-touch-icon">

@@ -2,7 +2,7 @@
         
 <!-- Vertically centered Modal -->
 <a type="button" class="text-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered{{$grupo->id}}">
-    <i class="bi bi-trash"></i>
+    <i class="bi bi-trash fs-3"></i>
 </a>
 
 <div class="modal fade" id="verticalycentered{{$grupo->id}}" tabindex="-1">
@@ -16,7 +16,7 @@
             ¿Esta seguro que desea eliminar el plan <span class="text-danger fs-5">{{$grupo->nombre}} - {{$grupo->codigo}}</span>? 
         </div>
         <div class="modal-footer">
-            <form action="grupos/{{$grupo->id}}" method="post" target="_self">
+            <form action="{{ route('admin.grupos.destroy', $grupo->id) }}" method="post" >
             @csrf
             @method('delete')
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

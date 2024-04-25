@@ -139,7 +139,6 @@ class Helpers extends Model
 
     public static function updateCedula($cedulaActual, $cedulaNueva)
     {
-
         try {
             // Pagos
             Pago::where('cedula_estudiante', $cedulaActual)->update([
@@ -321,6 +320,31 @@ class Helpers extends Model
         }
         return $datos;
     }
+
+
+    public static function getInputsEnArray($request, $prefijoInputs)
+    {
+        $arrayInput = [];
+        $arrayInputAssoc = [];
+        foreach ($prefijoInputs as $prefijo){
+            foreach ($request->all() as $key => $value) {
+                $text = substr($key, 0, 6);
+                if ($text == $prefijo) : $arrayInput[$key] = $value;
+                    continue;
+                endif;
+            }
+            
+        }
+
+        foreach ($arrayInput as $key => $value){
+            $id = substr($key, 6, 7);
+            $arrayInputAssoc[$id][substr($key, 0, 5)] =  $value;
+        }
+
+
+        return $arrayInputAssoc;
+    }
+
     /**
      * Esta funcion recibe la informacion del formulario y detecta cuales son los input que
      * contienen las dificultades y las convierte en un array y despues solicita las dificultades
@@ -621,7 +645,7 @@ class Helpers extends Model
     public static function getFechaCuota($plan)
     {
         $dt = Carbon::create(self::getFechaCuotaActual());
-        $date = explode(" ", $dt->addDays($plan->plazo))[0];
+        $date = explode(" ", $dt->addDays($plan['plazo']))[0];
         static::setFechaCuota($date);
         return $date;
     }

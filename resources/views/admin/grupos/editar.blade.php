@@ -4,10 +4,11 @@
 
 
 @section('content')
-    @isset($respuesta)
+    @if (session('mensaje'))
         @include('partials.alert')
-    @endisset
+    @endif
     <div id="alert"></div>
+    
     <div class="container">
         <section class="section register d-flex flex-column align-items-center justify-content-center ">
             <div class="container">
@@ -61,10 +62,10 @@
                                             @foreach ($niveles as $nivel)
                                                 @if ($grupo->codigo_nivel == $nivel->codigo)
                                                     <option value="{{ $nivel->codigo }}" selected> {{ $nivel->codigo }} -
-                                                        {{ $nivel->nombre }} -  Costo: {{ $nivel->precio }} </option>
+                                                        {{ $nivel->nombre }} - Costo: {{ $nivel->precio }} </option>
                                                 @endif
                                                 <option value="{{ $nivel->codigo }}">{{ $nivel->codigo }} -
-                                                    {{ $nivel->nombre }} -  Costo: {{ $nivel->precio }}</option>
+                                                    {{ $nivel->nombre }} - Costo: {{ $nivel->precio }}</option>
                                             @endforeach
 
                                         </select>
