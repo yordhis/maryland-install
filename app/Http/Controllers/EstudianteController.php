@@ -265,7 +265,7 @@ class EstudianteController extends Controller
 
         try {
 
-            Helpers::destroyData($estudiante->cedula, "", [
+            Helpers::destroyData($estudiante->cedula, false,false, [
                 "pagos" => true,
                 "cuotas" => true,
                 "inscripcione" => true,

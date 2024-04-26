@@ -39,11 +39,50 @@ class Helpers extends Model
             "estatus" => $estatus
         ], $estatus);
     }
-    
-    public static function destroyData($cedulaEstudiante, $codigoGrupo, $autorizado)
+
+    public static function destroyData($cedulaEstudiante, $codigoInscripcion, $codigoGrupo, $autorizado)
     {
-        // Si el codigo grupo es null se elimina todo ya que se esta eliminando el estudiante por completo
-        if ($codigoGrupo == null) {
+        /** Si viene codigo de inscripcion eliminamos todo lo que este relacionado con la inscripcion */
+        if ($codigoInscripcion) {
+            /** Eliminamos Las cuotas relaciondas con la inscripción */
+            if ($autorizado['cuotas']) {
+                Cuota::where([
+                    "cedula_estudiante" => $cedulaEstudiante,
+                    "codigo_inscripcion" => $codigoInscripcion
+                ])->delete();
+            }
+
+            /** Eliminamos los pagos relacionads a la inscripción */
+            if ($autorizado['pagos']) {
+                $pagos = Pago::where([
+                    "cedula_estudiante" => $cedulaEstudiante,
+                    "codigo_inscripcion" => $codigoInscripcion
+                ])->get();
+
+                foreach ($pagos  as $key => $pago) {
+                    FormaDePago::where('codigo_pago', $pago->codigo)->delete();
+                    $pago->delete();
+                }
+            }
+
+            // Eliminamos al estudiante del grupo
+            if ($autorizado['grupoEstudiante']) {
+                GrupoEstudiante::where([
+                    "cedula_estudiante" => $cedulaEstudiante,
+                    "codigo_grupo" => $codigoGrupo
+                ])->delete();
+            }
+
+            // Eliminamos la inscripcion del estudiante
+            if ($autorizado['inscripcione']) {
+                Inscripcione::where([
+                    "cedula_estudiante" => $cedulaEstudiante,
+                    "codigo" => $codigoInscripcion
+                ])->delete();
+            }
+        } else {
+            /** estamos eliminando al estudiante del istema es decir que volaremos todo */
+           
             // Eliminamos Las cuotas relacionads al estudiante en ese grupo
             if ($autorizado['cuotas']) {
                 Cuota::where([
@@ -53,62 +92,41 @@ class Helpers extends Model
 
             // Eliminamos los pagos relacionads al estudiante en ese grupo e inscripcion
             if ($autorizado['pagos']) {
-                Pago::where([
+                $pagos = Pago::where([
                     "cedula_estudiante" => $cedulaEstudiante
-                ])->delete();
+                ])->get();
+
+                foreach ($pagos  as $key => $pago) {
+                    FormaDePago::where('codigo_pago', $pago->codigo)->delete();
+                    $pago->delete();
+                }
             }
+
             // Eliminamos al estudiante del grupo
             if ($autorizado['grupoEstudiante']) {
                 GrupoEstudiante::where([
                     "cedula_estudiante" => $cedulaEstudiante
                 ])->delete();
             }
+
             // Eliminamos la inscripcion del estudiante
             if ($autorizado['inscripcione']) {
                 Inscripcione::where([
                     "cedula_estudiante" => $cedulaEstudiante
                 ])->delete();
             }
+
             // Eliminamos la Representantes del estudiante
             if ($autorizado['representanteEstudiante']) {
                 RepresentanteEstudiante::where([
                     "cedula_estudiante" => $cedulaEstudiante
                 ])->delete();
             }
+
             // Eliminamos la Representantes del estudiante
             if ($autorizado['dificultadEstudiante']) {
                 DificultadEstudiante::where([
                     "cedula_estudiante" => $cedulaEstudiante
-                ])->delete();
-            }
-        } else {
-            // Eliminamos Las cuotas relacionads al estudiante en ese grupo
-            if ($autorizado['cuotas']) {
-                Cuota::where([
-                    "cedula_estudiante" => $cedulaEstudiante,
-                    "codigo_grupo" => $codigoGrupo,
-                ])->delete();
-            }
-
-            // Eliminamos los pagos relacionads al estudiante en ese grupo e inscripcion
-            if ($autorizado['pagos']) {
-                Pago::where([
-                    "cedula_estudiante" => $cedulaEstudiante,
-                    "codigo_grupo" => $codigoGrupo,
-                ])->delete();
-            }
-            // Eliminamos al estudiante del grupo
-            if ($autorizado['grupoEstudiante']) {
-                GrupoEstudiante::where([
-                    "cedula_estudiante" => $cedulaEstudiante,
-                    "codigo_grupo" => $codigoGrupo,
-                ])->delete();
-            }
-            // Eliminamos la inscripcion del estudiante
-            if ($autorizado['inscripcione']) {
-                Inscripcione::where([
-                    "cedula_estudiante" => $cedulaEstudiante,
-                    "codigo_grupo" => $codigoGrupo,
                 ])->delete();
             }
         }
@@ -135,6 +153,11 @@ class Helpers extends Model
         $datos->fecha = $fechaInscripcion->format('d/m/Y');
 
         return $datos;
+    }
+
+    public static function normalizarFecha($fecha, $formato = 'd/m/Y')
+    {
+        return  date_format(date_create($fecha), $formato);
     }
 
     public static function updateCedula($cedulaActual, $cedulaNueva)
@@ -326,17 +349,16 @@ class Helpers extends Model
     {
         $arrayInput = [];
         $arrayInputAssoc = [];
-        foreach ($prefijoInputs as $prefijo){
+        foreach ($prefijoInputs as $prefijo) {
             foreach ($request->all() as $key => $value) {
                 $text = substr($key, 0, 6);
                 if ($text == $prefijo) : $arrayInput[$key] = $value;
                     continue;
                 endif;
             }
-            
         }
 
-        foreach ($arrayInput as $key => $value){
+        foreach ($arrayInput as $key => $value) {
             $id = substr($key, 6, 7);
             $arrayInputAssoc[$id][substr($key, 0, 5)] =  $value;
         }
@@ -412,16 +434,16 @@ class Helpers extends Model
             if (count($estudiante)) {
 
                 /** Obrenemos el representante */
-                    $estudiante[0]['representantes'] = self::addDatosDeRelacion(
-                        RepresentanteEstudiante::where('cedula_estudiante', $estudiante[0]->cedula)->get(),
-                        [
-                            "representantes" => "cedula_representante",
-                        ]
-                    );
-             
-                    // if(count($representante)) $estudiante[0]['representante'] = $representante[0];
-                    // else $estudiante[0]['representante'] = [];
-    
+                $estudiante[0]['representantes'] = self::addDatosDeRelacion(
+                    RepresentanteEstudiante::where('cedula_estudiante', $estudiante[0]->cedula)->get(),
+                    [
+                        "representantes" => "cedula_representante",
+                    ]
+                );
+
+                // if(count($representante)) $estudiante[0]['representante'] = $representante[0];
+                // else $estudiante[0]['representante'] = [];
+
                 /** CIERRE Obrenemos los representantes */
 
                 /** Obtenemos las dificultades de apredizaje del estudiante */
@@ -440,7 +462,7 @@ class Helpers extends Model
                         ]
                     );
                 }
-                
+
                 $estudiante[0]['inscripciones'] = $inscripciones;
 
 

@@ -62,7 +62,7 @@
                                     <div class="col-12" id="dataEstudiante">
                                     </div>{{-- ##FIN la tarjeta informativa del estudiante --}}
                                     <div class="input-group has-validation">
-                                        <input type="text" class="form-control" name="estudiantes" id="estudiantes"
+                                        <input type="hidden" class="form-control" name="estudiantes" id="estudiantes"
                                             required>
                                         <div class="invalid-feedback">Debe cargar estudiantes a la planilla de inscripción
                                         </div>

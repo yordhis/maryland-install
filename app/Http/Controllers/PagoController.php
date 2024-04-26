@@ -98,7 +98,7 @@ class PagoController extends Controller
     {
 
         try {
-            
+
             /** Obtenemos el abono */
             $abono = floatval($request->abono);
             $estatusPago = false;
@@ -113,38 +113,35 @@ class PagoController extends Controller
             ]);
 
             /** registrar las formas de pago */
-            for ($i=1; $i <= 3; $i++) { 
-                if($request["formas_pagos_".$i] != 0 && $request["monto_".$i] > 0){
+            for ($i = 1; $i <= 3; $i++) {
+                if ($request["formas_pagos_" . $i] != 0 && $request["monto_" . $i] > 0) {
                     FormaDePago::create([
-                        'codigo_pago' => $request->codigo_pago, 
-                        'metodo' => $request["formas_pagos_".$i], 
-                        'monto' => $request["monto_".$i], 
-                        'tasa' => $request["tasa_".$i], 
-                        'referencia' => $request["referencia_".$i]
+                        'codigo_pago' => $request->codigo_pago,
+                        'metodo' => $request["formas_pagos_" . $i],
+                        'monto' => $request["monto_" . $i],
+                        'tasa' => $request["tasa_" . $i],
+                        'referencia' => $request["referencia_" . $i]
                     ]);
                 }
             }
 
             /** Actualizar las cuotas */
-            $cuotas = Cuota::where( 'codigo_inscripcion', $request->codigo_inscripcion )->get();
+            $cuotas = Cuota::where('codigo_inscripcion', $request->codigo_inscripcion)->get();
             foreach ($cuotas as $key => $cuota) {
 
-                if($cuota->cuota > 0 && $abono > 0){
-                    if($cuota->cuota > $abono){
+                if ($cuota->cuota > 0 && $abono > 0) {
+                    if ($cuota->cuota > $abono) {
                         $cuota->update([
                             "cuota" => $cuota->cuota - $abono
                         ]);
                         $abono = 0;
-                    }else{
+                    } else {
                         $abono = $abono - $cuota->cuota;
                         $cuota->update([
                             "cuota" => 0,
                             "estatus" => 1,
                         ]);
                     }
-
-                    
-
                 }
             }
 
@@ -155,7 +152,7 @@ class PagoController extends Controller
             ]);
 
             $mensaje = $estatusPago ? "¡El Pago del estudiante se proceso correctamente!"
-                                    : "No se pudo procesar el pago, por favor vuelva a intentar.";
+                : "No se pudo procesar el pago, por favor vuelva a intentar.";
 
             $estatus = $estatusPago ? Response::HTTP_OK : Response::HTTP_UNAUTHORIZED;
 
@@ -163,7 +160,6 @@ class PagoController extends Controller
                 "mensaje" => $mensaje,
                 "estatus" => $estatus
             ]);
-            
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al registarr pago del estudiante en el método store,");
             return back()->with([
@@ -237,41 +233,61 @@ class PagoController extends Controller
                 "cedula_estudiante" => $cedulaEstudiante,
                 "codigo_inscripcion" => $codigoInscripcion
             ])->get();
-            
-            foreach ($pagos as $key => $pago) {
-               $pago->formas_pagos = FormaDePago::where('codigo_pago', $pago->codigo)->get();
-            }
 
-            
-            if (count($pagos)) {
-                /** obtenemos al estudiante */
-                return $estudiante = Helpers::getEstudiante($pago->cedula_estudiante);
+            foreach ($pagos as $key => $pago) {
+                /** obtenemos las formas de pago */
+                $pago->formas_pagos = FormaDePago::where('codigo_pago', $pago->codigo)->get();
                 
+                /** normalizamos el tipo de dato de monto y tasa  */
+                foreach ($pago->formas_pagos as $key => $pay) {
+                    $pay->tasa = floatval($pay->tasa);
+                    $pay->monto = floatval($pay->monto);
+                }
+                /** normalizamos la fecha */
+                $pago->fecha = Helpers::normalizarFecha($pago->fecha);
+              
+            }
+    
+            if (count($pagos)) {
+
                 /** Obtenemos la inscripcion pagada */
                 $inscripciones = Inscripcione::where([
-                    'codigo'=> $codigoInscripcion,
-                    'cedula_estudiante'=> $cedulaEstudiante,
+                    'codigo' => $codigoInscripcion
                 ])->get();
-            
-               
-         
 
-                // Configuramos los metodos de pago 
-                // $metodosPagos = explode(",", $pago->metodo);
-                // foreach ($metodosPagos as $metodosPago) {
-                //     foreach ($metodos as $key => $metodo) {
-                //         if ($metodo['metodo'] == $metodosPago) {
-                //             $metodos[$key]["activo"] = true;
-                //             break;
-                //         }
-                //     }
-                // }
-              
+                /** obtenemos al estudiante */
+                $estudiantes = [];
+                foreach ($inscripciones as $key => $inscripcion) {
+                    array_push($estudiantes, Helpers::getEstudiante($inscripcion->cedula_estudiante)[0]);
+                }
+
+                /** Obtenemos las cuotas */
+                $cuotas = Cuota::where([
+                    "codigo_inscripcion" => $codigoInscripcion,
+                    "cedula_estudiante" => $cedulaEstudiante,
+                ])->get();
+
+                $estatusCuotas = 0;
+                $contarPagoCompletador = 0;
+                foreach ($cuotas as $key => $cuota) {
+                    $cuota->cuota = floatval($cuota->cuota);
+                    $cuota->estatus = floatval($cuota->estatus);
+                    $cuota->fecha = Helpers::normalizarFecha($cuota->fecha);
+                    if( $cuota->estatus == 1){
+                        $contarPagoCompletador++;
+                    }
+
+                    if($contarPagoCompletador == count($cuotas)){
+                        $estatusCuotas = 1;
+                    }
+                }
+
+            
                 // Codigo para previsualizar el pdf
-                return view('admin.pagos.recibopdf',  compact('pagos'));
+                // return view('admin.pagos.recibopdf',  compact('pagos', 'inscripciones', 'estudiantes', 'cuotas', 'estatusCuotas'));
                 // Se genera el pdf
-                // $pdf = PDF::loadView('admin.pagos.recibopdf', compact('pago', 'metodos', 'notificaciones'));
-                // return $pdf->download("{$pago->cedula_estudiante}-{$pago->fecha}.pdf");
+                $pdf = PDF::loadView('admin.pagos.recibopdf', compact('pagos', 'inscripciones', 'estudiantes', 'cuotas', 'estatusCuotas'));
+                return $pdf->download("{$pagos[0]->cedula_estudiante}-{$pagos[0]->fecha}.pdf");
             } else {
                 return back()->with([
                     "mensaje" => "No poseé pagos registrados, por favor procese un pago antes de solicitar el recibo de pago.",

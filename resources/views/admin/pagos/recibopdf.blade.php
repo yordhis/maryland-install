@@ -2,15 +2,16 @@
 <html lang="en">
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Recibo</title>
+    <title>Recibo de pago</title>
 
-    {{-- <link href="assets/css/styles-recibo.css" rel="stylesheet"> --}}
+    <link href="{{ asset('assets/css/styles-recibo.css') }} " rel="stylesheet">
 
-    <style>
+    {{-- <style>
         
 
         body{
@@ -164,105 +165,119 @@
 
         
 
-    </style>
-    
+    </style> --}}
+
 
 </head>
+
 <body>
-    
-    
-    <div class="caja">
-        <img src="{{ asset('assets/img/recibo_pago.png') }}" class="centrar-img" width="700" alt="">
+    <header class="caja">
+        <img src="{{ asset('assets/img/header_recibo.png') }}" alt="cabezera de recibo de pago">
+    </header>
 
-        
-        <p class="codigo"></p>
-        
-        
+    <table>
+        <thead>
+            @foreach ($estudiantes as $estudiante)
+                <tr>
+                    <td colspan="6"><b>Estudiante:</b> {{ $estudiante->nombre }} </td>
+                    <td colspan="2"><b>C.I:</b> {{ $estudiante->cedulaFormateada }} </td>
+                </tr>
+            @endforeach
 
-            <ul class="caja-fecha">
-                <li>{{ explode('-', $pago->fecha)[2] ?? '' }}</li>
-                <li>{{ explode('-', $pago->fecha)[1] ?? '' }}</li>
-                <li>{{ explode('-', $pago->fecha)[0] ?? '' }}</li>
-            </ul>
- 
-        {{-- Nombre del Codigo --}}
-        <p class="codigo">{{$pago->codigo ?? ''}}</p>
-        {{-- Nombre del estudiante --}}
-        <p class="nombreEstudiante">{{$pago->estudiante['nombre'] ?? '' }}</p>
-        {{-- Nombre del Representante --}}
-        <p class="nombreRepresentante">{{$pago->estudiante->representantes[0]['nombre'] ?? '' }}</p>
-        
-        {{-- Nombre del Horario --}}
-        <p class="horario">
-            @isset( $pago->horario['horas'])
-                <span> {{ $pago->horario['horas'] ?? '' }} </span>
-                <span>| Dias: {{ $pago->horario['dias'] ?? '' }}</span>
-            @endisset
-        </p>
+            @if (count($estudiantes[0]->representantes))
+                <tr>
+                    <td colspan="6"><b>Representante:</b> {{ $estudiantes[0]->representantes[0]->nombre }} </td>
+                    <td colspan="2"><b>C.I:</b>V-{{ $estudiantes[0]->representantes[0]->cedula }}</td>
+                </tr>
+                <tr>
+                    <td><b>Contactos:</b></td>
+                    <td colspan="7">
+                        {{ $estudiantes[0]->representantes[0]->telefono }} /
+                        {{ $estudiantes[0]->telefono }}
+                    </td>
+                </tr>
+            @else
+                <tr>
+                    <td><b>Contactos:</b></td>
+                    <td colspan="7">{{ $estudiantes[0]->telefono }} </td>
+                </tr>
+            @endif
 
-        {{-- Numero de telefono del estudiante --}}
-        <p class="telefono">
-            {{ '(' . substr($pago->estudiante['telefono'], 0, 4) . ')' . ' ' . substr($pago->estudiante['telefono'], 5, 3) . '-' . substr($pago->estudiante['telefono'], 6, 4) ?? '' }}
-        </p>
-        {{-- Nombre del Cedula --}}
-        <p class="cedula">{{$pago->estudiante['cedula'] ?? '' }}</p>
+        </thead>
+        <thead>
+            <tr>
+                <td><b>N° control</b></td>
+                <td><b>Fecha</b></td>
+                <td><b>Concepto</b></td>
+                <td><b>Método</b></td>
+                <td><b>Divisas</b></td>
+                <td><b>Tasa</b></td>
+                <td><b>Bolivares</b></td>
+                <td><b>Referencia</b></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($pagos as $pago)
+                @foreach ($pago->formas_pagos as $forma)
+                    <tr>
+                        <td>{{ $pago->codigo }}</td>
+                        <td>{{ $pago->fecha }}</td>
+                        <td>{{ $pago->concepto }}</td>
+                        <td>{{ $forma->metodo }}</td>
+                        <td>{{ $forma->monto }}</td>
+                        @if ($forma->tasa > 0)
+                            <td>{{ $forma->tasa }}</td>
+                        @else
+                            <td></td>
+                        @endif
+                        <td>{{ $forma->tasa * $forma->monto }}</td>
+                        <td>{{ $forma->referencia }}</td>
+                    </tr>
+                @endforeach
+            @endforeach
 
-     
-        {{-- Metodo de pago --}}
-            <ul class="caja-metodos">
-                @isset($metodos)
-                    @foreach ($metodos as $metodo)
+            
+            @if (!$estatusCuotas)
+                {{--  Solo mostrar las pendientes --}}
+                @foreach ($cuotas as $cuota)
+                    @if (!$cuota->estatus)
+                        <tr>
+                            <td class="text-danger">Pendiente</td>
+                            <td class="text-danger">{{ $cuota->fecha }}</td>
+                            <td></td>
+                            <td class="text-danger">Pendiente</td>
+                            <td class="text-danger">{{ $cuota->cuota }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    @endif
+                @endforeach
+            @endif
 
-                        <li class="anio"> 
-                            <input 
-                            class="" 
-                            type="checkbox" 
-                            id="{{$metodo['metodo']}}" 
-                            name="met_{{$metodo['metodo']}}" 
-                            value="{{$metodo['metodo']}}"
-                            disabled
-                            {{ $metodo['activo'] ? "checked" : "" }}
-                            >
-                            <label class="form-check-label" style="font-size: 10px;" for="{{$metodo['metodo']}}">{{$metodo['metodo']}}</label>
-
-                        </li>
-                            
-
-                    @endforeach
-                @endisset
-            </ul>
-     
-        
-        
-        <ul class="caja-factura">
-            {{-- Cantidad --}}
-            <li>01</li>
-        
-            {{-- Monto en divisas --}}
-            <li id="montouds">{{ $pago->monto[1] ?? '' }}</li>
-    
-            {{-- Monto en Bolivares --}}
-            <li>{{ $pago->monto[0] ?? '' }}</li>
-        </ul>
-
-        <ul class="caja-total">
-       
-        
-            {{-- Total USD --}}
-            <li>{{ $pago->monto[1] ?? '' }}</li>
-    
-            {{--Total BS --}}
-            <li>{{ $pago->monto[0] ?? '' }}</li>
-
-        
-        </ul>
-   
-
-         {{-- Concepto --}}
-         <p class="concepto">{{ $pago->concepto ?? '' }}</p>
-
-    </div>
+            
+        </tbody>
+        <tfoot>
+            {{-- Total abonado --}}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Total abonado</td>
+                <td>{{ $inscripciones[0]->abono }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            @if ($estatusCuotas)
+                <tr>
+                    <td colspan="8" class="text-title">Todos los pagos completados</td>
+                </tr>
+            @endif
+        </tfoot>
+    </table>
 
 
 </body>
+
 </html>

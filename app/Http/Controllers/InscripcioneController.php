@@ -493,7 +493,7 @@ class InscripcioneController extends Controller
     {
         try {
 
-            Helpers::destroyData($inscripcione->cedula_estudiante, $inscripcione->codigo_grupo, [
+            Helpers::destroyData($inscripcione->cedula_estudiante, $inscripcione->codigo, $inscripcione->codigo_grupo,[
                 "pagos" => true,
                 "cuotas" => true,
                 "inscripcione" => false,
