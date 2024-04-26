@@ -80,6 +80,7 @@ Route::middleware('auth')->group(function () {
     /**
      * Rutas de Grupos de estudio
      */
+    Route::get('/imprimirMatriculaDelGrupo/{codigoGrupo}', [GrupoController::class, 'imprimirMatriculaDelGrupo'])->name('admin.grupos.imprimir');
     Route::resource('/grupos', GrupoController::class)->names('admin.grupos');
     Route::resource('/grupoEstudiantes', GrupoEstudianteController::class)->names('admin.grupoEstudiantes');
     

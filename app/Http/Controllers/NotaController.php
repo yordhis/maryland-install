@@ -8,6 +8,7 @@ use App\Models\Helpers;
 use App\Models\Inscripcione;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class NotaController extends Controller
 {
@@ -73,25 +74,39 @@ class NotaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = new DataDev;
+    
         try {
+            /** Validamos que los datos sean enviados */
+            $request->validate([
+                "nota" => "required | numeric | min:1",
+                "notaMaxima" => "required | numeric | min:1",
+            ]);
+
+
+            /** validamos que la nota asignada no pase la nota máxima */
             if ($request->nota > $request->notaMaxima) {
-                return redirect()->route('admin.inscripciones.index',[
-                    "estatus" => 301,
-                    "mensaje" => "La nota asignada supera la nota maxima."
-                ]);
+                return back()->with(
+                    [
+                        "estatus" => Response::HTTP_UNAUTHORIZED,
+                        "mensaje" => "La nota asignada supera la nota maxima."
+                    ]
+                );
             }
 
             $nota = "{$request->nota}/{$request->notaMaxima}";
             Inscripcione::where('id', $id)
             ->update(['nota' => $nota]);
-            return redirect()->route('admin.inscripciones.index',[
-                "estatus" => 200,
+
+            return back()->with([
+                "estatus" => Response::HTTP_OK,
                 "mensaje" => "La nota se guardo correctamente."
             ]);
+
         } catch (\Throwable $th) {
-            //throw $th;
-            return $th->getMessage();
+             return back()->with([
+                "estatus" => Response::HTTP_INTERNAL_SERVER_ERROR,
+                "mensaje" => "¡Error al actualizar nota, es probable que envio los campos vacios.!"
+            ]);
         }
     }
 

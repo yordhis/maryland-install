@@ -12,7 +12,7 @@
         <h5 class="modal-title">Asignar nota</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action=" {{ route( 'admin.notas.update', $inscripcion->id ) }}" method="post" >
+        <form action=" {{ route( 'admin.notas.update', $inscripcion->id ) }}" method="post" class="row g-3 needs-validation" novalidate>
             @csrf
             @method('put')
             <div class="modal-body">
@@ -23,7 +23,7 @@
                 </p>
                     
                     <label for="yourPassword" class="form-label">Ingrese nota</label>
-                    <input type="text" name="nota" class="form-control" id="yourUsername" 
+                    <input type="number" step="0.01" min="1" max="100" name="nota" class="form-control" id="yourUsername" 
                     placeholder="Ingrese nota del estudiante"
                     value="{{ explode("/", $inscripcion->nota)[0] ?? "" }}"
                     required>
@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-12">
                     <label for="yourPassword" class="form-label">Ingrese Sobre cuanto se evaluó</label>
-                    <input type="text" name="notaMaxima" class="form-control" id="yourUsername" 
+                    <input type="number" step="0.01" min="1" max="100" name="notaMaxima" class="form-control" id="yourUsername" 
                     placeholder="Ingrese sobre cuanto se evaluó."
                     value="{{ explode("/", $inscripcion->nota)[1] ?? "" }}"
                     required>

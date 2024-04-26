@@ -4,12 +4,13 @@ body{
 }
 img{
   width: 700px;
+  height: 100px;
 }
 table {
   width: 100%;
   border: 1px solid #000;
-  font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
+  font-family: Arial, Helvetica, sans-serif;
   text-transform: uppercase;
 }
 th, td {
@@ -23,7 +24,13 @@ th, td {
 }
 .text-title{
   text-align: center;
-  font-size: 14px;
+  font-size: 12px;
+}
+.title{
+  text-align: center;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
 }
 caption {
   padding: 0.3em;
@@ -37,4 +44,8 @@ caption {
 
 .text-danger{
   color: #D90000;
+}
+
+.bg-gris{
+  background-color: #3f3d3d46;
 }

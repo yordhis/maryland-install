@@ -110,7 +110,7 @@
                                     <div class="col-12">
                                         {{-- <label for="validationCustom04" class="form-label">Seleccione plan de pago</label> --}}
                                         <select name="codigo_plan" class="form-select" id="planes" required>
-                                            <option value="">Seleccione Plan de pago</option>
+                                            <option value="" selected disabled>Seleccione Plan de pago</option>
 
                                             @foreach ($planes as $plane)
                                                 @isset($request->codigo_plan)

@@ -39,32 +39,140 @@ class GrupoController extends Controller
             $dias = $this->data->dias;
 
             if ($request->filtro) {
-                $grupos = Grupo::where('codigo', $request->filtro)
-                    ->orWhere('nombre', 'like', "%{$request->filtro}%")
-                    ->orWhere('cedula_profesor', 'like', "%{$request->filtro}%")
+                $grupos = Grupo::join('profesores', 'profesores.cedula', '=', "grupos.cedula_profesor")
+                    ->join('niveles', 'niveles.codigo', '=', "grupos.codigo_nivel")
+                    ->select(
+                        'grupos.*',
+                        'niveles.nombre as nivel_nombre',
+                        'niveles.precio as nivel_precio',
+                        'niveles.libro as nivel_libro',
+                        'niveles.duracion as nivel_duracion',
+                        'niveles.tipo_duracion as nivel_tipo_duracion',
+                        'profesores.nombre as profesor_nombre',
+                        'profesores.nacionalidad as profesor_nacionalidad',
+                        'profesores.cedula as profesor_cedula',
+                        'profesores.telefono as profesor_telefono',
+                        'profesores.correo as profesor_correo',
+                        'profesores.edad as profesor_edad',
+                        'profesores.nacimiento as profesor_nacimiento',
+                        'profesores.direccion as profesor_direccion',
+                        'profesores.foto as profesor_foto',
+                    )
+                    ->where('grupos.codigo', $request->filtro)
+                    ->orWhere('grupos.nombre', 'like', "%{$request->filtro}%")
+                    ->orWhere('grupos.cedula_profesor', 'like', "%{$request->filtro}%")
+                    ->orWhere('profesores.nombre', 'like', "%{$request->filtro}%")
                     ->orderBy('id', 'desc')
-                    ->paginate(5);
+                    ->paginate(12);
             } else {
-                $grupos = Grupo::paginate(5);
+                $grupos = Grupo::join('profesores', 'profesores.cedula', '=', "grupos.cedula_profesor")
+                    ->join('niveles', 'niveles.codigo', '=', "grupos.codigo_nivel")
+                    ->select(
+                        'grupos.*',
+                        'niveles.nombre as nivel_nombre',
+                        'niveles.precio as nivel_precio',
+                        'niveles.libro as nivel_libro',
+                        'niveles.duracion as nivel_duracion',
+                        'niveles.tipo_duracion as nivel_tipo_duracion',
+                        'profesores.nombre as profesor_nombre',
+                        'profesores.nacionalidad as profesor_nacionalidad',
+                        'profesores.cedula as profesor_cedula',
+                        'profesores.telefono as profesor_telefono',
+                        'profesores.correo as profesor_correo',
+                        'profesores.edad as profesor_edad',
+                        'profesores.nacimiento as profesor_nacimiento',
+                        'profesores.direccion as profesor_direccion',
+                        'profesores.foto as profesor_foto',
+                    )
+                    ->paginate(12);
             }
 
-            // Agregar info de los grupos
+
+
+            /** Agregamos informacion del grupo com lista de estudiantes y matricula total */
             foreach ($grupos as $grupo) {
-                $grupo['profesor'] = Profesore::where('cedula', $grupo->cedula_profesor)->get()[0];
-                $grupo['nivel'] = Nivele::where('codigo', $grupo->codigo_nivel)->get()[0];
-                $grupo['matricula'] = GrupoEstudiante::where([
-                    'codigo_grupo' => $grupo->codigo,
-                    'estatus' => 1
-                ])->get()->count();
+                $grupoEstudiante = GrupoEstudiante::join('estudiantes', 'estudiantes.cedula', '=', 'grupo_estudiantes.cedula_estudiante')
+                    ->select(
+                        'grupo_estudiantes.cedula_estudiante',
+                        'estudiantes.nombre as estudiante_nombre',
+                        'estudiantes.edad as estudiante_edad',
+                        'estudiantes.nacionalidad as estudiante_nacionalidad',
+                        'estudiantes.telefono as estudiante_telefono',
+                        'estudiantes.correo as estudiante_correo',
+                        'estudiantes.direccion as estudiante_direccion',
+                        'estudiantes.nacimiento as estudiante_nacimiento',
+                        'estudiantes.foto as estudiante_foto'
+                    )
+                    ->where([
+                        'grupo_estudiantes.codigo_grupo' => $grupo->codigo
+                    ])->get();
+
+                $grupo['matricula'] = $grupoEstudiante->count();
+                $grupo['estudiantes'] = $grupoEstudiante;
             }
+
+
 
             return view('admin.grupos.lista', compact('grupos', 'notificaciones', 'request', 'respuesta', 'niveles', 'profesores', 'codigo', 'dias'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar Grupos en el método index,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            return back()->with([
+                "mensaje" => $errorInfo,
+                "estatus" => Response::HTTP_INTERNAL_SERVER_ERROR
+            ]);
         }
     }
 
+    /** imprimir matricula del grupo de estudio */
+    public function imprimirMatriculaDelGrupo($codigoGrupo)
+    {
+        $grupos = Grupo::join('profesores', 'profesores.cedula', '=', "grupos.cedula_profesor")
+            ->join('niveles', 'niveles.codigo', '=', "grupos.codigo_nivel")
+            ->select(
+                'grupos.*',
+                'niveles.nombre as nivel_nombre',
+                'niveles.precio as nivel_precio',
+                'niveles.libro as nivel_libro',
+                'niveles.duracion as nivel_duracion',
+                'niveles.tipo_duracion as nivel_tipo_duracion',
+                'profesores.nombre as profesor_nombre',
+                'profesores.nacionalidad as profesor_nacionalidad',
+                'profesores.cedula as profesor_cedula',
+                'profesores.telefono as profesor_telefono',
+                'profesores.correo as profesor_correo',
+                'profesores.edad as profesor_edad',
+                'profesores.nacimiento as profesor_nacimiento',
+                'profesores.direccion as profesor_direccion',
+                'profesores.foto as profesor_foto',
+            )
+            ->where('grupos.codigo', $codigoGrupo)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        /** Agregamos informacion del grupo com lista de estudiantes y matricula total */
+        foreach ($grupos as $grupo) {
+            $grupoEstudiante = GrupoEstudiante::join('estudiantes', 'estudiantes.cedula', '=', 'grupo_estudiantes.cedula_estudiante')
+                ->select(
+                    'grupo_estudiantes.cedula_estudiante',
+                    'estudiantes.nombre as estudiante_nombre',
+                    'estudiantes.edad as estudiante_edad',
+                    'estudiantes.nacionalidad as estudiante_nacionalidad',
+                    'estudiantes.telefono as estudiante_telefono',
+                    'estudiantes.correo as estudiante_correo',
+                    'estudiantes.direccion as estudiante_direccion',
+                    'estudiantes.nacimiento as estudiante_nacimiento',
+                    'estudiantes.foto as estudiante_foto'
+                )
+                ->where([
+                    'grupo_estudiantes.codigo_grupo' => $grupo->codigo
+                ])->get();
+
+            $grupo['matricula'] = $grupoEstudiante->count();
+            $grupo['estudiantes'] = $grupoEstudiante;
+        }
+
+        return $grupos;
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -232,17 +340,16 @@ class GrupoController extends Controller
             $estatus = $this->data->respuesta['estatus'] = $estatusUpdate ? 200
                 : 301;
 
-        
+
 
             return $estatusUpdate   ? redirect()->route('admin.grupos.index')->with([
-                                            "mensaje" => $mensaje,
-                                            "estatus" => $estatus
-                                        ])
-                                    : back()->with([
-                                        "mensaje" => $mensaje,
-                                        "estatus" => $estatus
-                                    ]);
-
+                "mensaje" => $mensaje,
+                "estatus" => $estatus
+            ])
+                : back()->with([
+                    "mensaje" => $mensaje,
+                    "estatus" => $estatus
+                ]);
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Actualizar grupo en el método update,");
             return response()->view('errors.404', compact("errorInfo"), 404);

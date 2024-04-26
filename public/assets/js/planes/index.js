@@ -23,10 +23,11 @@ const hanledCambioDeCostoDeCuotas = (e) =>{
 
 const hanledPlan =  (e) => {
     elementPlan.innerHTML="";
+    let codigoPlanE = e.target.value;
 
-    getPlan(e.target.value)
+    getPlan(codigoPlanE)
     .then(res => {
-  
+        log(res)
         let grupo = JSON.parse(localStorage.getItem('grupo'));
         
         if(grupo){

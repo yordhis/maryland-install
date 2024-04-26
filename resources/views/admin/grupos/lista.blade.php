@@ -56,24 +56,25 @@
                                 <td>{{ $grupo->codigo }}</td>
                                 <td>{{ $grupo->nombre }}</td>
                                 <td>{!! 
-                                    $grupo->profesor->nombre . "<br>"
-                                    . "C.I.:" . $grupo->profesor->cedula 
+                                    $grupo->profesor_nombre . "<br>"
+                                    . "C.I.:" . $grupo->profesor_cedula 
                                 
                                 !!}
                                 </td>
-                                <td>{{ $grupo->nivel->nombre }} </td>
+                                <td>{{ $grupo->nivel_nombre }} </td>
                                 <td>{{ $grupo->matricula }} </td>
                                 
 
                                 <td>
                                     <a href="{{ route('admin.grupos.show', $grupo->id)  }}" >
-                                        <i class="bi bi-eye fs-3"></i>
+                                        <i class="bi bi-eye fs-3 "></i>
                                     </a>
 
                                     <a href="{{ route('admin.grupos.edit', $grupo->id) }}">
-                                        <i class="bi bi-pencil fs-3"></i>
+                                        <i class="bi bi-pencil fs-3 text-warning"></i>
                                     </a>
 
+                                    @include('admin.grupos.partials.modalimprir')
                                     @include('admin.grupos.partials.modal')
 
 

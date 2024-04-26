@@ -87,20 +87,13 @@ const hanledBotonAgrupar = (e) => {
             if(res.estatus == HTTP_OK) {
                 inputCodigo.value="";
                 inputEstudiantes.value="";
-                inputCodigo.value += res.data;
+                inputCodigo.value += res.data + ',';
 
                 estudiantes.forEach( async (estudiante, index) => {
-
                     estudiantes[index].codigoInscripcion = null;
                     inputEstudiantes.value += estudiante.cedula + ',';
-
-
-
                     localStorage.setItem('estudiantes', JSON.stringify( estudiantes ))
                 })
-                setTimeout(()=>{
-                    quitarComaAlFinal(inputEstudiantes);
-                }, 1500);
         
             } else $.alert({
                 title: "¡Alerta!",
@@ -111,8 +104,8 @@ const hanledBotonAgrupar = (e) => {
         });
 
     }else{
-        e.target.textContent= "Agrupar"
-        hanledLoad()
+        e.target.textContent= "Agrupar";
+        hanledLoad();
     }
 };
 
@@ -166,11 +159,10 @@ const listarEstudiantes = (getCodigo, datos, inputCodigo, inputEstudiantes) => {
                     
                 });
 
-                log(inputCodigo.value)
-                setTimeout(()=>{
-                    quitarComaAlFinal( inputCodigo )
-                    quitarComaAlFinal( inputEstudiantes )
-                },2500)
+                // setTimeout(()=>{
+                //     quitarComaAlFinal( inputCodigo )
+                //     quitarComaAlFinal( inputEstudiantes )
+                // },3000)
 
             }else{
                 console.log('entro aqui');
@@ -182,8 +174,8 @@ const listarEstudiantes = (getCodigo, datos, inputCodigo, inputEstudiantes) => {
                     inputCodigo.value += estudiante.codigoInscripcion + ',';
                 });
 
-                quitarComaAlFinal( inputCodigo )
-                quitarComaAlFinal( inputEstudiantes )
+                // quitarComaAlFinal( inputCodigo )
+                // quitarComaAlFinal( inputEstudiantes )
               
             }
        

@@ -232,7 +232,10 @@ class InscripcioneController extends Controller
     public function store(StoreInscripcioneRequest $request)
     {
         try {
-
+            /** quitamos las comas de codigos y cedulas estudiantes */
+            $request['estudiantes'] = substr($request->estudiantes, 0, strlen($request->estudiantes) -1 );
+            $request['codigo'] = substr($request->codigo, 0, strlen($request->codigo) -1 );
+         
             /** Convertimos los estudiantes a un array */
             $datosCuotas = [];
             $estudiantes = explode(',', $request->estudiantes);
@@ -419,7 +422,6 @@ class InscripcioneController extends Controller
              */
             $inscripciones[0]->extras = explode(',', $inscripciones[0]->extras);
 
-         
             // return view(
             //     'admin.inscripciones.planillapdf',
             //     compact(

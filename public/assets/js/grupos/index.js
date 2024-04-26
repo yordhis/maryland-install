@@ -11,6 +11,13 @@
             if(res.estatus == HTTP_OK){
                 localStorage.setItem( 'grupo', JSON.stringify(res.data) );
                 cardDataGrupo.innerHTML = TarjetaGrupo(res.data);
+              
+               if(selectPlan.value){
+                    selectPlan[0].selected =true;
+                    elementPlan.innerHTML="";
+                    inputTotal.value=0;
+               }
+                
             }else{
                 $.alert({
                     title:"¡Alerta!",

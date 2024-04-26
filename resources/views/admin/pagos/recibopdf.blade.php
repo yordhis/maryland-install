@@ -174,38 +174,45 @@
     <header class="caja">
         <img src="{{ asset('assets/img/header_recibo.png') }}" alt="cabezera de recibo de pago">
     </header>
-
+    <span class="title text-danger">Control de pago</span>
     <table>
         <thead>
-            @foreach ($estudiantes as $estudiante)
+            @foreach ($estudiantes as $key => $estudiante)
                 <tr>
-                    <td colspan="6"><b>Estudiante:</b> {{ $estudiante->nombre }} </td>
+                    <td colspan="2" class="bg-gris"> <b>
+                        {{ $key + 1 }}
+                        Estudiante:
+                    </b> </td>
+                    <td colspan="4">{{ $estudiante->nombre }} </td>
                     <td colspan="2"><b>C.I:</b> {{ $estudiante->cedulaFormateada }} </td>
                 </tr>
             @endforeach
 
             @if (count($estudiantes[0]->representantes))
                 <tr>
-                    <td colspan="6"><b>Representante:</b> {{ $estudiantes[0]->representantes[0]->nombre }} </td>
-                    <td colspan="2"><b>C.I:</b>V-{{ $estudiantes[0]->representantes[0]->cedula }}</td>
+                    <td colspan="2" class="bg-gris"> <b>
+                        Representante:
+                    </b> </td>
+                    <td colspan="4">{{ $estudiantes[0]->representantes[0]->representante->nombre }} </td>
+                    <td colspan="2"><b>C.I:</b>V-{{ $estudiantes[0]->representantes[0]->representante->cedula }}</td>
                 </tr>
                 <tr>
-                    <td><b>Contactos:</b></td>
-                    <td colspan="7">
-                        {{ $estudiantes[0]->representantes[0]->telefono }} /
+                    <td colspan="2" class="bg-gris"><b>Contactos:</b></td>
+                    <td colspan="6">
+                        {{ $estudiantes[0]->representantes[0]->representante->telefono }} /
                         {{ $estudiantes[0]->telefono }}
                     </td>
                 </tr>
             @else
                 <tr>
-                    <td><b>Contactos:</b></td>
-                    <td colspan="7">{{ $estudiantes[0]->telefono }} </td>
+                    <td colspan="2" class="bg-gris"><b>Contactos:</b></td>
+                    <td colspan="6">{{ $estudiantes[0]->telefono }} </td>
                 </tr>
             @endif
 
         </thead>
         <thead>
-            <tr>
+            <tr class="bg-gris">
                 <td><b>N° control</b></td>
                 <td><b>Fecha</b></td>
                 <td><b>Concepto</b></td>
@@ -260,14 +267,12 @@
         <tfoot>
             {{-- Total abonado --}}
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>Total abonado</td>
+                <td colspan="3"></td>
+                
+                <td class="bg-gris">Total abonado</td>
                 <td>{{ $inscripciones[0]->abono }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td colspan="3"></td>
+                
             </tr>
             @if ($estatusCuotas)
                 <tr>

@@ -4,6 +4,7 @@ body{
 }
 img{
     width: 700px;
+    height: 100px;
 }
 table {
     width: 100%;
@@ -18,7 +19,7 @@ table {
     vertical-align: top;
     border: 1px solid #000;
     border-collapse: collapse;
-    padding: 0.5em;
+    padding: 0.23em;
     font-size: 12px;
  }
  .text-title{
@@ -39,7 +40,7 @@ table {
     position: absolute;
     color: #D90000;
     font-size: 16px;
-    margin-top: 25px;
+    margin-top: 20px;
     margin-bottom: 0px;
     margin-right: 0px;
     margin-left: -80px;
@@ -49,8 +50,15 @@ table {
     position: absolute;
     color: #D90000;
     font-size: 16px;
-    margin-top: -60px;
+    margin-top: -50px;
     margin-bottom: 0px;
     margin-right: 0px;
     margin-left: 520px;
 }
+.bg-gris{
+    background-color: #3f3d3d7e;
+}
+
+.text-danger{
+    color: #D90000;
+  }

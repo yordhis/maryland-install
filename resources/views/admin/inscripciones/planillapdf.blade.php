@@ -33,14 +33,15 @@
     <table>
         <thead>
             <tr>
-                <td colspan="4" class="text-title"><b>DATOS PERSONALES</b></td>
+                <td colspan="4" class="text-title bg-gris"><b>DATOS PERSONALES</b></td>
             </tr>
         </thead>
         <tbody>
-            @foreach ($estudiantes as $estudiante)
+            {{-- DATOS DE ESTUDIANTES --}}
+            @foreach ($estudiantes as $key => $estudiante)
                 <tr>
-                    <td colspan="4">
-                        <b>NOMBRE:</b> {{ $estudiante->nombre }}
+                    <td colspan="4" class="bg-gris">
+                        <b>{{$key + 1}} ESTUDIANTE:</b> {{ $estudiante->nombre }}
                     </td>
                 </tr>
                 <tr>
@@ -95,27 +96,28 @@
                 </tr>
             @endforeach
 
+            {{-- DATOS DE REPRESENTANTE --}}
             @if (count($estudiantes[0]->representantes))
                 <tr>
-                    <td colspan="4" class="text-title"><b>DATOS DEL REPRESENTANTE</b></td>
+                    <td colspan="4" class="text-title bg-gris"><b>DATOS DEL REPRESENTANTE</b></td>
                 </tr>
                 <tr>
-                    <td><b>NOMBRE Y APELLIDO:</b> {{ $estudiantes[0]->representantes[0]->nombre }}</td>
-                    <td><b>C.I.:</b> {{ $estudiantes[0]->representantes[0]->cedula }}</td>
-                    <td><b>EDAD:</b> {{ $estudiantes[0]->representantes[0]->edad . ' AÑOS' }}</td>
+                    <td><b>NOMBRE Y APELLIDO:</b> {{ $estudiantes[0]->representantes[0]->representante->nombre }}</td>
+                    <td><b>C.I.:</b> {{ $estudiantes[0]->representantes[0]->representante->cedula }}</td>
+                    <td colspan="2"><b>EDAD:</b> {{ $estudiantes[0]->representantes[0]->representante->edad . ' AÑOS' }}</td>
                 </tr>
                 <tr>
-                    <td><b>TELÉFONO:</b> {{ $estudiantes[0]->representantes[0]->telefono }}</td>
-                    <td><b>CORREO:</b> {{ $estudiantes[0]->representantes[0]->correo }}</td>
-                    <td><b>OCUPACIÓN:</b> {{ $estudiantes[0]->representantes[0]->ocupacion }}</td>
+                    <td><b>TELÉFONO:</b> {{ $estudiantes[0]->representantes[0]->representante->telefono }}</td>
+                    <td><b>CORREO:</b> {{ $estudiantes[0]->representantes[0]->representante->correo }}</td>
+                    <td colspan="2"><b>OCUPACIÓN:</b> {{ $estudiantes[0]->representantes[0]->representante->ocupacion }}</td>
                 </tr>
                 <tr>
-                    <td colspan="4"><b>DIRECCIÓN:</b> {{ $estudiantes[0]->representantes[0]->direccion }}</td>
+                    <td colspan="4"><b>DIRECCIÓN:</b> {{ $estudiantes[0]->representantes[0]->representante->direccion }}</td>
                 </tr>
             @endif
 
             <tr>
-                <td colspan="4" class="text-title"><b>PLAN DE ESTUDIO</b></td>
+                <td colspan="4" class="text-title bg-gris"><b>PLAN DE ESTUDIO</b></td>
             </tr>
             <tr>
                 <td><b>NIVEL O CURSO:</b> {{ $inscripciones[0]->nivel_nombre }}</td>
@@ -136,15 +138,15 @@
             </tr>
 
             <tr>
-                <td colspan="4" class="text-title"><b>PLAN DE PAGO</b></td>
+                <td colspan="4" class="text-title bg-gris"><b>PLAN DE PAGO</b></td>
             </tr>
             <tr>
-                <td colspan="2"><b>PLAN:</b> {{ $inscripciones[0]->plan_nombre }} </td>
-                <td colspan="2"><b>DESCRIPCIÓN DEL PLAN:</b> {{ $inscripciones[0]->plan_descripcion }} </td>
+                <td ><b>PLAN:</b> {{ $inscripciones[0]->plan_nombre }} </td>
+                <td colspan="3"><b>DESCRIPCIÓN DEL PLAN:</b> {{ $inscripciones[0]->plan_descripcion }} </td>
 
             </tr>
             <tr>
-                <td><b>VALOR:</b> {{ $inscripciones[0]->nivel_precio }} </td>
+                <td class="text-danger"><b>VALOR:</b> {{ $inscripciones[0]->total }} $</td>
                 <td><b>CANTIDAD DE CUOTAS:</b> {{ $inscripciones[0]->plan_cantidad_cuotas }} </td>
                 <td colspan="2"><b>PLAZO POR CUOTA:</b> {{ $inscripciones[0]->plan_plazo . ' DÍAS' }} </td>
             </tr>
@@ -152,7 +154,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="4" class="text-title"><b>INFORMACIÓN EXTRA</b></td>
+                <td colspan="4" class="text-title bg-gris"><b>INFORMACIÓN EXTRA</b></td>
             </tr>
             <tr>
                 <td>
@@ -211,6 +213,11 @@
             <tr>
                 <td colspan="4">
                     <b>OBSERVACIÓN:</b> {{$inscripciones[0]->extras[4]}}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <b>NOTA:</b> {{ $inscripciones[0]->nota ?? "En curso"}}
                 </td>
             </tr>
         </tfoot>

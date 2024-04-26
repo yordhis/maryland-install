@@ -147,7 +147,7 @@ $subcategoria = 'LISTA';
         </li><!-- End Components Nav | Grupos de Estudios -->
 
         <!-- Start Components Nav | Pagos -->
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="nav-link {{ $categoria == 'PAGOS' ? 'collapse show' : 'collapsed' }}"
                 data-bs-target="#components-nav-7" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-paypal"></i><span>Pagos</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -168,7 +168,7 @@ $subcategoria = 'LISTA';
                 </li>
 
             </ul>
-        </li><!-- End Components Nav | Pagos -->
+        </li><!-- End Components Nav | Pagos --> --}}
 
         <!-- Start Components Nav | Inscripciones -->
         <li class="nav-item">

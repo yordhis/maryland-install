@@ -135,6 +135,7 @@
 
     <script src="{{ asset('assets/js/master.js') }}" defer></script>
     <script src="{{ asset('assets/js/pagos/create.js') }}" defer></script>
+    <script src="{{ asset('assets/js/inscripciones/lista.js') }}" defer></script>
 
 
 @endsection
