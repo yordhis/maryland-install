@@ -130,7 +130,7 @@
                     <!-- Sales Card -->
                     <div class="col-sm-4">
                         <div class="card info-card sales-card bg-primary rounded-3">
-                            <a href="/pagos/create" target="_self">
+                            <a href="{{ route('admin.inscripciones.index') }}" >
                                 <div class="card-body">
                                     <h5 class="card-title"></span></h5>
     

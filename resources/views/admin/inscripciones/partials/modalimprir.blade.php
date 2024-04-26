@@ -14,20 +14,32 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <a href="{{ route('admin.inscripciones.pdf', [
-                "cedula" => $inscripcion->cedula_estudiante,
-                "codigo" => $inscripcion->codigo
-            ])}}"
-            class="btn btn-primary"> 
-                Imprimir Planilla de inscripción 
-            </a>
-            <a href="{{ route('admin.pagos.recibopdf', [
-                "cedula_estudiante" => $inscripcion->cedula_estudiante,
-                "codigo_inscripcion" => $inscripcion->codigo
-            ]) }}"
-            class="btn btn-primary"> 
-                Imprimir Planilla de inscripción 
-            </a>
+            <div class="d-flex">
+                <a href="{{ route('admin.inscripciones.pdf', [
+                    "cedula" => $inscripcion->cedula_estudiante,
+                    "codigo" => $inscripcion->codigo
+                ])}}"
+                class="btn btn-warning w-50 m-2"
+                data-bs-toggle="tooltip" 
+                data-bs-placement="top" 
+                data-bs-title="Imprimir Planilla de inscripción"
+                > 
+                    <i class="bi bi-file-earmark-ppt-fill fs-2"></i>
+                    
+                </a>
+                <a href="{{ route('admin.pagos.recibopdf', [
+                    "cedula_estudiante" => $inscripcion->cedula_estudiante,
+                    "codigo_inscripcion" => $inscripcion->codigo
+                ]) }}"
+                class="btn btn-primary w-50 m-2"
+                data-bs-toggle="tooltip" 
+                data-bs-placement="top" 
+                data-bs-title="Imprimir Recibo de control de pagos"
+                > 
+                    <i class="bi bi-card-checklist fs-2"></i>
+                     
+                </a>
+            </div>
         </div>
        
     </div>

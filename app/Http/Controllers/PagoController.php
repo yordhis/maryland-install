@@ -242,60 +242,48 @@ class PagoController extends Controller
                $pago->formas_pagos = FormaDePago::where('codigo_pago', $pago->codigo)->get();
             }
 
-                return $pagos;
+            
             if (count($pagos)) {
-           
-                $pago['estudiante'] = Helpers::getEstudiante($pago->cedula_estudiante);
-                $pago->id_cuota = explode(",", $pago->id_cuota);
-                $pago->monto = explode(",", $pago->monto);
-
-                // Configuramos los horarios
-                $pago['horario'] = null;
-                foreach ($pago->id_cuota as $key => $cuotaPagada) {
-                    foreach ($pago['estudiante']['inscripciones'] as $key => $inscripcion) {
-
-                        foreach ($inscripcion['cuotas'] as $key => $cuota) {
-                            if ($cuotaPagada == $cuota['id']) {
-                                foreach ($pago['estudiante']['grupos'] as $key => $grupo) {
-                                    if ($cuota['codigo_grupo'] == $grupo['codigo']) {
-                                        $pago['horario'] = [
-                                            "dias" => $grupo['dias'],
-                                            "horas" => $grupo['hora_inicio'] . " - " . $grupo['hora_fin']
-                                        ];
-                                        break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
+                /** obtenemos al estudiante */
+                return $estudiante = Helpers::getEstudiante($pago->cedula_estudiante);
+                
+                /** Obtenemos la inscripcion pagada */
+                $inscripciones = Inscripcione::where([
+                    'codigo'=> $codigoInscripcion,
+                    'cedula_estudiante'=> $cedulaEstudiante,
+                ])->get();
+            
+               
+         
 
                 // Configuramos los metodos de pago 
-                $metodosPagos = explode(",", $pago->metodo);
-                foreach ($metodosPagos as $metodosPago) {
-                    foreach ($metodos as $key => $metodo) {
-                        if ($metodo['metodo'] == $metodosPago) {
-                            $metodos[$key]["activo"] = true;
-                            break;
-                        }
-                    }
-                }
+                // $metodosPagos = explode(",", $pago->metodo);
+                // foreach ($metodosPagos as $metodosPago) {
+                //     foreach ($metodos as $key => $metodo) {
+                //         if ($metodo['metodo'] == $metodosPago) {
+                //             $metodos[$key]["activo"] = true;
+                //             break;
+                //         }
+                //     }
+                // }
               
                 // Codigo para previsualizar el pdf
-                return view('admin.pagos.recibopdf',  compact('pago', 'metodos'));
+                return view('admin.pagos.recibopdf',  compact('pagos'));
                 // Se genera el pdf
                 // $pdf = PDF::loadView('admin.pagos.recibopdf', compact('pago', 'metodos', 'notificaciones'));
                 // return $pdf->download("{$pago->cedula_estudiante}-{$pago->fecha}.pdf");
             } else {
                 return back()->with([
-                    "mensaje" => "El recibo de pago no existe, por favor vuelva a intentar.",
+                    "mensaje" => "No poseé pagos registrados, por favor procese un pago antes de solicitar el recibo de pago.",
                     "estatus" => Response::HTTP_UNAUTHORIZED,
                 ]);
             }
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Generar PDF del Pago del estudiante en el método recibopdf,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            return back()->with([
+                "mensaje" => $errorInfo,
+                "estatus" => Response::HTTP_INTERNAL_SERVER_ERROR
+            ]);
         }
     }
 

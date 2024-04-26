@@ -101,6 +101,7 @@ class InscripcioneController extends Controller
                     )
                     ->where('inscripciones.codigo', $request->filtro)
                     ->orWhere('inscripciones.cedula_estudiante', 'like', "%{$request->filtro}%")
+                    ->orWhere('estudiantes.nombre', 'like', "%{$request->filtro}%")
                     ->orderBy('inscripciones.codigo', 'desc')
                     ->paginate(12);
             } else {
