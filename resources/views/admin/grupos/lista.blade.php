@@ -66,9 +66,8 @@
                                 
 
                                 <td>
-                                    <a href="{{ route('admin.grupos.show', $grupo->id)  }}" >
-                                        <i class="bi bi-eye fs-3 "></i>
-                                    </a>
+                                  
+                                    @include('admin.grupos.partials.modalVerGrupo')
 
                                     <a href="{{ route('admin.grupos.edit', $grupo->id) }}">
                                         <i class="bi bi-pencil fs-3 text-warning"></i>

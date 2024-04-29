@@ -124,26 +124,9 @@ $subcategoria = 'LISTA';
 
         <!-- Start Components Nav | Grupos de Estudios -->
         <li class="nav-item">
-            <a class="nav-link {{ $categoria == 'GRUPOS' ? 'collapse show' : 'collapsed' }}"
-                data-bs-target="#components-nav-6" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-diagram-3"></i><span>Grupos de Estudios</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a href="{{ route('admin.grupos.index') }}" class="nav-link  {{ $categoria == 'GRUPOS' ? 'text-warning collapse' : 'collapsed' }}">
+                <i class="bi bi-diagram-3"></i><span>Grupos de Estudios</span>
             </a>
-            <ul id="components-nav-6" class="nav-content {{ $categoria == 'GRUPOS' ? 'collapse show' : 'collapse' }} "
-                data-bs-parent=" #sidebar-nav">
-                <li>
-                    <a href="{{ route('admin.grupos.index') }}" 
-                        class="{{ $categoria == 'GRUPOS' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}">
-                        <i class="bi bi-circle"></i><span>Lista</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.grupos.create') }}" 
-                        class="{{ $categoria == 'GRUPOS' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
-                        <i class="bi bi-circle"></i><span>Crear</span>
-                    </a>
-                </li>
-
-            </ul>
         </li><!-- End Components Nav | Grupos de Estudios -->
 
         <!-- Start Components Nav | Pagos -->

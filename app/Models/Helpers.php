@@ -132,6 +132,97 @@ class Helpers extends Model
         }
     }
 
+
+    /** obtener toda la informacion de los grupos o un grupo por filtro */
+    public static function getGrupos($filtro = false, $paginacion = 12){
+        if ($filtro) {
+            $grupos = Grupo::join('profesores', 'profesores.cedula', '=', "grupos.cedula_profesor")
+                ->join('niveles', 'niveles.codigo', '=', "grupos.codigo_nivel")
+                ->select(
+                    'grupos.*',
+                    'niveles.nombre as nivel_nombre',
+                    'niveles.precio as nivel_precio',
+                    'niveles.libro as nivel_libro',
+                    'niveles.duracion as nivel_duracion',
+                    'niveles.tipo_duracion as nivel_tipo_duracion',
+                    'profesores.nombre as profesor_nombre',
+                    'profesores.nacionalidad as profesor_nacionalidad',
+                    'profesores.cedula as profesor_cedula',
+                    'profesores.telefono as profesor_telefono',
+                    'profesores.correo as profesor_correo',
+                    'profesores.edad as profesor_edad',
+                    'profesores.nacimiento as profesor_nacimiento',
+                    'profesores.direccion as profesor_direccion',
+                    'profesores.foto as profesor_foto',
+                )
+                ->where('grupos.codigo', $filtro)
+                ->orWhere('grupos.nombre', 'like', "%{$filtro}%")
+                ->orWhere('grupos.cedula_profesor', 'like', "%{$filtro}%")
+                ->orWhere('profesores.nombre', 'like', "%{$filtro}%")
+                ->orderBy('id', 'desc')
+                ->paginate($paginacion);
+        } else {
+            $grupos = Grupo::join('profesores', 'profesores.cedula', '=', "grupos.cedula_profesor")
+                ->join('niveles', 'niveles.codigo', '=', "grupos.codigo_nivel")
+                ->select(
+                    'grupos.*',
+                    'niveles.nombre as nivel_nombre',
+                    'niveles.precio as nivel_precio',
+                    'niveles.libro as nivel_libro',
+                    'niveles.duracion as nivel_duracion',
+                    'niveles.tipo_duracion as nivel_tipo_duracion',
+                    'profesores.nombre as profesor_nombre',
+                    'profesores.nacionalidad as profesor_nacionalidad',
+                    'profesores.cedula as profesor_cedula',
+                    'profesores.telefono as profesor_telefono',
+                    'profesores.correo as profesor_correo',
+                    'profesores.edad as profesor_edad',
+                    'profesores.nacimiento as profesor_nacimiento',
+                    'profesores.direccion as profesor_direccion',
+                    'profesores.foto as profesor_foto',
+                )
+                ->paginate($paginacion);
+        }
+
+        /** Agregamos informacion del grupo com lista de estudiantes y matricula total */
+        foreach ($grupos as $grupo) {
+            $grupoEstudiante = GrupoEstudiante::join('estudiantes', 'estudiantes.cedula', '=', 'grupo_estudiantes.cedula_estudiante')
+                ->select(
+                    'grupo_estudiantes.cedula_estudiante',
+                    'grupo_estudiantes.id as id_grupo_estudiante',
+                    'estudiantes.id as estudiante_id',
+                    'estudiantes.nombre as estudiante_nombre',
+                    'estudiantes.edad as estudiante_edad',
+                    'estudiantes.nacionalidad as estudiante_nacionalidad',
+                    'estudiantes.telefono as estudiante_telefono',
+                    'estudiantes.correo as estudiante_correo',
+                    'estudiantes.direccion as estudiante_direccion',
+                    'estudiantes.nacimiento as estudiante_nacimiento',
+                    'estudiantes.foto as estudiante_foto'
+                )
+                ->where([
+                    'grupo_estudiantes.codigo_grupo' => $grupo->codigo
+                ])->get();
+
+            $grupo->fecha_init = Helpers::normalizarFecha($grupo->fecha_inicio);
+            $grupo->fecha_end = Helpers::normalizarFecha($grupo->fecha_fin);
+            $grupo->hora_init = Helpers::normalizarHora($grupo->hora_inicio);
+            $grupo->hora_end = Helpers::normalizarHora($grupo->hora_fin);
+            $grupo['matricula'] = $grupoEstudiante->count();
+
+            foreach ($grupoEstudiante as $key => $estudiante) {
+                $estudiante->inscripcion = Inscripcione::where([
+                    "codigo_grupo" =>  $grupo->codigo,
+                    "cedula_estudiante" => $estudiante['cedula_estudiante']
+                ])->get()[0];
+            }
+
+            $grupo['estudiantes'] = $grupoEstudiante;
+        }
+
+        return $grupos;
+    }
+
     public static function getRepresentante($cedula)
     {
         return Representante::where(['cedula' => $cedula])->get();
@@ -158,6 +249,13 @@ class Helpers extends Model
     public static function normalizarFecha($fecha, $formato = 'd/m/Y')
     {
         return  date_format(date_create($fecha), $formato);
+    }
+
+    public static function normalizarHora($hora, $formato = 'h:ia')
+    {
+        $newHora = Carbon::parse($hora);
+        return $newHora->format($formato);
+     
     }
 
     public static function updateCedula($cedulaActual, $cedulaNueva)
