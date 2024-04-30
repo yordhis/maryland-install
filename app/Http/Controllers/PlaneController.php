@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\{
     Plane,
     DataDev,
-    Helpers
+    Helpers,
+    Inscripcione
 };
 
 use App\Http\Requests\StorePlaneRequest;
 use App\Http\Requests\UpdatePlaneRequest;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class PlaneController extends Controller
@@ -81,9 +83,6 @@ class PlaneController extends Controller
         try {
    
             $estatusCreate = 0;
-            // $datoExiste = Helpers::datoExiste($request, ["planes" => ["nombre", "", "nombre"]]);
-            // if (!$datoExiste) {
-                // }
                 
             $estatusCreate = Plane::create($request->all());
             
@@ -184,17 +183,29 @@ class PlaneController extends Controller
     public function destroy(Plane $plane)
     {
         try {
-            
-            $plane->delete();
-            return redirect( url()->previous() )->with([
-                "mensaje" =>  "El Plan se Eliminó correctamente.",
-                "estatus" =>  200
-            ]);
+            $inscripciones = Inscripcione::where("codigo_plan", $plane->codigo)->get();
+            if(count($inscripciones)){
+
+                return back()->with([
+                    "mensaje" => "No se puede eliminar el plan, porque esta asignados a registros inscripción.",
+                    "estatus" => Response::HTTP_UNAUTHORIZED
+                ]);
+
+            }else{
+
+                /** Eliminamos el plan */
+                $plane->delete();
+                return redirect( url()->previous() )->with([
+                    "mensaje" =>  "El Plan se Eliminó correctamente.",
+                    "estatus" =>  Response::HTTP_OK
+                ]);
+            }
+
         } catch (\Throwable $th) {
             $mensaje = Helpers::getMensajeError($th, "Error de al intentar Eliminar un nivel,");
             return redirect( url()->previous() )->with([
                 "mensaje" =>   $mensaje ,
-                "estatus" =>  404
+                "estatus" =>  Response::HTTP_INTERNAL_SERVER_ERROR
             ]);
         }
     }

@@ -24,7 +24,11 @@ class StoreNiveleRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "codigo" => "required",
+            "nombre" => "required | max:255",
+            "libro" => "required | max:255",
+            "precio" => "required | numeric",
+            "duracion" => "required | numeric"
         ];
     }
 }

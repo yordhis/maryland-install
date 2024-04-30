@@ -75,51 +75,17 @@ $subcategoria = 'LISTA';
         </li><!-- End Components Nav | Estudiantes-->
 
         <!-- Start Components Nav | Niveles de estudio -->
-        <li class="nav-item">
-            <a class="nav-link {{ $categoria == 'NIVELES' ? 'collapse show' : 'collapsed' }}"
-                data-bs-target="#components-nav-4" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-controller"></i><span>Nivel de Estudio</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="components-nav-4" class="nav-content {{ $categoria == 'NIVELES' ? 'collapse show' : 'collapse' }} "
-                data-bs-parent=" #sidebar-nav">
-                <li>
-                    <a href="{{ route('admin.niveles.index') }}" 
-                        class="{{ $categoria == 'NIVELES' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}">
-                        <i class="bi bi-circle"></i><span>Lista</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.niveles.create') }}" 
-                        class="{{ $categoria == 'NIVELES' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
-                        <i class="bi bi-circle"></i><span>Crear</span>
-                    </a>
-                </li>
-
-            </ul>
-        </li><!-- End Components Nav | Niveles de estudio -->
+            <li class="nav-item">
+                <a href="{{ route('admin.niveles.index') }}" class="nav-link  {{ $categoria == 'NIVELES' ? 'text-warning collapse' : 'collapsed' }}">
+                    <i class="bi bi-controller"></i><span>Niveles de estudio</span>
+                </a>
+            </li><!-- End Components Nav | Niveles de estudio -->
 
         <!-- Start Components Nav | Planes de Pago -->
         <li class="nav-item">
-            <a class="nav-link {{ $categoria == 'PLANES' ? 'collapse show' : 'collapsed' }}"
-                data-bs-target="#components-nav-5" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-signpost-2"></i><span>Planes de Pago</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a href="{{ route('admin.planes.index') }}" class="nav-link  {{ $categoria == 'PLANES' ? 'text-warning collapse' : 'collapsed' }}">
+                <i class="bi bi-signpost-2"></i><span>Planes de Pago</span>
             </a>
-            <ul id="components-nav-5" class="nav-content {{ $categoria == 'PLANES' ? 'collapse show' : 'collapse' }} "
-                data-bs-parent=" #sidebar-nav">
-                <li>
-                    <a href="{{ route('admin.planes.index') }}" 
-                        class="{{ $categoria == 'PLANES' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}">
-                        <i class="bi bi-circle"></i><span>Lista</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.planes.create') }}" 
-                        class="{{ $categoria == 'PLANES' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
-                        <i class="bi bi-circle"></i><span>Crear</span>
-                    </a>
-                </li>
-
-            </ul>
         </li><!-- End Components Nav | Planes de Pago -->
 
         <!-- Start Components Nav | Grupos de Estudios -->

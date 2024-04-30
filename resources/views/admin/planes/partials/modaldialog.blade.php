@@ -56,7 +56,7 @@
                         <label for="yourPassword" class="form-label">Cantidad de cuotas</label>
                         <input type="number" name="cantidad_cuotas" class="form-control" id="yourUsername"
                             placeholder="Ingrese cantidad de cuotas"
-                            value="{{ $request->cantidad_cuotas ?? '' }}" 
+                            value="{{ old('cantidad_cuotas') ?? $request->cantidad_cuotas }}" 
                             required>
                         <div class="invalid-feedback">Por favor, Ingrese cantidad de cuotas!</div>
                     </div>
@@ -64,8 +64,8 @@
                     <div class="col-sm-8 col-xs-12">
                         <label for="validationCustom04" class="form-label">Plazo de pago</label>
                         <select name="plazo" class="form-select" id="validationCustom04" required>
-                            @if (isset($request->plazo))
-                              <option value="{{ $request->plazo }}" selected>{{ $request->plazo }} Días</option>
+                            @if ( old('plazo') )
+                              <option value="{{ old('plazo') }}" selected>{{ old('plazo') }} Días</option>
                             @endif
 
                             <option value="">Seleccione cantidad de dias</option>
@@ -87,10 +87,7 @@
 
                  </form>
              </div>
-             <div class="modal-footer">
-                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                 {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-             </div>
+        
          </div>
      </div>
  </div><!-- End Modal Dialog Scrollable-->

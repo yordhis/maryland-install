@@ -200,14 +200,29 @@ class GrupoController extends Controller
     public function destroy(Grupo $grupo)
     {
         try {
-            if ($grupo->update(["estatus" => 0])) {
-                $mensaje = "Grupo Eliminado correctamente.";
-                $estatus = 200;
-                return redirect()->route('admin.grupos.index', compact('mensaje', 'estatus'));
+            $grupos = Helpers::getGrupos($grupo->codigo);
+ 
+            if(count($grupos[0]->estudiantes)){
+                return back()->with([
+                    "mensaje" => "No se puede eliminar el grupo, porque poseé estudiantes inscriptos.",
+                    "estatus" => Response::HTTP_UNAUTHORIZED
+                ]);
+            }else{
+                /** Eliminar el grupo */
+                $grupo->delete();
+                
+                return back()->with([
+                    "mensaje" => "Grupo eliminado correctamente.",
+                    "estatus" => Response::HTTP_OK
+                ]);
             }
+            
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Eliminar grupo en el método destroy,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            return back()->with([
+                "mensaje" =>  $errorInfo ,
+                "estatus" => Response::HTTP_INTERNAL_SERVER_ERROR
+            ]);
         }
     }
 }

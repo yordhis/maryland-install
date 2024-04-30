@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\{
     Nivele,
     Helpers,
-    DataDev
+    DataDev,
+    Grupo,
+    Inscripcione
 };
 use App\Http\Requests\StoreNiveleRequest;
 use App\Http\Requests\UpdateNiveleRequest;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class NiveleController extends Controller
 {
@@ -23,42 +27,35 @@ class NiveleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $dataDev = new DataDev;
-            $notificaciones = $dataDev->notificaciones;
-            $usuario = $dataDev->usuario;
-            $niveles = Nivele::where('estatus', '>=', 1)->orderBy("codigo", "desc")->get();
-            return view( 'admin.niveles.lista', compact('niveles', 'notificaciones', 'usuario') );
-
-        } catch (\Throwable $th) {
-            //throw $th;
-            $errorInfo = Helpers::getMensajeError($th, "Error de consula,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
-        }
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        try {
-            $dataDev = new DataDev;
-            $notificaciones = $dataDev->notificaciones;
-            $usuario = $dataDev->usuario;
             $codigo = Helpers::getCodigo('niveles');
-            return view('admin.niveles.crear', compact('notificaciones', 'usuario', 'codigo'));
+            $notificaciones = $this->data->notificaciones;
+            $respuesta = $this->data->respuesta;
+            if($request->filtro){
+                $niveles = Nivele::where("codigo", $request->filtro)
+                ->orWhere('nombre', 'like', "%{$request->filtro}%")
+                ->orWhere('libro', 'like', "%{$request->filtro}%")
+                ->orWhere('precio', 'like', "%{$request->filtro}%")
+                ->orderBy("codigo", "desc")->paginate(12);
+
+            }else{
+                $niveles = Nivele::orderBy("codigo", "desc")->paginate(12);
+            }
+            return view( 'admin.niveles.lista', compact('niveles', 'notificaciones', 'codigo', 'request', 'respuesta') );
+
         } catch (\Throwable $th) {
             //throw $th;
             $errorInfo = Helpers::getMensajeError($th, "Error de consula,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            return back()->with([
+                "mensaje" => $errorInfo,
+                "estatus" => Response::HTTP_INTERNAL_SERVER_ERROR
+            ]);
         }
+
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -69,37 +66,33 @@ class NiveleController extends Controller
     public function store(StoreNiveleRequest $request)
     {
         try {
-            $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
+            
             $estatusCreate = 0;
             $datoExiste = Helpers::datoExiste($request, ["niveles" => ["nombre","","nombre"]]);
             if(!$datoExiste){
                 $estatusCreate = Nivele::create($request->all());
             }
-            $mensaje = $this->data->respuesta['mensaje'] = $estatusCreate ? "El nivel se Registró correctamente."
+            $mensaje = $estatusCreate ? "El nivel se Registró correctamente."
                                       : "El nombre del Nivel Ya existe, Cambie el nombre.";
-            $estatus = $this->data->respuesta['estatus'] = $estatusCreate ? 200 
-                                      : 301;
-            $respuesta = $this->data->respuesta;
-            return $estatusCreate ? redirect()->route('admin.niveles.index', compact('mensaje', 'estatus'))
-                                  : view('admin.niveles.crear', compact('request', 'notificaciones', 'usuario', 'respuesta') );
+            $estatus = $estatusCreate ? Response::HTTP_OK 
+                                      : Response::HTTP_UNAUTHORIZED;
+    
+            return back()->with([
+                "mensaje" => $mensaje,
+                "estatus" => $estatus
+            ]);
+        
             
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al intentar crear un nivel,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            return back()->with([
+                "mensaje" => $errorInfo,
+                "estatus" => Response::HTTP_INTERNAL_SERVER_ERROR
+            ]);
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Nivele  $nivele
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Nivele $nivele)
-    {
-        return redirect()->route('admin.niveles.index');
-    }
+   
 
     /**
      * Show the form for editing the specified resource.
@@ -110,10 +103,10 @@ class NiveleController extends Controller
     public function edit(Nivele $nivele)
     {
         try {
-            $data = new DataDev;
-            $notificaciones = $data->notificaciones;
-            $usuario = $data->usuario;
-            return view('admin.niveles.editar', compact('notificaciones', 'usuario', 'nivele'));
+            $notificaciones = $this->data->notificaciones;
+            $respuesta = $this->data->respuesta;
+
+            return view('admin.niveles.editar', compact('notificaciones', 'nivele'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error de consula,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -132,12 +125,22 @@ class NiveleController extends Controller
         try {
             if($nivele->update($request->all())){
                 $mensaje = "El nivel se Actualizó correctamente.";
-                $estatus = 200;
-                return redirect()->route('admin.niveles.index', compact('mensaje', 'estatus'));
+                $estatus = Response::HTTP_OK;    
+            }else{
+                $mensaje = "¡El nivel NO se pudo actualizar!.";
+                $estatus = Response::HTTP_UNAUTHORIZED;    
             }
+
+            return redirect()->route('admin.niveles.index')->with([
+                "mensaje" => $mensaje,
+                "estatus" => $estatus
+            ]);
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error de al intentar Actualizar un nivel,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            return back('admin.niveles.index')->with([
+                "mensaje" => $errorInfo,
+                "estatus" => $estatus
+            ]);
         }
     }
 
@@ -150,13 +153,32 @@ class NiveleController extends Controller
     public function destroy(Nivele $nivele)
     {
         try {
-            $nivele->update(["estatus" => 0]);
-            $mensaje = "El nivel se Eliminó correctamente.";
-            $estatus = 200;
-            return redirect()->route( 'admin.niveles.index', compact('mensaje', 'estatus') );
+           
+
+            $grupos = Grupo::where("codigo_nivel", $nivele->codigo)->get();
+            
+            if(count($grupos)){
+
+                return back()->with([
+                    "mensaje" => "No se puede eliminar el nivel, porque esta asignados a un grupo de estudio.",
+                    "estatus" => Response::HTTP_UNAUTHORIZED
+                ]);
+
+            }else{
+
+                /** Eliminamos el nivel */
+                $nivele->delete();
+                return back()->with([
+                    "mensaje" =>  "El Nivel se Eliminó correctamente.",
+                    "estatus" =>  Response::HTTP_OK
+                ]);
+            }
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error de al intentar Eliminar un nivel,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            return back()->with([
+                "mensaje" =>  $errorInfo,
+                "estatus" =>  Response::HTTP_INTERNAL_SERVER_ERROR
+            ]);
         }
     }
 }
