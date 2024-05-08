@@ -6,7 +6,7 @@
 
     <div class="d-flex align-items-center justify-content-between">
         <a href="{{ route('admin.panel.index') }}" class="">
-            <img src="{{ asset('assets/img/Logo.png') }}" height="50" width="255" alt="">
+            <img src="{{ asset('assets/img/logo.png') }}" height="50" width="255" alt="">
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
