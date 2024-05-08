@@ -57,8 +57,8 @@ class GrupoController extends Controller
     /** imprimir matricula del grupo de estudio */
     public function imprimirMatriculaDelGrupo($codigoGrupo)
     {
-        $grupos = Helpers::getGrupos($codigoGrupo);
-        return $grupos[0];
+        // $grupos = Helpers::getGrupos($codigoGrupo);
+        // return $grupos[0];
         return Excel::download(new ExportarMatricula($codigoGrupo), "matricula-grupo-codigo-{$codigoGrupo}.xlsx");
     }
  
