@@ -340,10 +340,23 @@ class Helpers extends Model
                     "codigo_grupo" =>  $grupo->codigo,
                     "cedula_estudiante" => $estudiante['cedula_estudiante']
                 ])->get()[0];
+
+                    /** Obtenemos la ultima fecha de pago */
+                    $cuotas = Cuota::where([
+                        'codigo_inscripcion' => $estudiante->inscripcion->codigo,
+                        'cedula_estudiante' => $estudiante->inscripcion->cedula_estudiante
+                    ])->get();
+
+                    $estudiante->inscripcion->proxima_fecha_pago = $cuotas->where('estatus', 0)->min('fecha') ?? 'PAGADO';
+                
             }
 
             $grupo['estudiantes'] = $grupoEstudiante;
+
+            
         }
+
+            
 
         return $grupos;
     }

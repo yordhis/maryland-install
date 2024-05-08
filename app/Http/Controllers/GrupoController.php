@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportarMatricula;
 use App\Models\{
     Grupo,
     GrupoEstudiante,
@@ -14,6 +15,7 @@ use App\Http\Requests\StoreGrupoRequest;
 use App\Http\Requests\UpdateGrupoRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GrupoController extends Controller
 {
@@ -56,8 +58,8 @@ class GrupoController extends Controller
     public function imprimirMatriculaDelGrupo($codigoGrupo)
     {
         $grupos = Helpers::getGrupos($codigoGrupo);
-
-        return $grupos;
+        return $grupos[0];
+        return Excel::download(new ExportarMatricula($codigoGrupo), "matricula-grupo-codigo-{$codigoGrupo}.xlsx");
     }
  
 
