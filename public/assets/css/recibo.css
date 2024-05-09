@@ -2,10 +2,12 @@ body{
   padding: 0em;
   margin: 0em;
 }
+
 img{
   width: 700px;
   height: 100px;
 }
+
 table {
   width: 100%;
   border: 1px solid #000;
