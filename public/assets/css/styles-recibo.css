@@ -10,7 +10,7 @@ table {
   width: 100%;
   border: 1px solid #000;
   border-collapse: collapse;
-  /* font-family: Arial, Helvetica, sans-serif; */
+  font-family: Arial, Helvetica, sans-serif;
   text-transform: uppercase;
 }
 th, td {
@@ -29,7 +29,7 @@ th, td {
 .title{
   text-align: center;
   font-size: 16px;
-  /* font-family: Arial, Helvetica, sans-serif; */
+  font-family: Arial, Helvetica, sans-serif;
   text-transform: uppercase;
 }
 caption {
