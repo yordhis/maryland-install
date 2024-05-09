@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Planilla de inscripción </title>
-    <link href="assets/css/fuente.css">
+    {{-- <link href="assets/css/fuente.css"> --}}
 
     {{-- SEO --}}
     <meta content="" name="description">
