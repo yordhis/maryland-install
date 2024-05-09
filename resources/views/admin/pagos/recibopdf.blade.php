@@ -10,8 +10,8 @@
     <link href="{{ asset('assets/img/logo-img-circulo.png') }}" rel="icon">
     <link href="{{ asset('assets/img/logo-img-circulo.png') }}" rel="apple-touch-icon">
 
-    <link href="{{ asset('assets/css/recibo.css') }} " rel="stylesheet">
-    {{-- <link href="{{ asset('assets/css/personalizado.css') }}" rel="stylesheet"> --}}
+    {{-- <link href="{{ asset('assets/css/recibo.css') }} " rel="stylesheet"> --}}
+    <link href="{{ asset('assets/css/personalizado.css') }}" rel="stylesheet">
 </head>
 
 <body>
