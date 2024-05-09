@@ -203,8 +203,9 @@ class EstudianteController extends Controller
 
             // Actualizamos los datos del representante
             // validamos que la cedula no cambio
+            $represntante = Representante::where('cedula', $request->rep_cedula)->get();
             if (isset($request->rep_cedula)) {
-                if (isset($request->rep_nombre)) {
+                if (!count($represntante)) {
                     // Se crea y asigna el representante al estudiante
                     Helpers::setRepresentantes($request);
                 }else{
@@ -220,40 +221,16 @@ class EstudianteController extends Controller
             // Seteamos las dificultades
             Helpers::setDificultades( $listDificultades, $request->cedula);
 
+            $mensaje = "Los Datos del estudiante se guardaron correctamente";
+            $estatus = Response::HTTP_OK;
          
-            return back()->with(
-                Response::HTTP_OK,
-                "Los Datos del estudiante se guardaron correctamente"
-            );
+            return back()->with(compact('mensaje', 'estatus'));
+            
         } catch (\Throwable $th) {
             //throw $th;
-            $this->data->respuesta['activo'] = true;
-            $this->data->respuesta['mensaje'] = "Algo fallo al actualizar los datos del estudiante." . PHP_EOL
-                . " Verifique este error: " . $th->getMessage() . PHP_EOL
-                . "Codigo: " . $th->getCode() . PHP_EOL
-                . "linea: " . $th->getLine();
-            $this->data->respuesta['estatus'] = 404;
-            $respuesta = $this->data->respuesta;
-            $notificaciones = $this->data->notificaciones;
-            
-            $representantes = RepresentanteEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
-            $listDificultades = DificultadEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
-
-            foreach ($representantes as  $repre) {
-                $data = Representante::where('cedula', $repre['cedula_representante'])->get();
-                $repre['data'] = $data[0];
-            }
-            return view(
-                'admin.estudiantes.editar',
-                compact(
-                    'notificaciones',
-                    'respuesta',
-                    'estudiante',
-                    'representantes',
-                    'listDificultades',
-
-                )
-            );
+            $mensaje = Helpers::getMensajeError($th, ", Error interno al intentar editar un estudiante");
+            $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
+            return back()->with(compact('mensaje', 'estatus'));
         }
     }
 

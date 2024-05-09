@@ -478,25 +478,29 @@ class Helpers extends Model
     {
         try {
             /** Se registra el representante */
-            Representante::updateOrCreate([
-                // Comparamos
-                "cedula" => $request->rep_cedula,
-            ], [
-                // Se actualiza o Crea el representante 
-                "nombre" => $request->rep_nombre ?? '',
-                "edad" => $request->rep_edad ?? '',
-                "ocupacion" => $request->rep_ocupacion ?? '',
-                "telefono" => $request->rep_telefono ?? '',
-                "direccion" => $request->rep_direccion ?? '',
-                "correo" => $request->rep_correo ?? '',
-            ]);
+            Representante::updateOrCreate(
+                [
+                    // Comparamos
+                    "cedula" => $request->rep_cedula,
+                ], 
+                [
+                    // Se actualiza o Crea el representante 
+                    "nombre" => $request->rep_nombre ?? '',
+                    "edad" => $request->rep_edad ?? '',
+                    "ocupacion" => $request->rep_ocupacion ?? '',
+                    "telefono" => $request->rep_telefono ?? '',
+                    "direccion" => $request->rep_direccion ?? '',
+                    "correo" => $request->rep_correo ?? '',
+                ]);
 
             /** Relacionamos los estudiante con el representante */
-            RepresentanteEstudiante::updateOrCreate([
-                "cedula_estudiante" => $request->cedula,
-            ], [
-                "cedula_representante" => $request->rep_cedula
-            ]);
+            RepresentanteEstudiante::updateOrCreate(
+                [
+                    "cedula_estudiante" => $request->cedula,
+                ], 
+                [
+                    "cedula_representante" => $request->rep_cedula
+                ]);
             return true;
         } catch (\Throwable $th) {
             //throw $th;
