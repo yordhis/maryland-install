@@ -15,7 +15,7 @@ use App\Models\{
     Pago,
     Plane
 };
-use Barryvdh\DomPDF\Facade\PDF;
+use \PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Http\Response;
