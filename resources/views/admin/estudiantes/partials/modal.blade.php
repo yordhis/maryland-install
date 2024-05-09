@@ -14,6 +14,7 @@
         </div>
         <div class="modal-body">
             ¿Esta seguro que desea eliminar el Estudiante <span class="text-danger fs-5">{{$estudiante->nombre}}</span>? 
+            Si procede, ¡se borraran todos los registros de inscripción, pagos y demás información relacionada con el estudiante!.
         </div>
         <div class="modal-footer">
             <form action="{{ route('admin.estudiantes.destroy', $estudiante->id) }}" method="post" >

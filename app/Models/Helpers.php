@@ -661,10 +661,17 @@ class Helpers extends Model
      * @var Representantes
      * @var Dificultades
      */
-    public static function getEstudiantes($filtro = ["campo" => "estatus", "filtro" => 1])
+    public static function getEstudiantes($filtro = false, $paginacion = 12)
     {
-
-        $estudiantes = Estudiante::where($filtro['campo'], 'like', "%{$filtro['filtro']}%")->orderBy('id', 'desc')->paginate(12);
+        if($filtro){
+            $estudiantes = Estudiante::where('cedula', 'like', "%{$filtro}%")
+            ->orWhere('nombre', 'like', "%{$filtro}%")
+            ->orderBy('id', 'desc')->paginate($paginacion);
+        }else{
+            $estudiantes = Estudiante::orderBy('id', 'desc')->paginate($paginacion);
+        }
+       
+       
         foreach ($estudiantes as $key => $estudiante) {
             $estudiantes[$key] = self::getEstudiante($estudiante->cedula)[0];
         }

@@ -42,12 +42,13 @@ class EstudianteController extends Controller
     public function index(Request $request)
     {
         if($request->filtro){
-            $estudiantes =  Helpers::getEstudiantes($request);
+            $estudiantes =  Helpers::getEstudiantes($request->filtro);
         }else{
             $estudiantes =  Helpers::getEstudiantes();
         }
         $notificaciones =  $this->data->notificaciones;
-        return view('admin.estudiantes.lista', compact('estudiantes', 'notificaciones', 'request'));
+        $respuesta =  $this->data->respuesta;
+        return view('admin.estudiantes.lista', compact('estudiantes', 'notificaciones', 'request', 'respuesta'));
     }
 
     /**
@@ -107,25 +108,27 @@ class EstudianteController extends Controller
             }
         
 
-        $mensaje = $this->data->respuesta['mensaje'] = $estatusCreate ? "Estudiante registrado correctamente"
-            : "No se pudo registrar verifique los datos.";
-        $estatus = $this->data->respuesta['estatus'] =  $estatusCreate ? 201 : 404;
+        $mensaje =  $estatusCreate   ? "Estudiante registrado correctamente"
+                                    : "No se pudo registrar verifique los datos.";
+        $estatus = $estatusCreate ? Response::HTTP_CREATED : Response::HTTP_NOT_FOUND;
 
-        $respuesta = $this->data->respuesta;
-        $notificaciones =  $this->data->notificaciones;
+      
+        return back()->with(compact('mensaje', 'estatus'));
 
 
-        if(stripos(url()->previous(), '/inscripciones/estudiante')) return redirect()->route('admin.inscripciones.createEstudiante')->with([
-            'mensaje'=> $mensaje, 
-            'estatus'=> $estatus
-        ]);
+
+
+        // if(stripos(url()->previous(), '/inscripciones/estudiante')) return redirect()->route('admin.inscripciones.createEstudiante')->with([
+        //     'mensaje'=> $mensaje, 
+        //     'estatus'=> $estatus
+        // ]);
   
 
-        return $estatusCreate ? redirect()->route('admin.estudiantes.index')->with([
-                                'mensaje'=> $mensaje, 
-                                'estatus'=> $estatus
-                            ])
-            : view('admin.estudiantes.crear', compact('respuesta', 'request', 'notificaciones'));
+        // return $estatusCreate ? redirect()->route('admin.estudiantes.index')->with([
+        //                         'mensaje'=> $mensaje, 
+        //                         'estatus'=> $estatus
+        //                     ])
+        //     : view('admin.estudiantes.crear', compact('respuesta', 'request', 'notificaciones'));
     }
 
   
@@ -218,7 +221,7 @@ class EstudianteController extends Controller
             Helpers::setDificultades( $listDificultades, $request->cedula);
 
          
-            return redirect($request->urlPrevia)->with(
+            return back()->with(
                 Response::HTTP_OK,
                 "Los Datos del estudiante se guardaron correctamente"
             );
@@ -275,17 +278,15 @@ class EstudianteController extends Controller
             ]);
 
             $estudiante->delete();
+
             $mensaje = "El estudiante {$estudiante->nombre}, fue eliminado correctamente";
             $estatus = 200;
-            return back();
+            return back()->with(compact('mensaje', 'estatus'));
+
         } catch (\Throwable $th) {
-            $mensaje = "Error al intentar eliminar al estudiante {$estudiante->nombre}. \n"
-                . "Verificar los siguientes errores: \n"
-                . "Código de error: " . $th->getCode()
-                . "Linea de error: " . $th->getLine()
-                . "Archivo de error: " . $th->getFile();
+            $mensaje = Helpers::getMensajeError($th, "Error interno al intentar eliminar el estudiante");
             $estatus = 301;
-            return redirect()->route('admin.estudiantes.index', compact('mensaje', 'estatus'));
+            return back()->with(compact('mensaje', 'estatus'));
         }
     }
 }

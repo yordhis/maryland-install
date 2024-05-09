@@ -1,24 +1,22 @@
        {{-- Boton de agregar estudiante --}}
-       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-           <i class="bi bi-people"></i>
-           Registrar estudiante
-       </button>
+       <a type="button" class="" data-bs-toggle="modal" data-bs-target="#modalEditarEstudiante">
+           <i class="bi bi-pencil"></i>
+       </a>
 
        <!-- Modal formulario crear estudiante -->
-       <div class="modal fade text-start" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-           aria-labelledby="staticBackdropLabel" aria-hidden="true">
+       <div class="modal fade text-start" id="modalEditarEstudiante" data-bs-backdrop="static" data-bs-keyboard="false"
+           tabindex="-1" aria-labelledby="modalEditarEstudianteLabel" aria-hidden="true">
            <div class="modal-dialog  modal-xl">
                <div class="modal-content">
                    <div class="modal-header">
-                       <h5 class="modal-title" id="staticBackdropLabel">Registrar estudiante</h5>
+                       <h5 class="modal-title" id="modalEditarEstudianteLabel">Registrar estudiante</h5>
                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrra"></button>
                    </div>
                    <div class="modal-body">
-                       <form action="{{ route('admin.estudiantes.store') }}" method="POST"
+                       <form action="{{ route('admin.estudiantes.update', $estudiante->id) }}" method="POST"
                            class="row g-3 needs-validation" enctype="multipart/form-data" novalidate>
-                           {{--  --}}
                            @csrf
-                           @method('POST')
+                           @method('put')
 
 
                            {{-- INICIO DE DATOS PERSONALES --}}
@@ -30,7 +28,7 @@
                                    </span>
                                    <input type="text" name="nombre" class="form-control" id="yourUsername"
                                        placeholder="Ingrese su nombres y apellidos"
-                                       value="{{ $request->nombre ?? old('nombre') }}" required>
+                                       value="{{ $estudiante->nombre ?? old('nombre') }}" required>
                                    <div class="invalid-feedback">Por favor, ingrese nombre! </div>
                                    @error('nombre')
                                        <div class="text-danger">{{ $message }}</div>
@@ -41,11 +39,16 @@
                            <div class="col-xs-12 col-sm-4">
                                <label for="validationCustom04" class="form-label">Nacionalidad</label>
                                <select name="nacionalidad" class="form-select" id="validationCustom04" required>
-                                    @if (old('nacionalidad'))
-                                        <option value="{{ old('nacionalidad') }}" selected>
-                                            {{ old('nacionalidad') }}
-                                        </option>
-                                    @endif
+                                   @if (old('nacionalidad'))
+                                       <option value="{{ old('nacionalidad') }}" selected>
+                                           {{ old('nacionalidad') }}
+                                       </option>
+                                   @endif
+                                   @if ($estudiante->nacionalidad)
+                                       <option value="{{ $estudiante->nacionalidad }}" selected>
+                                           {{ $estudiante->nacionalidad }}
+                                       </option>
+                                   @endif
 
 
                                    <option value="">Seleccione Nacionalidad</option>
@@ -60,12 +63,17 @@
                                @enderror
                            </div>
 
+                           {{-- Cedula --}}
                            <div class="col-xs-12 col-sm-4">
                                <label for="yourPassword" class="form-label">Cédula</label>
-                               <input type="number" name="cedula" class="form-control" id="yourUsername"
-                                   placeholder="Ingrese número de cédula"
-                                   value="{{ $request->cedula ?? old('cedula') }}" 
-                                   required>
+                               <div class="input-group">
+                                   <input type="text" name="cedula" class="form-control bg-muted" id="inputCedula"
+                                       placeholder="Ingrese número de cédula"
+                                       value="{{ $estudiante->cedula ?? old('cedula') }}" disabled readonly required>
+                                   <button type="button" class="btn btn-warning" id="activarEdicionDeCedula">
+                                       <i class="bi bi-pencil"></i>
+                                   </button>
+                               </div>
                                <div class="invalid-feedback">Por favor, Ingrese número de cédula!</div>
                                @error('cedula')
                                    <div class="text-danger"> {{ $message }} </div>
@@ -78,8 +86,8 @@
                                <label for="yourPassword" class="form-label">Teléfono</label>
                                <input type="text" name="telefono" class="form-control" id="yourUsername"
                                    placeholder="Ingrese número de teléfono"
-                                   value="{{ $request->telefono ?? old('telefono') }}" 
-                                   min="11" max="15" required>
+                                   value="{{ $estudiante->telefono ?? old('telefono') }}" min="11" max="15"
+                                   required>
                                <div class="invalid-feedback">Por favor, Ingrese número de teléfono!
                                </div>
                                @error('telefono')
@@ -91,7 +99,7 @@
                                <label for="yourPassword" class="form-label">E-mail</label>
                                <input type="email" name="correo" class="form-control" id="yourUsername"
                                    placeholder="Ingrese dirección de correo."
-                                   value="{{ $request->correo ?? old('correo') }}" required>
+                                   value="{{ $estudiante->correo ?? old('correo') }}" required>
                                <div class="invalid-feedback">Por favor, Ingrese dirección de correo!
                                </div>
                                @error('correo')
@@ -103,7 +111,7 @@
                                <label for="yourPassword" class="form-label">Fecha de nacimiento</label>
                                <input type="date" name="nacimiento" class="form-control" id="fecha_nacimiento"
                                    placeholder="Ingrese fecha de nacimiento."
-                                   value="{{ $request->nacimiento ?? old('nacimiento') }}" required>
+                                   value="{{ $estudiante->nacimiento ?? old('nacimiento') }}" required>
                                <div class="invalid-feedback">Por favor, ingrese fecha de nacimiento!
                                </div>
                                @error('nacimiento')
@@ -114,7 +122,7 @@
                            <div class="col-xs-12 col-sm-4">
                                <label for="yourPassword" class="form-label">Edad</label>
                                <input type="number" name="edad" class="form-control" id="edad_estudiante"
-                                   placeholder="Ingrese edad." value="{{ $request->edad ?? old('edad') }}" 
+                                   placeholder="Ingrese edad." value="{{ $estudiante->edad ?? old('edad') }}"
                                    min="1" max="120" required>
                                <div class="invalid-feedback">Por favor, Ingrese edad!</div>
                                @error('edad')
@@ -127,7 +135,7 @@
                                    habitación</label>
                                <input type="text" name="direccion" class="form-control" id="yourUsername"
                                    placeholder="Ingrese dirección de domicilio."
-                                   value="{{ $request->direccion ?? old('direccion') }}" required>
+                                   value="{{ $estudiante->direccion ?? old('direccion') }}" required>
                                <div class="invalid-feedback">Por favor, Ingrese dirección!</div>
                                @error('direccion')
                                    <div class="text-danger"> {{ $message }} </div>
@@ -138,7 +146,7 @@
                                <label for="yourPassword" class="form-label">Grado de estudio</label>
                                <input type="text" name="grado" class="form-control" id="yourUsername"
                                    placeholder="Ingrese grado de estudio."
-                                   value="{{ $request->grado ?? old('grado') }}" required>
+                                   value="{{ $estudiante->grado ?? old('grado') }}" required>
                                <div class="invalid-feedback">Por favor, Ingrese grado de estudio!
                                </div>
                                @error('grado')
@@ -150,7 +158,7 @@
                                    profesión</label>
                                <input type="text" name="ocupacion" class="form-control" id="yourUsername"
                                    placeholder="Ingrese ocupación."
-                                   value="{{ $request->ocupacion ?? old('ocupacion') }}" required>
+                                   value="{{ $estudiante->ocupacion ?? old('ocupacion') }}" required>
                                <div class="invalid-feedback">Por favor, Ingrese ocupación!</div>
                                @error('ocupacion')
                                    <div class="text-danger"> {{ $message }} </div>
@@ -172,7 +180,7 @@
                                    <i class="bi bi-person-plus"></i>
                                    Agregar Representante
                                </a>
-                               
+
                                <a class="btn btn-dark m-1" id="addDifi">
                                    <i class="bi bi-postcard-heart"></i>
                                    Agregar Dificultad de aprendizaje

@@ -1,6 +1,6 @@
 <!-- Vertically centered Modal -->
 <a type="button" class="text-info" data-bs-toggle="modal" data-bs-target="#modalVerGrupo{{ $grupo->id }}">
-    <i class="bi bi-eye fs-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Procesar pago"></i>
+    <i class="bi bi-eye fs-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver información de grupo"></i>
 </a>
 
 
