@@ -48,6 +48,7 @@ class InscripcioneController extends Controller
             $metodos = $this->data->metodosPagos;
             $codigoDePago = Helpers::getCodigo('pagos');
             $conceptos = Concepto::where("estatus", 1)->get();
+            $grupos = Helpers::getGrupos(false, 200);
 
             $inscripciones = Helpers::getInscripciones($request->filtro);
             // return $inscripciones;
@@ -60,6 +61,7 @@ class InscripcioneController extends Controller
                     'request',
                     'codigoDePago',
                     'conceptos',
+                    'grupos',
                     'metodos'
                 )
             );
@@ -118,9 +120,9 @@ class InscripcioneController extends Controller
     {
         try {
             /** quitamos las comas de codigos y cedulas estudiantes */
-            $request['estudiantes'] = substr($request->estudiantes, 0, strlen($request->estudiantes) -1 );
-            $request['codigo'] = substr($request->codigo, 0, strlen($request->codigo) -1 );
-         
+            $request['estudiantes'] = substr($request->estudiantes, 0, strlen($request->estudiantes) - 1);
+            $request['codigo'] = substr($request->codigo, 0, strlen($request->codigo) - 1);
+
             /** Convertimos los estudiantes a un array */
             $datosCuotas = [];
             $estudiantes = explode(',', $request->estudiantes);
@@ -234,66 +236,67 @@ class InscripcioneController extends Controller
         }
     }
 
+    /** imprimir planilla PDF de la inscripcion */
     public function planillapdf($cedula, $codigo)
     {
 
         try {
-            $estudiantes=[];
+            $estudiantes = [];
             $inscripciones = Inscripcione::join('grupos', 'grupos.codigo', '=', 'inscripciones.codigo_grupo')
-            ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
-            ->join('planes', 'planes.codigo', '=', 'inscripciones.codigo_plan')
-            ->join('profesores', 'profesores.cedula', '=', 'grupos.cedula_profesor')
-            ->join('niveles', 'niveles.codigo', '=', 'grupos.codigo_nivel')
-            ->select(
-                'inscripciones.id', 
-                'inscripciones.codigo', 
-                'inscripciones.cedula_estudiante', 
-                'inscripciones.codigo_grupo', 
-                'inscripciones.codigo_plan', 
-                'inscripciones.nota', 
-                'inscripciones.extras', 
-                'inscripciones.total', 
-                'inscripciones.abono', 
-                'inscripciones.fecha', 
-                'inscripciones.estatus', 
-                'grupos.codigo_nivel',
-                'grupos.cedula_profesor',
-                'grupos.nombre as grupo_nombre',
-                'grupos.dias as grupo_dias',
-                'grupos.hora_inicio as grupo_hora_inicio',
-                'grupos.hora_fin as grupo_hora_fin',
-                'grupos.fecha_inicio as grupo_fecha_inicio',
-                'grupos.fecha_fin as grupo_fecha_fin',
-                'profesores.nombre as grupo_profesor_nombre',
-                'profesores.nacionalidad as grupo_profesor_nacionalidad',
-                'profesores.edad as grupo_profesor_edad',
-                'profesores.telefono as grupo_profesor_telefono',
-                'niveles.nombre as nivel_nombre',
-                'niveles.precio as nivel_precio',
-                'niveles.libro as nivel_libro',
-                'niveles.duracion as nivel_duracion',
-                'niveles.tipo_duracion as nivel_tipo_duracion',
-                'planes.nombre as plan_nombre',
-                'planes.cantidad_cuotas as plan_cantidad_cuotas',
-                'planes.plazo as plan_plazo',
-                'planes.descripcion as plan_descripcion',
-                'estudiantes.nombre as estudiante_nombre',
-                'estudiantes.nacionalidad as estudiante_nacionalidad',
-                'estudiantes.telefono as estudiante_telefono',
-                'estudiantes.correo as estudiante_correo',
-                'estudiantes.nacimiento as estudiante_nacimiento',
-                'estudiantes.edad as estudiante_edad',
-                'estudiantes.direccion as estudiante_direccion',
-                'estudiantes.grado as estudiante_grado',
-                'estudiantes.ocupacion as estudiante_ocupacion',
-                'estudiantes.foto as estudiante_foto'
-            )
-            ->where('inscripciones.codigo', $codigo)
-            ->orderBy('inscripciones.codigo' , 'desc')
-            ->get();
+                ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
+                ->join('planes', 'planes.codigo', '=', 'inscripciones.codigo_plan')
+                ->join('profesores', 'profesores.cedula', '=', 'grupos.cedula_profesor')
+                ->join('niveles', 'niveles.codigo', '=', 'grupos.codigo_nivel')
+                ->select(
+                    'inscripciones.id',
+                    'inscripciones.codigo',
+                    'inscripciones.cedula_estudiante',
+                    'inscripciones.codigo_grupo',
+                    'inscripciones.codigo_plan',
+                    'inscripciones.nota',
+                    'inscripciones.extras',
+                    'inscripciones.total',
+                    'inscripciones.abono',
+                    'inscripciones.fecha',
+                    'inscripciones.estatus',
+                    'grupos.codigo_nivel',
+                    'grupos.cedula_profesor',
+                    'grupos.nombre as grupo_nombre',
+                    'grupos.dias as grupo_dias',
+                    'grupos.hora_inicio as grupo_hora_inicio',
+                    'grupos.hora_fin as grupo_hora_fin',
+                    'grupos.fecha_inicio as grupo_fecha_inicio',
+                    'grupos.fecha_fin as grupo_fecha_fin',
+                    'profesores.nombre as grupo_profesor_nombre',
+                    'profesores.nacionalidad as grupo_profesor_nacionalidad',
+                    'profesores.edad as grupo_profesor_edad',
+                    'profesores.telefono as grupo_profesor_telefono',
+                    'niveles.nombre as nivel_nombre',
+                    'niveles.precio as nivel_precio',
+                    'niveles.libro as nivel_libro',
+                    'niveles.duracion as nivel_duracion',
+                    'niveles.tipo_duracion as nivel_tipo_duracion',
+                    'planes.nombre as plan_nombre',
+                    'planes.cantidad_cuotas as plan_cantidad_cuotas',
+                    'planes.plazo as plan_plazo',
+                    'planes.descripcion as plan_descripcion',
+                    'estudiantes.nombre as estudiante_nombre',
+                    'estudiantes.nacionalidad as estudiante_nacionalidad',
+                    'estudiantes.telefono as estudiante_telefono',
+                    'estudiantes.correo as estudiante_correo',
+                    'estudiantes.nacimiento as estudiante_nacimiento',
+                    'estudiantes.edad as estudiante_edad',
+                    'estudiantes.direccion as estudiante_direccion',
+                    'estudiantes.grado as estudiante_grado',
+                    'estudiantes.ocupacion as estudiante_ocupacion',
+                    'estudiantes.foto as estudiante_foto'
+                )
+                ->where('inscripciones.codigo', $codigo)
+                ->orderBy('inscripciones.codigo', 'desc')
+                ->get();
 
             foreach ($inscripciones as $key => $inscripcion) {
-                array_push( $estudiantes, Helpers::getEstudiante($inscripcion->cedula_estudiante)[0] );
+                array_push($estudiantes, Helpers::getEstudiante($inscripcion->cedula_estudiante)[0]);
             }
             /** normalizar fecha y horas */
             Helpers::setFechasHorasNormalizadas($inscripciones[0]);
@@ -320,7 +323,7 @@ class InscripcioneController extends Controller
                 compact(
                     'inscripciones',
                     'estudiantes',
-                  
+
                 )
             );
             return $pdf->download("{$inscripciones[0]->codigo}-{$inscripciones[0]->cedula_estudiante}-{$inscripciones[0]->fecha}.pdf");
@@ -328,16 +331,7 @@ class InscripcioneController extends Controller
             dd();
         }
     }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Inscripcione  $inscripcione
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Inscripcione $inscripcione)
-    {
-        return redirect()->route('admin.inscripciones.index');
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -370,6 +364,53 @@ class InscripcioneController extends Controller
         }
     }
 
+    /** REASIGNAR GRUPO DE ESTUDIO */
+
+    public function reasignarGrupo(HttpRequest $request)
+    {
+       
+        try {
+      
+            $mensaje = "El estudiante se asigno al grupo correctamente";
+            $estatus = Response::HTTP_OK;
+
+          
+
+            /** Obtenemos el grupo */
+            $grupo =  Helpers::getGrupos($request->codigo_grupo);
+         
+            if (count($grupo)) {
+                /** Realizamos la asignacion */
+                $resultadoDeReasignar = GrupoEstudiante::create([
+                    "cedula_estudiante" => $request->cedula_estudiante,
+                    "codigo_grupo" => $request->codigo_grupo
+                ]);
+        
+                if ($resultadoDeReasignar) {
+                    Inscripcione::where([
+                        'codigo' => $request->codigo_inscripcion,
+                        'cedula_estudiante' => $request->cedula_estudiante
+                    ])->update([
+                        "codigo_grupo" => $request->codigo_grupo
+                    ]);
+                }else{
+                    $mensaje = "No se pudo asignar al estudiante al grupo, vuelva a intentar.";
+                    $estatus = Response::HTTP_UNAUTHORIZED;
+                }
+            } else {
+                $mensaje = "El grupo seleccionado no exite, vuelva a intentar, seleccionando otro grupo.";
+                $estatus = Response::HTTP_NOT_FOUND;
+            }
+
+            /** Redireccionamos a la vista anterior con la respuesta */
+            return back()->with(compact('mensaje', 'estatus'));
+
+        } catch (\Throwable $th) {
+            $mensaje = Helpers::getMensajeError($th, ", Error interno al intentar reasignar un estudiante a un grupo.");
+            return Helpers::getRespuestaJson($mensaje,[], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -380,7 +421,7 @@ class InscripcioneController extends Controller
     {
         try {
 
-            Helpers::destroyData($inscripcione->cedula_estudiante, $inscripcione->codigo, $inscripcione->codigo_grupo,[
+            Helpers::destroyData($inscripcione->cedula_estudiante, $inscripcione->codigo, $inscripcione->codigo_grupo, [
                 "pagos" => true,
                 "cuotas" => true,
                 "inscripcione" => false,

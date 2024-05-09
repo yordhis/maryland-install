@@ -77,6 +77,10 @@
                                         @include('admin.inscripciones.partials.modalpagar')
                                     @endif
 
+                                    @if ($inscripcion->estatus_reasignar)
+                                        @include('admin.inscripciones.partials.modalreasignargrupo')
+                                    @endif
+
                                 
                                     @include('admin.inscripciones.partials.modalimprir')
                                     @include('admin.inscripciones.partials.modalEliminar')

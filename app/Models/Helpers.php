@@ -251,7 +251,20 @@ class Helpers extends Model
                 'codigo_inscripcion' => $inscripcion->codigo,
                 'cedula_estudiante' => $inscripcion->cedula_estudiante
             ])->get();
+
+            /** obtenemos la proxima fecha de pago */
             $inscripcion['proxima_fecha_pago'] = $inscripcion['cuotas']->where('estatus', 0)->min('fecha') ?? 'PAGADO';
+
+            /** Verificamos si el estudiante no esta en un grupo */
+            $estudianteEstaEnGrupo = GrupoEstudiante::where([
+                "codigo_grupo" => $inscripcion->codigo_grupo,
+                "cedula_estudiante" => $inscripcion->cedula_estudiante,
+            ])->get();
+            if(count($estudianteEstaEnGrupo)){
+                $inscripcion['estatus_reasignar'] = false;
+            }else{
+                $inscripcion['estatus_reasignar'] = true;
+            }
         }
         
         return $inscripciones;
