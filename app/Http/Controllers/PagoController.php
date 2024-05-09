@@ -13,7 +13,7 @@ use App\Models\{
     Grupo,
     Inscripcione
 };
-use Barryvdh\DomPDF\Facade\PDF;
+use \PDF;
 use App\Http\Requests\StorePagoRequest;
 use App\Http\Requests\UpdatePagoRequest;
 use Illuminate\Http\Response;
