@@ -15,7 +15,8 @@ use App\Http\Controllers\{
     PagoController,
     InscripcioneController,
     LoginController,
-    NotaController
+    NotaController,
+    PageController
 };
 
 
@@ -29,10 +30,12 @@ use App\Http\Controllers\{
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', [PageController::class, 'index'])->name('page.index');
 
-Route::get('/', function () {
-    return redirect('/login');
-})->middleware('guest');
+Route::controller(PageController::class)->group(function () {
+    Route::get('/preinscripcion', 'create')->name('page.preinscripcion.index');
+    Route::post('/preinscripcion', 'store')->name('page.preinscripcion.store');
+});
 
 /**
  * Rutas de Profesor

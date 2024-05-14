@@ -10,7 +10,7 @@
                 {{$errorInfo ?? 'No hay mensaje de error por favor llame a soporte. '}}
             </p>
 
-            <a href="{{ route('admin.panel.index') }}" class="btn btn-primary">Volver al panel</a>
+            <a href="{{ url()->previous() }}" class="btn btn-primary">Salir</a>
         </div>
     </div>
     

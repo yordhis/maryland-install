@@ -68,11 +68,12 @@ class Handler extends ExceptionHandler
         //     return redirect()->back(301, ["mensaje" => $errorInfo]);
         // });
 
-        // $this->renderable(function (RouteNotFoundException $e, $request) {
-        //     // dd($e);
-        //     $errorInfo = Helpers::getMensajeError($e, "La ruta solicitada no esta definida,");
-        //     return redirect()->back(301, ["mensaje" => $errorInfo]);
-        // });
+      
+        $this->renderable(function (RouteNotFoundException $e, $request) {
+            $mensaje = Helpers::getMensajeError($e, "La ruta solicitada no esta definida,");
+            $estatus = Response::HTTP_NOT_FOUND;
+            return back()->with(compact('mensaje', 'estatus'));
+        });
 
         // $this->renderable(function (ViewException $e, $request) {
         //     // dd($e);
