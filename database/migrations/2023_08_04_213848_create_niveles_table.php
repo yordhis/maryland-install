@@ -20,6 +20,8 @@ class CreateNivelesTable extends Migration
             $table->string("libro", 255)->nullable();
             $table->string("duracion", 255)->nullable(); // se ingresa la cantidad de meses
             $table->string("tipo_duracion", 255)->nullable(); // recive dias o meses
+            $table->string("imagen", 255)->nullable(); // recive dias o meses
+            $table->string("tipo_nivel", 255)->nullable(); // recive dias o meses
             $table->string("estatus", 255)->default(1); // recive dias o meses
             $table->timestamps();
         });

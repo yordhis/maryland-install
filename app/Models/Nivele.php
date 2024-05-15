@@ -16,6 +16,8 @@ class Nivele extends Model
         "libro",
         "duracion",
         "tipo_duracion",
+        "imagen",
+        "tipo_nivel",
         "estatus"
     ];
 }
