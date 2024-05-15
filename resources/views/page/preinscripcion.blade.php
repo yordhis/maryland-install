@@ -33,10 +33,9 @@
             </div> --}}
 
         </div>
-        <form action="{{ route('page.preinscripcion.store') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('page.preinscripcion.store') }}" method="post" enctype="multipart/form-data" novalidate>
             @csrf
             @method('post')
-
 
             <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
@@ -67,6 +66,7 @@
                     <input type="tel" id="telefono" name="telefono"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required />
+                    <span class="text-red-900"></span>
                 </div>
 
                 <div>
@@ -75,6 +75,7 @@
                     <input type="email" id="email" name="correo"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Academia@gamil.com" required />
+                    <span class="text-red-900"></span>
                 </div>
 
 
@@ -84,6 +85,7 @@
                     <input type="date" id="nacimiento" name="nacimiento"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="nacimiento" required />
+                    <span class="text-red-900"></span>
                 </div>
 
                 <div>
@@ -91,6 +93,7 @@
                     <input type="number" id="edad" name="edad"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="edad" required />
+                    <span class="text-red-900"></span>
                 </div>
                 <div>
                     <label for="direccion"
@@ -98,6 +101,7 @@
                     <input type="text" id="direccion" name="direccion"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="ingrese dirección de domicilio" required />
+                    <span class="text-red-900"></span>
                 </div>
                 <div>
                     <label for="ocupacion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ocupación o
@@ -105,6 +109,7 @@
                     <input type="text" id="ocupacion" name="ocupacion"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="ingrese dirección de domicilio" required />
+                    <span class="text-red-900"></span>
                 </div>
                 <div>
                     <label for="grado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grado de
@@ -112,6 +117,7 @@
                     <input type="text" id="grado" name="grado"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="ingrese grado de instrucción (basica, secundadria, universisdad o N/A)" required />
+                    <span class="text-red-900"></span>
                 </div>
                 <div>
                     <!-------subir file--------->
@@ -135,15 +141,16 @@
                             </span>
                         </span>
                         <input id="photo-dropbox" type="file" name="foto" class="sr-only" />
+                        <span class="text-red-900"></span>
                     </label>
                 </div>
             </div>
 
 
             <div class="mb-6">
-                <label for="countries"
+                <label for="select_cursos" 
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Cursos</label>
-                <select id="countries"
+                <select id="select_cursos" name="codigo_nivel"
                     class="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required>
                     <option selected disabled>Seleccione el curso</option>
@@ -154,9 +161,9 @@
                 </select>
             </div>
             <div class="mb-6">
-                <label for="countries"
+                <label for="select_planes"
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Plan de pago</label>
-                <select id="countries"
+                <select id="select_planes" name="codigo_plan"
                     class="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required>
                     <option selected disabled>Seleccione el plan de pago</option>
@@ -200,9 +207,6 @@
 
             {{-- Información de pago --}}
             <div class="mb-6" id="informacion_pago">
-             
-
-
             </div>
 
             {{-- Terminos y condiciones el checkbox --}}

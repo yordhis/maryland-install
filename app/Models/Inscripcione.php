@@ -14,6 +14,7 @@ class Inscripcione extends Model
         "cedula_estudiante", 
         "codigo_grupo", 
         "codigo_plan",
+        "codigo_nivel",
         "nota",
         "fecha",
         "extras",
