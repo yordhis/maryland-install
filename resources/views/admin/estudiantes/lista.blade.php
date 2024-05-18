@@ -74,7 +74,9 @@
                                     @include('admin.estudiantes.partials.modaldialog')
 
                                     {{-- Boton editar --}}
-                                    @include('admin.estudiantes.partials.modalFormularioEditar')
+                                    <a href="{{ route('admin.estudiantes.edit', $estudiante->id) }}">
+                                        <i class="bi bi-pencil-square fs-4 text-warning"></i>
+                                    </a>
 
                                     {{-- Boton eliminar --}}
                                     @include('admin.estudiantes.partials.modal')

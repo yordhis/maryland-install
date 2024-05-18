@@ -1,10 +1,10 @@
        {{-- Boton de agregar estudiante --}}
-       <a type="button" class="" data-bs-toggle="modal" data-bs-target="#modalEditarEstudiante">
+       <a type="button" class="" data-bs-toggle="modal" data-bs-target="#modalEditarEstudiante{{$estudiante->id}}">
            <i class="bi bi-pencil"></i>
        </a>
 
        <!-- Modal formulario crear estudiante -->
-       <div class="modal fade text-start" id="modalEditarEstudiante" data-bs-backdrop="static" data-bs-keyboard="false"
+       <div class="modal fade text-start" id="modalEditarEstudiante{{$estudiante->id}}" data-bs-backdrop="static" data-bs-keyboard="false"
            tabindex="-1" aria-labelledby="modalEditarEstudianteLabel" aria-hidden="true">
            <div class="modal-dialog  modal-xl">
                <div class="modal-content">

@@ -1,6 +1,6 @@
  <!-- Modal Dialog Scrollable -->
  <a type="button" class="" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable{{$estudiante->id}}">
-    <i class="bi bi-eye"></i>
+    <i class="bi bi-eye fs-4"></i>
  </a>
   <div class="modal fade" id="modalDialogScrollable{{$estudiante->id}}" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
@@ -170,27 +170,39 @@
                                   <div class="card card-body">
                                     <div class="col-md-12 label"> 
                                       <span class="text-primary">Ver inscripción:</span> 
-                                      <a href="{{ route('admin.inscripciones.show', $inscripcione->id) }}"> 
-                                        {{ $inscripcione->codigo . " - " . $inscripcione->fecha . " - " . $inscripcione->estatus }} 
-                                      </a> 
+                                      <form action="{{route('admin.inscripciones.pdf', [ $inscripcione->cedula_estudiante, $inscripcione->codigo ])}}" method="post">
+                                        @csrf
+                                        @method('get')
+                                      
+                                        <button type="submit" class="btn btn-none">N° de control:{{ $inscripcione->codigo }}</button>
+                                      </form>
+                                    
                                     </div>
                                     <div class="col-md-12 label"> 
                                       <span class="text-primary">Ver grupo:</span> 
-                                      <a href="{{ route('admin.grupos.show', $inscripcione->grupo['id']) }}"> 
-                                        {{ $inscripcione->grupo['nombre'] }}
-                                      </a> 
+                                      <form action="{{route('admin.grupos.index')}}" method="post">
+                                        @csrf
+                                        @method('get')
+                                        <input type="hidden" name="filtro" value="{{ $inscripcione->grupo['codigo']}}">
+                                        <button type="submit" class="btn btn-none">{{ $inscripcione->grupo['nombre']}}</button>
+                                      </form>
                                     </div>
                                     <div class="col-md-12 label"> 
                                       <span class="text-primary">
                                         Costo del curso: 
                                         <b class="fs-3 text-success"> 
-                                          {{ $inscripcione->grupo['nivel']->precio }} 
+                                          {{ $inscripcione->total }} 
                                         </b>
                                       </span> 
                                     </div>
                                     <div class="col-md-12 label"> 
-                                      <span class="text-primary">Abonado: <b class="fs-3">100$</b></span> 
-                                      <span class="text-primary">Pendiente: <b class="fs-3">100$</b></span> 
+                                      <span class="text-primary">Abonado: <b class="fs-3">
+                                        {{ $inscripcione->abono }}  
+                                         
+                                      </b></span> 
+                                      <span class="text-primary">Pendiente: <b class="fs-3">
+                                        {{ $inscripcione->total - $inscripcione->abono }} 
+                                      </b></span> 
                                     </div>
                                   </div>
                                 </div>

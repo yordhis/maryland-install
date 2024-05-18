@@ -147,7 +147,7 @@ class ConceptoController extends Controller
     public function destroy(Concepto $concepto)
     {
         try {
-            $concepto->update(["estatus" => 0 ]);
+            $concepto->delete();
             $mensaje = "El Concepto de pago se Eliminó correctamente.";
             $estatus =  404;
             return redirect()->route('admin.conceptos.index', compact('mensaje', 'estatus'));

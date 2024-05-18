@@ -15,6 +15,7 @@ class Plane extends Model
         "cantidad_cuotas",
         "plazo",
         "descripcion",
+        "porcentaje_descuento",
         "estatus",
     ];
 }

@@ -142,26 +142,26 @@ class EstudianteController extends Controller
     public function edit(Estudiante $estudiante)
     {
         try {
+             $estudiante =  Helpers::getEstudiantes($estudiante->cedula)[0];
             $urlPrevia = url()->previous();
-            $representantes = RepresentanteEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
-            $listDificultades = DificultadEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
+            // $representantes = RepresentanteEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
+            // $listDificultades = DificultadEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
 
-            foreach ($representantes as  $repre) {
-                $data = Representante::where('cedula', $repre['cedula_representante'])->get();
-                $repre['data'] = $data[0];
-            }
+            // foreach ($representantes as  $repre) {
+            //     $data = Representante::where('cedula', $repre['cedula_representante'])->get();
+            //     $repre['data'] = $data[0];
+            // }
             $notificaciones = $this->data->notificaciones;
             return view('admin.estudiantes.editar', compact(
                 'estudiante',
-                'representantes',
-                'listDificultades',
                 'notificaciones',
                 'urlPrevia'
             ));
         } catch (\Throwable $th) {
             //throw $th;
-            $errorInfo = Helpers::getMensajeError($th, "Error al Consultar datos del estudiante en el método edit,");
-            return response()->view('errors.404', compact("errorInfo"), 404);
+            $mensaje = Helpers::getMensajeError($th, "Error al Consultar datos del estudiante en el método edit,");
+            $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
+            return back()->with(compact("mensaje", 'estatus'));
         }
     }
 
@@ -176,6 +176,7 @@ class EstudianteController extends Controller
     {
 
         try {
+    
             // Validamos si se envio una foto
             if (isset($request->file)) {
                 // Eliminamos la imagen anterior
@@ -203,27 +204,29 @@ class EstudianteController extends Controller
 
             // Actualizamos los datos del representante
             // validamos que la cedula no cambio
-            $represntante = Representante::where('cedula', $request->rep_cedula)->get();
-            if (isset($request->rep_cedula)) {
-                if (!count($represntante)) {
+            Helpers::setRepresentantes($request, $estudiante->cedula);
+            // $represntante = Representante::where('cedula', $request->rep_cedula)->get();
+            // if (isset($request->rep_cedula)) {
+            //     if (!count($represntante)) {
                     // Se crea y asigna el representante al estudiante
-                    Helpers::setRepresentantes($request);
-                }else{
+                // }else{
                     // Solo asignamos al representante
-                    Helpers::asignarRepresentante($request->cedula, $request->rep_cedula);
-                }
+                //     Helpers::asignarRepresentante($estudiante->cedula, $request->rep_cedula);
+                // }
                 
-            }
+            // }
 
+          
             // Configuramos las dificultades en un array y obtenemos
             $listDificultades = Helpers::getDificultades($request->request);
-
             // Seteamos las dificultades
-            Helpers::setDificultades( $listDificultades, $request->cedula);
+            Helpers::setDificultades( $listDificultades, $estudiante->cedula);
 
             $mensaje = "Los Datos del estudiante se guardaron correctamente";
             $estatus = Response::HTTP_OK;
          
+            if($request->urlPrevia) return redirect($request->urlPrevia)->with(compact('mensaje', 'estatus'));
+
             return back()->with(compact('mensaje', 'estatus'));
             
         } catch (\Throwable $th) {

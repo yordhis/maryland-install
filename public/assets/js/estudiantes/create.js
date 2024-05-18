@@ -4,7 +4,12 @@ closeRepre = document.getElementById('closeRepre'),
 closeDifi = document.getElementById('closeDifi'),
 inputEdadEstudiante = document.getElementById('edad_estudiante'),
 inputFechaNacimiento = document.getElementById('fecha_nacimiento'),
-formCreate = document.forms[1];
+forms = document.forms,
+formCreate = "";
+
+for (const form of forms) {
+    if(form.id == "formularioCrearEstudiante") formCreate = form;
+}
 
 if(document.getElementById('agregar-representante')){
     representanteElemento = document.getElementById('agregar-representante');

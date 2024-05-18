@@ -117,6 +117,7 @@ if (document.getElementById('rep_cedula')) {
     };
 
     log(componenteRepresentante)
+    log(formCreate)
 
     /** Funcion que Obtiene datos del representante */
     function getRepresentante(cedula) {
@@ -146,6 +147,14 @@ if (document.getElementById('rep_cedula')) {
                             preloadSpan.innerHTML = "";
                             componenteRepresentante.classList.remove('invisible');
                             componenteRepresentante.classList.add('visible');
+
+                            for (const input of formCreate) {
+                                if (input.name.includes('rep_')) {
+                                    if (!input.name.includes('rep_cedula')) {
+                                    input.value = null;
+                                    }
+                                } 
+                            }
                         }
                     })
                     .catch((err) => {

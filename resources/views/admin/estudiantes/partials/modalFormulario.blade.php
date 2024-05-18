@@ -1,11 +1,11 @@
        {{-- Boton de agregar estudiante --}}
-       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalformularioCrearEstudiante">
            <i class="bi bi-people"></i>
            Registrar estudiante
        </button>
 
        <!-- Modal formulario crear estudiante -->
-       <div class="modal fade text-start" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+       <div class="modal fade text-start" id="modalformularioCrearEstudiante" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
            aria-labelledby="staticBackdropLabel" aria-hidden="true">
            <div class="modal-dialog  modal-xl">
                <div class="modal-content">
@@ -14,7 +14,7 @@
                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrra"></button>
                    </div>
                    <div class="modal-body">
-                       <form action="{{ route('admin.estudiantes.store') }}" method="POST"
+                       <form action="{{ route('admin.estudiantes.store') }}" method="POST" id="formularioCrearEstudiante"
                            class="row g-3 needs-validation" enctype="multipart/form-data" novalidate>
                            {{--  --}}
                            @csrf

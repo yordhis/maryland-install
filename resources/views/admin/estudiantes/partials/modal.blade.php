@@ -1,8 +1,8 @@
 
         
 <!-- Vertically centered Modal -->
-<a type="button" class="text-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered{{ $estudiante->id }}">
-    <i class="bi bi-trash"></i>
+<a type="button" class="text-danger" data-bs-toggle="modal" data-bs-target="#verticalycentered{{ $estudiante->id }}">
+    <i class="bi bi-trash fs-4"></i>
 </a>
 
 <div class="modal fade" id="verticalycentered{{ $estudiante->id }}" tabindex="-1">

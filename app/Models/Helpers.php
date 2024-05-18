@@ -474,31 +474,36 @@ class Helpers extends Model
         }
     }
 
-    public static function setRepresentantes($request)
+    public static function setRepresentantes($request, $cedula_edit = 0)
     {
         try {
+            $cedula = empty($request->cedula) ? $cedula_edit : $request->cedula;
+            
             /** Se registra el representante */
-            Representante::updateOrCreate(
-                [
-                    // Comparamos
-                    "cedula" => $request->rep_cedula,
-                ], 
-                [
-                    // Se actualiza o Crea el representante 
-                    "nombre" => $request->rep_nombre ?? '',
-                    "edad" => $request->rep_edad ?? '',
-                    "ocupacion" => $request->rep_ocupacion ?? '',
-                    "telefono" => $request->rep_telefono ?? '',
-                    "direccion" => $request->rep_direccion ?? '',
-                    "correo" => $request->rep_correo ?? '',
+            if(!empty($request->rep_nombre)){
+                Representante::updateOrCreate(
+                    [
+                        // Comparamos
+                        "cedula" => $request->rep_cedula,
+                    ], 
+                    [
+                        // Se actualiza o Crea el representante 
+                        "nombre" => $request->rep_nombre ?? '',
+                        "edad" => $request->rep_edad ?? '',
+                        "ocupacion" => $request->rep_ocupacion ?? '',
+                        "telefono" => $request->rep_telefono ?? '',
+                        "direccion" => $request->rep_direccion ?? '',
+                        "correo" => $request->rep_correo ?? '',
                 ]);
+            }
 
             /** Relacionamos los estudiante con el representante */
             RepresentanteEstudiante::updateOrCreate(
                 [
-                    "cedula_estudiante" => $request->cedula,
+                    "cedula_estudiante" => $cedula
                 ], 
                 [
+
                     "cedula_representante" => $request->rep_cedula
                 ]);
             return true;
@@ -639,9 +644,10 @@ class Helpers extends Model
                 continue;
             endif;
         }
-
+      
         if ($dificultades) {
             foreach ($listDificultades as $listDificultad) {
+
                 foreach ($dificultades as $nombreDificultad) {
                     if ($nombreDificultad == $listDificultad->nombre) {
                         $listDificultad->estatus = 1;
@@ -650,6 +656,7 @@ class Helpers extends Model
                         $listDificultad->estatus = 0;
                     }
                 }
+
             }
         } else {
             foreach ($listDificultades as $listDificultad) {
