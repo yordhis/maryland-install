@@ -200,89 +200,174 @@
                   {{-- FIN DE DATOS PERSONALES --}}
 
 
+                    @if (count($estudiante->representantes))
+                        {{-- INICIO DE DATOS DEL REPRESENTANTE --}}
+                        <div  class="row">
+                            <div class="col-xs-8 col-sm-12">
+                                <h5 class="mt-3">Editar datos del representante </h5>
+                                <hr>
+                            </div>
 
-                  {{-- INICIO DE DATOS DEL REPRESENTANTE --}}
-                  <div  class="row">
-                      <div class="col-xs-8 col-sm-12">
-                          <h5 class="mt-3">Editar datos del representante </h5>
-                          <hr>
-                      </div>
+                            <div class="col-sm-12">
+                                <label for="yourUsername" class="form-label">Cédula del 
+                                    representante</label><br>
+                                <input type="number" name="rep_cedula" class="form-control"
+                                    value="{{ old('rep_cedula') ?? $estudiante->representantes[0]->representante->cedula  }}" id="rep_cedula"
+                                    placeholder="Ingrese la cédula del representante.">
+                                <p><small class="text-white card mt-2 p-2 bg-secondary" id="mensajeRepresentante">
+                                        Si el representante ya existe los datos se llenaran
+                                        automáticamente.
+                                    </small></p>
+                                <div class="invalid-feedback">Por favor, Ingrese la cédula del
+                                    representante!
+                                </div>
+                            </div>
+                            {{-- Se muestra la precarga  --}}
+                            <span id="preload"></span>
+                            <div id="componenteRepresentante" class="row">
+                                <div class="col-sm-12">
+                                    <label for="yourName" class="form-label">Nombre del
+                                        representante</label>
+                                    <input type="text" name="rep_nombre" class="form-control" id="yourName"
+                                        value="{{ old('rep_nombre') ?? $estudiante->representantes[0]->representante->nombre }}"
+                                        placeholder="Ingrese Nombre del representante.">
+                                    <div class="invalid-feedback">Por favor, Nombre del
+                                        representante!</div>
+                                </div>
 
-                      <div class="col-sm-12">
-                          <label for="yourUsername" class="form-label">Cédula del 
-                              representante</label><br>
-                          <input type="number" name="rep_cedula" class="form-control"
-                              value="{{ old('rep_cedula') ?? $estudiante->representantes[0]->representante->cedula  }}" id="rep_cedula"
-                              placeholder="Ingrese la cédula del representante.">
-                          <p><small class="text-white card mt-2 p-2 bg-secondary" id="mensajeRepresentante">
-                                  Si el representante ya existe los datos se llenaran
-                                  automáticamente.
-                              </small></p>
-                          <div class="invalid-feedback">Por favor, Ingrese la cédula del
-                              representante!
-                          </div>
-                      </div>
-                      {{-- Se muestra la precarga  --}}
-                      <span id="preload"></span>
-                      <div id="componenteRepresentante" class="row">
-                          <div class="col-sm-12">
-                              <label for="yourName" class="form-label">Nombre del
-                                  representante</label>
-                              <input type="text" name="rep_nombre" class="form-control" id="yourName"
-                                  value="{{ old('rep_nombre') ?? $estudiante->representantes[0]->representante->nombre }}"
-                                  placeholder="Ingrese Nombre del representante.">
-                              <div class="invalid-feedback">Por favor, Nombre del
-                                  representante!</div>
-                          </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <label for="yourUsername" class="form-label">Teléfono </label>
+                                    <input type="number" name="rep_telefono" class="form-control"
+                                        value="{{ old('rep_telefono') ?? $estudiante->representantes[0]->representante->telefono }}" id="yourUsername"
+                                        placeholder="Ingrese teléfono del representante.">
+                                    <div class="invalid-feedback">Por favor, Ingrese teléfono del
+                                        representante!
+                                    </div>
+                                </div>
 
-                          <div class="col-xs-12 col-sm-6">
-                              <label for="yourUsername" class="form-label">Teléfono </label>
-                              <input type="number" name="rep_telefono" class="form-control"
-                                  value="{{ old('rep_telefono') ?? $estudiante->representantes[0]->representante->telefono }}" id="yourUsername"
-                                  placeholder="Ingrese teléfono del representante.">
-                              <div class="invalid-feedback">Por favor, Ingrese teléfono del
-                                  representante!
-                              </div>
-                          </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <label for="yourUsername" class="form-label">Edad</label>
+                                    <input type="number" name="rep_edad" class="form-control" id="yourUsername"
+                                        value="{{ old('rep_edad') ?? $estudiante->representantes[0]->representante->edad }}" placeholder="Ingrese edad.">
+                                    <div class="invalid-feedback">Por favor, Ingrese edad!</div>
+                                </div>
 
-                          <div class="col-xs-12 col-sm-6">
-                              <label for="yourUsername" class="form-label">Edad</label>
-                              <input type="number" name="rep_edad" class="form-control" id="yourUsername"
-                                  value="{{ old('rep_edad') ?? $estudiante->representantes[0]->representante->edad }}" placeholder="Ingrese edad.">
-                              <div class="invalid-feedback">Por favor, Ingrese edad!</div>
-                          </div>
+                                <div class="col-12">
+                                    <label for="yourUsername" class="form-label">Ocupación</label>
+                                    <input type="text" name="rep_ocupacion" class="form-control"
+                                        value="{{ old('rep_ocupacion') ?? $estudiante->representantes[0]->representante->ocupacion }}" id="yourUsername"
+                                        placeholder="Ingrese ocupación o oficio.">
+                                    <div class="invalid-feedback">Por favor, ocupación o oficio!
+                                    </div>
+                                </div>
 
-                          <div class="col-12">
-                              <label for="yourUsername" class="form-label">Ocupación</label>
-                              <input type="text" name="rep_ocupacion" class="form-control"
-                                  value="{{ old('rep_ocupacion') ?? $estudiante->representantes[0]->representante->ocupacion }}" id="yourUsername"
-                                  placeholder="Ingrese ocupación o oficio.">
-                              <div class="invalid-feedback">Por favor, ocupación o oficio!
-                              </div>
-                          </div>
+                                <div class="col-12">
+                                    <label for="yourUsername" class="form-label">Dirección del
+                                        representante</label>
+                                    <input type="text" name="rep_direccion" class="form-control"
+                                        value="{{ old('rep_direccion') ?? $estudiante->representantes[0]->representante->direccion }}" id="yourUsername"
+                                        placeholder="Ingrese dirección del representante.">
+                                    <div class="invalid-feedback">Por favor, Ingrese dirección del
+                                        representante!
+                                    </div>
+                                </div>
 
-                          <div class="col-12">
-                              <label for="yourUsername" class="form-label">Dirección del
-                                  representante</label>
-                              <input type="text" name="rep_direccion" class="form-control"
-                                  value="{{ old('rep_direccion') ?? $estudiante->representantes[0]->representante->direccion }}" id="yourUsername"
-                                  placeholder="Ingrese dirección del representante.">
-                              <div class="invalid-feedback">Por favor, Ingrese dirección del
-                                  representante!
-                              </div>
-                          </div>
+                                <div class="col-12">
+                                    <label for="yourUsername" class="form-label">Correo</label>
+                                    <input type="email" name="rep_correo" class="form-control"
+                                        value="{{ old('rep_correo')  ?? $estudiante->representantes[0]->representante->correo }}" id="yourUsername"
+                                        placeholder="Ingrese correo.">
+                                    <div class="invalid-feedback">Por favor, Ingrese correo
+                                        electrónico correcto!
+                                    </div>
+                                </div>
+                            </div>
+                        </div> {{-- FIN DE DATOS DEL REPRESENTANTE --}}
+                    @else
+                        {{-- INICIO DE DATOS DEL REPRESENTANTE --}}
+                        <div  class="row">
+                            <div class="col-xs-8 col-sm-12">
+                                <h5 class="mt-3">Editar datos del representante </h5>
+                                <hr>
+                            </div>
 
-                          <div class="col-12">
-                              <label for="yourUsername" class="form-label">Correo</label>
-                              <input type="email" name="rep_correo" class="form-control"
-                                  value="{{ old('rep_correo')  ?? $estudiante->representantes[0]->representante->correo }}" id="yourUsername"
-                                  placeholder="Ingrese correo.">
-                              <div class="invalid-feedback">Por favor, Ingrese correo
-                                  electrónico correcto!
-                              </div>
-                          </div>
-                      </div>
-                  </div> {{-- FIN DE DATOS DEL REPRESENTANTE --}}
+                            <div class="col-sm-12">
+                                <label for="yourUsername" class="form-label">Cédula del 
+                                    representante</label><br>
+                                <input type="number" name="rep_cedula" class="form-control"
+                                    value="{{ old('rep_cedula') ?? '' }}" id="rep_cedula"
+                                    placeholder="Ingrese la cédula del representante.">
+                                <p><small class="text-white card mt-2 p-2 bg-secondary" id="mensajeRepresentante">
+                                        Si el representante ya existe los datos se llenaran
+                                        automáticamente.
+                                    </small></p>
+                                <div class="invalid-feedback">Por favor, Ingrese la cédula del
+                                    representante!
+                                </div>
+                            </div>
+                            {{-- Se muestra la precarga  --}}
+                            <span id="preload"></span>
+                            <div id="componenteRepresentante" class="row">
+                                <div class="col-sm-12">
+                                    <label for="yourName" class="form-label">Nombre del
+                                        representante</label>
+                                    <input type="text" name="rep_nombre" class="form-control" id="yourName"
+                                        value="{{ old('rep_nombre') ?? '' }}"
+                                        placeholder="Ingrese Nombre del representante.">
+                                    <div class="invalid-feedback">Por favor, Nombre del
+                                        representante!</div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6">
+                                    <label for="yourUsername" class="form-label">Teléfono </label>
+                                    <input type="number" name="rep_telefono" class="form-control"
+                                        value="{{ old('rep_telefono') ?? '' }}" id="yourUsername"
+                                        placeholder="Ingrese teléfono del representante.">
+                                    <div class="invalid-feedback">Por favor, Ingrese teléfono del
+                                        representante!
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6">
+                                    <label for="yourUsername" class="form-label">Edad</label>
+                                    <input type="number" name="rep_edad" class="form-control" id="yourUsername"
+                                        value="{{ old('rep_edad') ?? '' }}" placeholder="Ingrese edad.">
+                                    <div class="invalid-feedback">Por favor, Ingrese edad!</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="yourUsername" class="form-label">Ocupación</label>
+                                    <input type="text" name="rep_ocupacion" class="form-control"
+                                        value="{{ old('rep_ocupacion') ?? '' }}" id="yourUsername"
+                                        placeholder="Ingrese ocupación o oficio.">
+                                    <div class="invalid-feedback">Por favor, ocupación o oficio!
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="yourUsername" class="form-label">Dirección del
+                                        representante</label>
+                                    <input type="text" name="rep_direccion" class="form-control"
+                                        value="{{ old('rep_direccion') ?? '' }}" id="yourUsername"
+                                        placeholder="Ingrese dirección del representante.">
+                                    <div class="invalid-feedback">Por favor, Ingrese dirección del
+                                        representante!
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="yourUsername" class="form-label">Correo</label>
+                                    <input type="email" name="rep_correo" class="form-control"
+                                        value="{{ old('rep_correo')  ?? '' }}" id="yourUsername"
+                                        placeholder="Ingrese correo.">
+                                    <div class="invalid-feedback">Por favor, Ingrese correo
+                                        electrónico correcto!
+                                    </div>
+                                </div>
+                            </div>
+                        </div> {{-- FIN DE DATOS DEL REPRESENTANTE --}}
+
+                    @endif
 
                   {{-- INICIO DE DATOS DE DIFICULTAD DE APRENDIZAJE --}}
                   <div class="row">
