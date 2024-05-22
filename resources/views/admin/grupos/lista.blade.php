@@ -98,12 +98,12 @@
                 </table>
 
                 <!-- End Table with stripped rows -->
+                <div class="col-sm-6 col-xs-12">
+                    {{ $grupos->appends(['filtro' => $request->filtro])->links() }}
+                </div>
 
             </div>
 
-            <div class="col-sm-6 col-xs-12">
-                {{ $grupos->appends(['filtro' => $request->filtro])->links() }}
-            </div>
 
             <div class="col-sm-6 col-xs-12 text-end">
                 @include('admin.grupos.partials.modalformulario')

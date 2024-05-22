@@ -21,58 +21,21 @@ $subcategoria = 'LISTA';
             </a>
         </li><!-- End Dashboard Nav | Panel-->
 
-        <!-- Start Components Nav | Profesores -->
-        <li class="nav-item">
-            <a class="nav-link {{ $categoria == 'PROFESORES' ? 'collapse show' : 'collapsed' }} "
-                data-bs-target=" #components-nav-2" data-bs-toggle="collapse" href="#" aria-expanded="true">
-                <i class="bi bi-person-vcard"></i><span>Profesores</span><i class="bi bi-chevron-down ms-auto "></i>
-            </a>
-            <ul id="components-nav-2"
-                class="nav-content {{ $categoria == 'PROFESORES' ? 'collapse show' : 'collapse' }} "
-                data-bs-parent=" #sidebar-nav">
-                <li>
-                    <a href="{{ route('admin.profesores.index') }}"
-                        class="{{ $categoria == 'PROFESORES' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}"
-                        >
-                        <i class="bi bi-circle"></i><span>Lista</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.profesores.create') }}"
-                        class="{{ $categoria == 'PROFESORES' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}"
-                        >
-                        <i class="bi bi-circle"></i><span>Crear</span>
-                    </a>
-                </li>
+        <!-- Start Components Nav | Estudiantes -->
+            <li class="nav-item">
+                <a href="{{ route('admin.profesores.index') }}" class="nav-link  {{ $categoria == 'PROFESORES' ? 'text-warning collapse' : 'collapsed' }}">
+                    <i class="bi bi-person-vcard"></i><span>Profesores</span>
+                </a>
+            </li><!-- End Components Nav | Estudiantes -->
 
-            </ul>
-        </li><!-- End Components Nav | Profesores -->
 
         <!-- Start Components Nav | Estudiantes -->
-        <li class="nav-item">
-            <a class="nav-link {{ $categoria == 'ESTUDIANTES' ? 'collapse show' : 'collapsed' }}"
-                data-bs-target="#components-nav-3" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-person-video3"></i><span>Estudiantes</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="components-nav-3"
-                class="nav-content {{ $categoria == 'ESTUDIANTES' ? 'collapse show' : 'collapse' }} "
-                data-bs-parent=" #sidebar-nav">
-                <li>
-                    <a href="{{ route('admin.estudiantes.index') }}" 
-                        class="{{ $categoria == 'ESTUDIANTES' ? ($subcategoria == 'LISTA' ? 'active border rounded' : '') : '' }}">
-                        <i class="bi bi-circle"></i><span>Lista</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.estudiantes.index') }}" class="nav-link  {{ $categoria == 'ESTUDIANTES' ? 'text-warning collapse' : 'collapsed' }}">
+                    <i class="bi bi-person-video3"></i><span>Estudiantes</span>
+                </a>
+            </li><!-- End Components Nav | Estudiantes -->
 
-                <li>
-                    <a href="{{ route('admin.estudiantes.create') }}"  
-                        class="{{ $categoria == 'ESTUDIANTES' ? ($subcategoria == 'CREATE' ? 'active border rounded' : '') : '' }}">
-                        <i class="bi bi-circle"></i><span>Crear</span>
-                    </a>
-                </li>
-
-            </ul>
-        </li><!-- End Components Nav | Estudiantes-->
 
         <!-- Start Components Nav | Niveles de estudio -->
             <li class="nav-item">

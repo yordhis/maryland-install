@@ -41,9 +41,9 @@ class EstudianteController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->filtro){
+        if ($request->filtro) {
             $estudiantes =  Helpers::getEstudiantes($request->filtro);
-        }else{
+        } else {
             $estudiantes =  Helpers::getEstudiantes();
         }
         $notificaciones =  $this->data->notificaciones;
@@ -70,9 +70,10 @@ class EstudianteController extends Controller
      */
     public function store(StoreEstudianteRequest $request)
     {
+        try {
             // Validando cedula 
-            $estatusCreate = 0;   
-        
+            $estatusCreate = 0;
+
             // Configuramos las dificultades en un array
             $dificultadesInput = Helpers::getDificultades($request->request);
 
@@ -81,6 +82,7 @@ class EstudianteController extends Controller
                 $request['foto'] = Helpers::setFile($request);
             }
 
+            // registramos el estudiante
             $estatusCreate = Estudiante::create($request->all());
 
             if ($estatusCreate) {
@@ -89,7 +91,7 @@ class EstudianteController extends Controller
                     if (isset($request->rep_nombre)) {
                         // Se crea y asigna el representante al estudiante
                         Helpers::setRepresentantes($request);
-                    }else{
+                    } else {
                         // Solo asignamos al representante
                         Helpers::asignarRepresentante($request->cedula, $request->rep_cedula);
                     }
@@ -106,32 +108,21 @@ class EstudianteController extends Controller
                     }
                 }
             }
-        
-
-        $mensaje =  $estatusCreate   ? "Estudiante registrado correctamente"
-                                    : "No se pudo registrar verifique los datos.";
-        $estatus = $estatusCreate ? Response::HTTP_CREATED : Response::HTTP_NOT_FOUND;
-
-      
-        return back()->with(compact('mensaje', 'estatus'));
 
 
+            $mensaje =  $estatusCreate   ? "Estudiante registrado correctamente"
+                : "No se pudo registrar verifique los datos.";
+            $estatus = $estatusCreate ? Response::HTTP_CREATED : Response::HTTP_NOT_FOUND;
 
-
-        // if(stripos(url()->previous(), '/inscripciones/estudiante')) return redirect()->route('admin.inscripciones.createEstudiante')->with([
-        //     'mensaje'=> $mensaje, 
-        //     'estatus'=> $estatus
-        // ]);
-  
-
-        // return $estatusCreate ? redirect()->route('admin.estudiantes.index')->with([
-        //                         'mensaje'=> $mensaje, 
-        //                         'estatus'=> $estatus
-        //                     ])
-        //     : view('admin.estudiantes.crear', compact('respuesta', 'request', 'notificaciones'));
+            return back()->with(compact('mensaje', 'estatus'));
+        } catch (\Throwable $th) {
+            $mensaje = Helpers::getMensajeError($th, ", ¡Error interno al intentar registrar estudiante!");
+            $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
+            return back()->with(compact('mensaje', 'estatus'));
+        }
     }
 
-  
+
 
     /**
      * Show the form for editing the specified resource.
@@ -142,20 +133,16 @@ class EstudianteController extends Controller
     public function edit(Estudiante $estudiante)
     {
         try {
-             $estudiante =  Helpers::getEstudiantes($estudiante->cedula)[0];
+            $estudiante =  Helpers::getEstudiantes($estudiante->cedula)[0];
             $urlPrevia = url()->previous();
-            // $representantes = RepresentanteEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
-            // $listDificultades = DificultadEstudiante::where('cedula_estudiante', $estudiante->cedula)->get();
 
-            // foreach ($representantes as  $repre) {
-            //     $data = Representante::where('cedula', $repre['cedula_representante'])->get();
-            //     $repre['data'] = $data[0];
-            // }
             $notificaciones = $this->data->notificaciones;
+            $respuesta = $this->data->respuesta;
             return view('admin.estudiantes.editar', compact(
                 'estudiante',
                 'notificaciones',
-                'urlPrevia'
+                'urlPrevia',
+                'respuesta'
             ));
         } catch (\Throwable $th) {
             //throw $th;
@@ -176,7 +163,6 @@ class EstudianteController extends Controller
     {
 
         try {
-    
             // Validamos si se envio una foto
             if (isset($request->file)) {
                 // Eliminamos la imagen anterior
@@ -190,10 +176,10 @@ class EstudianteController extends Controller
             } else {
                 $request['foto'] = $estudiante->foto;
             }
-            
+
             // Editar cedula
-            if(!empty($request->cedula)){
-                if($estudiante->cedula != $request->cedula){
+            if (!empty($request->cedula)) {
+                if ($estudiante->cedula != $request->cedula) {
                     Helpers::updateCedula($estudiante->cedula, $request->cedula);
                 }
             }
@@ -205,30 +191,20 @@ class EstudianteController extends Controller
             // Actualizamos los datos del representante
             // validamos que la cedula no cambio
             Helpers::setRepresentantes($request, $estudiante->cedula);
-            // $represntante = Representante::where('cedula', $request->rep_cedula)->get();
-            // if (isset($request->rep_cedula)) {
-            //     if (!count($represntante)) {
-                    // Se crea y asigna el representante al estudiante
-                // }else{
-                    // Solo asignamos al representante
-                //     Helpers::asignarRepresentante($estudiante->cedula, $request->rep_cedula);
-                // }
-                
-            // }
 
-          
+
+
             // Configuramos las dificultades en un array y obtenemos
             $listDificultades = Helpers::getDificultades($request->request);
             // Seteamos las dificultades
-            Helpers::setDificultades( $listDificultades, $estudiante->cedula);
+            Helpers::setDificultades($listDificultades, $estudiante->cedula);
 
             $mensaje = "Los Datos del estudiante se guardaron correctamente";
             $estatus = Response::HTTP_OK;
-         
-            if($request->urlPrevia) return redirect($request->urlPrevia)->with(compact('mensaje', 'estatus'));
+
+            if ($request->urlPrevia) return redirect($request->urlPrevia)->with(compact('mensaje', 'estatus'));
 
             return back()->with(compact('mensaje', 'estatus'));
-            
         } catch (\Throwable $th) {
             //throw $th;
             $mensaje = Helpers::getMensajeError($th, ", Error interno al intentar editar un estudiante");
@@ -248,7 +224,7 @@ class EstudianteController extends Controller
 
         try {
 
-            Helpers::destroyData($estudiante->cedula, false,false, [
+            Helpers::destroyData($estudiante->cedula, false, false, [
                 "pagos" => true,
                 "cuotas" => true,
                 "inscripcione" => true,
@@ -262,7 +238,6 @@ class EstudianteController extends Controller
             $mensaje = "El estudiante {$estudiante->nombre}, fue eliminado correctamente";
             $estatus = 200;
             return back()->with(compact('mensaje', 'estatus'));
-
         } catch (\Throwable $th) {
             $mensaje = Helpers::getMensajeError($th, "Error interno al intentar eliminar el estudiante");
             $estatus = 301;

@@ -72,8 +72,6 @@
                                @enderror
                            </div>
 
-
-
                            <div class="col-xs-12 col-sm-4">
                                <label for="yourPassword" class="form-label">Teléfono</label>
                                <input type="text" name="telefono" class="form-control" id="yourUsername"
@@ -145,6 +143,7 @@
                                    <div class="text-danger"> {{ $message }} </div>
                                @enderror
                            </div>
+
                            <div class="col-12">
                                <label for="yourPassword" class="form-label">Ocupación o
                                    profesión</label>
@@ -156,7 +155,6 @@
                                    <div class="text-danger"> {{ $message }} </div>
                                @enderror
                            </div>
-
 
                            <div class="col-xs-12 col-sm-6">
                                <label for="foto" class="form-label">Subir Foto (Opcional)</label>
@@ -206,6 +204,8 @@
                                </div>
                                {{-- Se muestra la precarga  --}}
                                <span id="preload"></span>
+                               <div id="componenteCardRepresentante"></div>
+
                                <div id="componenteRepresentante" class="row">
                                    <div class="col-sm-12">
                                        <label for="yourName" class="form-label">Nombre del
@@ -217,7 +217,7 @@
                                            representante!</div>
                                    </div>
 
-                                   <div class="col-xs-12 col-sm-6">
+                                   <div class="col-12">
                                        <label for="yourUsername" class="form-label">Teléfono </label>
                                        <input type="number" name="rep_telefono" class="form-control"
                                            value="{{ old('rep_telefono') }}" id="yourUsername"
@@ -228,8 +228,14 @@
                                    </div>
 
                                    <div class="col-xs-12 col-sm-6">
+                                       <label for="yourUsername" class="form-label">Fecha de nacimiento</label>
+                                       <input type="date" name="rep_nacimiento" class="form-control" id="rep_nacimiento"
+                                           value="{{ old('rep_nacimiento') }}" placeholder="Ingrese edad.">
+                                       <div class="invalid-feedback">Por favor, Ingrese fecha de nacimiento!</div>
+                                   </div>
+                                   <div class="col-xs-12 col-sm-6">
                                        <label for="yourUsername" class="form-label">Edad</label>
-                                       <input type="number" name="rep_edad" class="form-control" id="yourUsername"
+                                       <input type="number" name="rep_edad" class="form-control" id="rep_edad"
                                            value="{{ old('rep_edad') }}" placeholder="Ingrese edad.">
                                        <div class="invalid-feedback">Por favor, Ingrese edad!</div>
                                    </div>

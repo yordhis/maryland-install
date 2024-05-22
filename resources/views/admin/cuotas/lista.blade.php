@@ -52,10 +52,16 @@
                                             <td>{{ $cuota->cuota ?? 'Sin monto'}}</td>
     
                                             <td>
-                                              
-                                                <a href="/pagos/{{$cuota->estudiante->cedula ?? '0000000'}}/estudiante" target="_self">
-                                                    <i class="bi bi-paypal fs-3"></i>
-                                                </a>
+                                                <form action="{{route('admin.inscripciones.index')}}" method="post">
+                                                    @csrf
+                                                    @method('GET')
+                                                    <input type="hidden" name="filtro" value="{{$cuota->estudiante->cedula}}">
+                                                    <button class="btn btn-none" >
+                                                        <i class="bi bi-paypal fs-3"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Procesar pago"></i>
+                                                    </button>
+                                                </form>
+                                               
                                 
                                             </td>
                                         </tr>

@@ -1,76 +1,48 @@
+let input_edad_representante = document.getElementById('rep_edad'),
+input_fecha_nacimiento_representante = document.getElementById('rep_nacimiento'),
+input_edad_estudiante = document.getElementById('edad_estudiante'),
+input_fecha_nacimiento_estudiante = document.getElementById('fecha_nacimiento_estudiante');
+fecha_cumpleanio = document.getElementById('fecha_cumpleanio'),
+forms = document.forms,
+formRepresentante = null;
 
-if (document.getElementById("addRepresentante") && document.getElementById("btnAddRepresentante")) {
-
-    console.log("esta vacio o es null");
-    let addRepresentante = document.getElementById("addRepresentante"),
-    btnAddRepresentante = document.getElementById("btnAddRepresentante");
-    
-    const insputsRepresentante = `
-    <!-- INICIO DE DATOS DEL REPRESENTANTE -->
-    <div id="agregar-representante" class="row">
-        <div class="col-11">
-            <h5 class="mt-3">Representante</h5>
-            <hr>
-        </div>
-        <div class="col-1">
-            <span class="text-danger fs-3" id="closeRepre">X</span>
-        </div>
-        <div class="col-12">
-            <label for="yourName" class="form-label">Nombre del representante</label>
-            <input type="text" name="rep_nombre" class="form-control" id="yourName"
-                placeholder="Ingrese Nombre del representante." >
-            <div class="invalid-feedback">Por favor, Nombre del representante!</div>
-        </div>
-        <div class="col-6">
-            <label for="yourUsername" class="form-label">Cédula</label>
-            <input type="text" name="rep_cedula" class="form-control"
-                id="yourUsername" placeholder="Ingrese la cédula del representante."
-                >
-            <div class="invalid-feedback">Por favor, Ingrese la cédula del representante!
-            </div>
-        </div>
-        <div class="col-6">
-            <label for="yourUsername" class="form-label">Teléfono </label>
-            <input type="text" name="rep_telefono" class="form-control"
-                id="yourUsername" placeholder="Ingrese teléfono del representante."
-                >
-            <div class="invalid-feedback">Por favor, Ingrese teléfono del representante!
-            </div>
-        </div>
-        <div class="col-2">
-            <label for="yourUsername" class="form-label">Edad</label>
-            <input type="number" name="rep_edad" class="form-control" id="yourUsername"
-                placeholder="Ingrese edad." >
-            <div class="invalid-feedback">Por favor, Ingrese edad!</div>
-        </div>
-        <div class="col-10">
-            <label for="yourUsername" class="form-label">Ocupación</label>
-            <input type="text" name="rep_ocupacion" class="form-control"
-                id="yourUsername" placeholder="Ingrese ocupación o oficio." >
-            <div class="invalid-feedback">Por favor, ocupación o oficio!</div>
-        </div>
-        <div class="col-12">
-            <label for="yourUsername" class="form-label">Dirección del
-                representante</label>
-            <input type="text" name="rep_direccion" class="form-control"
-                id="yourUsername" placeholder="Ingrese dirección del representante."
-                >
-            <div class="invalid-feedback">Por favor, Ingrese dirección del representante!
-            </div>
-        </div>
-        <div class="col-12">
-            <label for="yourUsername" class="form-label">Correo</label>
-            <input type="text" name="rep_correo" class="form-control"
-                id="yourUsername" placeholder="Ingrese correo." >
-            <div class="invalid-feedback">Por favor, Ingrese correo del representante!
-            </div>
-        </div>
-    </div> <!-- FIN DE DATOS DEL REPRESENTANTE -->
-    `;
-    
-    btnAddRepresentante.addEventListener('click', (e)=>{
-        e.preventDefault();
-        addRepresentante.innerHTML = insputsRepresentante;
-    
-    })
+for (const form of forms) {
+    if(form.id = 'formulario_add_representante') formRepresentante = form;
 }
+
+
+input_fecha_nacimiento_representante.addEventListener("change", (e)=>{
+    calcularEdad(e.target, input_edad_representante)
+})
+
+input_fecha_nacimiento_estudiante.addEventListener("change", (e)=>{
+    calcularEdad(e.target, input_edad_estudiante);
+})
+
+formatearFecha(fecha_cumpleanio);
+/** funciones extras */
+/**
+ * Esta funcion calcula la edad apartir de la fecha de nacimiento agregada detectando el cambio 
+ * del año, dia y mes.
+ * @param {fecha} input_fecha 
+ * @param {edad} input_edad 
+ */
+function calcularEdad(input_fecha, input_edad){
+   
+        let cumpleanio = input_fecha.value.split('-');
+        let fechaActual = new Date();
+    
+        if( fechaActual.getMonth() + 1 >= parseInt(cumpleanio[1]) 
+            && fechaActual.getDate() >= parseInt(cumpleanio[2])){
+                
+            input_edad.value = fechaActual.getFullYear() - parseInt(cumpleanio[0]);
+        }else{
+            input_edad.value = fechaActual.getFullYear() - parseInt(cumpleanio[0]) - 1;
+        }
+};
+
+/** */
+function formatearFecha(elemento_fecha){
+    elemento_fecha.textContent = elemento_fecha.textContent.split('-').reverse().join('/');
+}
+

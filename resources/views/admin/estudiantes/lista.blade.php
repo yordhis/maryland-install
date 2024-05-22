@@ -7,6 +7,7 @@
     @if (session('mensaje'))
         @include('partials.alert')
     @endif
+
     <div id="alert"></div>
 
     <section class="section">
@@ -28,6 +29,7 @@
             <div class="col-sm-6 col-xs-12">
                 <h2> Lista de estudiantes </h2>
             </div>
+
             <div class="col-sm-6 col-xs-12">
                 <form action="{{ route('admin.estudiantes.index') }}" method="post">
                     @csrf
@@ -102,17 +104,15 @@
                 </table>
 
                 <!-- End Table with stripped rows -->
+                <div class="col-xs-12 col-sm-6 ">
+                    {{ $estudiantes->appends(['filtro' => $request->filtro])->links() }}
+                </div>
 
             </div>
 
-            <div class="col-sm-6 col-xs-12">
-                {{ $estudiantes->appends(['filtro' => $request->filtro])->links() }}
-            </div>
 
             <div class="col-sm-6 col-xs-12 text-end">
-
                     @include('admin.estudiantes.partials.modalFormulario')
-               
             </div>
         </div>
 
@@ -123,6 +123,6 @@
     <script src="{{ asset('assets/js/master.js') }}" defer></script>
     <script src="{{ asset('assets/js/estudiantes/create.js') }}" defer></script>
     <script src="{{ asset('assets/js/representantes/getRepresentante.js') }}" defer></script>
-    <script src="{{ asset('assets/js/profesores/editar.js') }}"></script>
+
 
 @endsection

@@ -108,12 +108,12 @@
                 </table>
 
                 <!-- End Table with stripped rows -->
+                <div class="col-sm-6 col-xs-12">
+                    {{ $inscripciones->appends(['filtro' => $request->filtro])->links() }}
+                </div>
 
             </div>
 
-            <div class="col-sm-6 col-xs-12">
-                {{ $inscripciones->appends(['filtro' => $request->filtro])->links() }}
-            </div>
 
             <div class="col-sm-6 col-xs-12 text-end">
                 <a href="{{ route('admin.inscripciones.createEstudiante') }}" class="btn btn-primary">Procesar

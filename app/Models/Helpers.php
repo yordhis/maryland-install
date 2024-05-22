@@ -82,7 +82,7 @@ class Helpers extends Model
             }
         } else {
             /** estamos eliminando al estudiante del istema es decir que volaremos todo */
-           
+
             // Eliminamos Las cuotas relacionads al estudiante en ese grupo
             if ($autorizado['cuotas']) {
                 Cuota::where([
@@ -133,7 +133,8 @@ class Helpers extends Model
     }
 
     /** OPbtenemos toda la información de las inscripciones */
-    public static function getInscripciones($filtro = false, $paginacion = 12){
+    public static function getInscripciones($filtro = false, $paginacion = 12)
+    {
         if ($filtro) {
             $inscripciones = Inscripcione::join('grupos', 'grupos.codigo', '=', 'inscripciones.codigo_grupo')
                 ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
@@ -245,7 +246,7 @@ class Helpers extends Model
                 ->orderBy('inscripciones.codigo', 'desc')
                 ->paginate($paginacion);
         }
-        
+
         foreach ($inscripciones as $key => $inscripcion) {
             $inscripcion['cuotas'] = Cuota::where([
                 'codigo_inscripcion' => $inscripcion->codigo,
@@ -260,18 +261,19 @@ class Helpers extends Model
                 "codigo_grupo" => $inscripcion->codigo_grupo,
                 "cedula_estudiante" => $inscripcion->cedula_estudiante,
             ])->get();
-            if(count($estudianteEstaEnGrupo)){
+            if (count($estudianteEstaEnGrupo)) {
                 $inscripcion['estatus_reasignar'] = false;
-            }else{
+            } else {
                 $inscripcion['estatus_reasignar'] = true;
             }
         }
-        
+
         return $inscripciones;
-    }   
+    }
 
     /** obtener toda la informacion de los grupos o un grupo por filtro */
-    public static function getGrupos($filtro = false, $paginacion = 12){
+    public static function getGrupos($filtro = false, $paginacion = 12)
+    {
         if ($filtro) {
             $grupos = Grupo::join('profesores', 'profesores.cedula', '=', "grupos.cedula_profesor")
                 ->join('niveles', 'niveles.codigo', '=', "grupos.codigo_nivel")
@@ -354,22 +356,19 @@ class Helpers extends Model
                     "cedula_estudiante" => $estudiante['cedula_estudiante']
                 ])->get()[0];
 
-                    /** Obtenemos la ultima fecha de pago */
-                    $cuotas = Cuota::where([
-                        'codigo_inscripcion' => $estudiante->inscripcion->codigo,
-                        'cedula_estudiante' => $estudiante->inscripcion->cedula_estudiante
-                    ])->get();
+                /** Obtenemos la ultima fecha de pago */
+                $cuotas = Cuota::where([
+                    'codigo_inscripcion' => $estudiante->inscripcion->codigo,
+                    'cedula_estudiante' => $estudiante->inscripcion->cedula_estudiante
+                ])->get();
 
-                    $estudiante->inscripcion->proxima_fecha_pago = $cuotas->where('estatus', 0)->min('fecha') ?? 'PAGADO';
-                
+                $estudiante->inscripcion->proxima_fecha_pago = $cuotas->where('estatus', 0)->min('fecha') ?? 'PAGADO';
             }
 
             $grupo['estudiantes'] = $grupoEstudiante;
-
-            
         }
 
-            
+
 
         return $grupos;
     }
@@ -406,7 +405,6 @@ class Helpers extends Model
     {
         $newHora = Carbon::parse($hora);
         return $newHora->format($formato);
-     
     }
 
     public static function updateCedula($cedulaActual, $cedulaNueva)
@@ -478,14 +476,14 @@ class Helpers extends Model
     {
         try {
             $cedula = empty($request->cedula) ? $cedula_edit : $request->cedula;
-            
+
             /** Se registra el representante */
-            if(!empty($request->rep_nombre)){
+            if (!empty($request->rep_nombre)) {
                 Representante::updateOrCreate(
                     [
                         // Comparamos
                         "cedula" => $request->rep_cedula,
-                    ], 
+                    ],
                     [
                         // Se actualiza o Crea el representante 
                         "nombre" => $request->rep_nombre ?? '',
@@ -494,19 +492,24 @@ class Helpers extends Model
                         "telefono" => $request->rep_telefono ?? '',
                         "direccion" => $request->rep_direccion ?? '',
                         "correo" => $request->rep_correo ?? '',
-                ]);
+                    ]
+                );
             }
 
             /** Relacionamos los estudiante con el representante */
-            RepresentanteEstudiante::updateOrCreate(
-                [
-                    "cedula_estudiante" => $cedula
-                ], 
-                [
+            if (!empty($request->rep_cedula)) {
+                RepresentanteEstudiante::updateOrCreate(
+                    [
+                        "cedula_estudiante" => $cedula
+                    ],
+                    [
 
-                    "cedula_representante" => $request->rep_cedula
-                ]);
+                        "cedula_representante" => $request->rep_cedula
+                    ]
+                );
+            }
             return true;
+            
         } catch (\Throwable $th) {
             //throw $th;
             $errorInfo = Helpers::getMensajeError($th, "Error al Registrar el representante en el objeto helper,");
@@ -644,7 +647,7 @@ class Helpers extends Model
                 continue;
             endif;
         }
-      
+
         if ($dificultades) {
             foreach ($listDificultades as $listDificultad) {
 
@@ -656,7 +659,6 @@ class Helpers extends Model
                         $listDificultad->estatus = 0;
                     }
                 }
-
             }
         } else {
             foreach ($listDificultades as $listDificultad) {
@@ -674,15 +676,15 @@ class Helpers extends Model
      */
     public static function getEstudiantes($filtro = false, $paginacion = 12)
     {
-        if($filtro){
+        if ($filtro) {
             $estudiantes = Estudiante::where('cedula', 'like', "%{$filtro}%")
-            ->orWhere('nombre', 'like', "%{$filtro}%")
-            ->orderBy('id', 'desc')->paginate($paginacion);
-        }else{
+                ->orWhere('nombre', 'like', "%{$filtro}%")
+                ->orderBy('id', 'desc')->paginate($paginacion);
+        } else {
             $estudiantes = Estudiante::orderBy('id', 'desc')->paginate($paginacion);
         }
-       
-       
+
+
         foreach ($estudiantes as $key => $estudiante) {
             $estudiantes[$key] = self::getEstudiante($estudiante->cedula)[0];
         }
@@ -708,8 +710,6 @@ class Helpers extends Model
                     ]
                 );
 
-                // if(count($representante)) $estudiante[0]['representante'] = $representante[0];
-                // else $estudiante[0]['representante'] = [];
 
                 /** CIERRE Obrenemos los representantes */
 

@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @if( session('mensaje') )
+    @if (session('mensaje'))
         @include('partials.alert')
     @endif
     <div id="alert"></div>
@@ -19,18 +19,15 @@
             </div>
             <div class="col-sm-6 col-xs-12">
                 <form action="{{ route('admin.niveles.index') }}" method="post">
-                @csrf
-                @method('get')
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" 
-                    name="filtro"
-                    placeholder="Buscar" 
-                    aria-label="Filtrar" 
-                    aria-describedby="button-addon2" required>
-                    <button class="btn btn-primary" type="submit" id="button-addon2">
-                        <i class="bi bi-search"></i>
-                    </button>
-                  </div>
+                    @csrf
+                    @method('get')
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="filtro" placeholder="Buscar" aria-label="Filtrar"
+                            aria-describedby="button-addon2" required>
+                        <button class="btn btn-primary" type="submit" id="button-addon2">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
                 </form>
             </div>
 
@@ -50,7 +47,7 @@
                         </tr>
                     </thead>
                     <tbody>
-               
+
                         @foreach ($niveles as $nivel)
                             <tr>
                                 <th scope="row">{{ $nivel->id }}</th>
@@ -58,7 +55,7 @@
                                 <td>{{ $nivel->nombre }}</td>
                                 <td>{{ $nivel->precio }}</td>
                                 <td class="text-break">{{ $nivel->libro }}</td>
-                                <td>{{ $nivel->duracion . " " . $nivel->tipo_duracion }} </td>
+                                <td>{{ $nivel->duracion . ' ' . $nivel->tipo_duracion }} </td>
 
                                 <td>
 
@@ -72,7 +69,6 @@
 
                                 </td>
                             </tr>
-                           
                         @endforeach
 
                     </tbody>
@@ -80,9 +76,8 @@
                         <tr>
 
                             <td colspan="7" class="text-center table-secondary">
-                                Total de niveles: {{ $niveles->total() }} | 
-                                <a href="{{ route('admin.niveles.index') }}"
-                                   class="text-primary" >
+                                Total de niveles: {{ $niveles->total() }} |
+                                <a href="{{ route('admin.niveles.index') }}" class="text-primary">
                                     Ver todo
                                 </a>
                                 <br>
@@ -92,18 +87,16 @@
                 </table>
 
                 <!-- End Table with stripped rows -->
-
-            </div>
-
-            <div class="col-sm-6 col-xs-12">
-                {{ $niveles->appends(['filtro'=> $request->filtro])->links() }}
+                <div class="col-sm-6 col-xs-12">
+                    {{ $niveles->appends(['filtro' => $request->filtro])->links() }}
+                </div>
             </div>
 
             <div class="col-sm-6 col-xs-12 text-end">
                 {{-- boton del modal para crear --}}
                 @include('admin.niveles.partials.modaldialog')
                 <br>
-                 
+
                 @if ($errors->any())
                     <div class="alert alert-danger text-start">
                         <ul>
@@ -116,12 +109,12 @@
             </div>
         </div>
 
-       
+
 
     </section>
 
 
-    
+
 
 
 @endsection

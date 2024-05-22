@@ -13,7 +13,7 @@ class StoreRepresentanteEstudianteRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class StoreRepresentanteEstudianteRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "rep_cedula_estudiante" => "required",
+            "rep_cedula" => "required"
         ];
     }
 }

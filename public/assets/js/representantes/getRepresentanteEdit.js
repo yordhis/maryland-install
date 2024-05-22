@@ -1,8 +1,8 @@
 if (document.getElementById('rep_cedula')) {
 
     let inputCedulaRepresentante = document.getElementById('rep_cedula'),
-        componenteRepresentante = document.getElementById('componenteRepresentante'),
         componenteCardRepresentante = document.getElementById('componenteCardRepresentante'),
+        componenteRepresentante = document.getElementById('componenteRepresentante'),
         preloadSpan = document.getElementById('preload'),
         mensajeRepresentante = document.getElementById('mensajeRepresentante'),
         URLpatname = window.location.pathname,
@@ -76,12 +76,13 @@ if (document.getElementById('rep_cedula')) {
         `;
     };
 
+    const hanledSubmitForm = (e) =>{
+        e.target.submit();
+    };
     /** Funcion que Obtiene datos del representante */
     function getRepresentante(cedula) {
         if (cedula.value.length > 6) {
             preloadSpan.innerHTML = preload;
-            componenteRepresentante.classList.remove('visible');
-            componenteRepresentante.classList.add('invisible');
             setTimeout(() => {
 
                 fetch(URL_BASE_API + "/getRepresentante/" + cedula.value)
@@ -93,20 +94,24 @@ if (document.getElementById('rep_cedula')) {
                             mensajeRepresentante.textContent = result.mensaje;
                             mensajeRepresentante.classList.remove('bg-danger');
                             mensajeRepresentante.classList.add('bg-success');
-                            componenteRepresentante.classList.remove('invisible');
-                            componenteRepresentante.classList.add('visible');
+                            componenteRepresentante.classList.remove('d-block');
+                            componenteRepresentante.classList.add('d-none');
+                            formRepresentante.action = URL_BASE_HOST + "/representanteEstudiates";
+                            formRepresentante.addEventListener( 'submit', hanledSubmitForm, true);
                             componenteCardRepresentante.innerHTML = getCardRepresentante(result.data);
                             preloadSpan.innerHTML = "";
                         } else {
                             mensajeRepresentante.textContent = result.mensaje;
                             mensajeRepresentante.classList.remove('bg-success');
                             mensajeRepresentante.classList.add('bg-danger');
-                            componenteRepresentante.classList.remove('invisible');
-                            componenteRepresentante.classList.add('visible');
-                            componenteCardRepresentante.innerHTML = "";
                             preloadSpan.innerHTML = "";
+                            formRepresentante.action = URL_BASE_HOST + "/representantes";
+                            formRepresentante.removeEventListener( 'submit', hanledSubmitForm , true);
+                            componenteRepresentante.classList.remove('d-none');
+                            componenteRepresentante.classList.add('d-block');
+                            componenteCardRepresentante.innerHTML = "";
 
-                            for (const input of formCreate) {
+                            for (const input of formRepresentante) {
                                 if (input.name.includes('rep_')) {
                                     if (!input.name.includes('rep_cedula')) {
                                         input.value = null;

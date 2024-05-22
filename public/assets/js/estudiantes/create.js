@@ -35,7 +35,7 @@ inputFechaNacimiento.addEventListener("change", (e)=>{
 })
 
 btnAddRepre.addEventListener('click', (e) => {
-    e.preventDefault; 
+    e.preventDefault(); 
     for (const input of formCreate) {
         if (input.name.includes('rep_')) {
             input.required=true
@@ -47,7 +47,7 @@ btnAddRepre.addEventListener('click', (e) => {
 });
 
 btnAddDifi.addEventListener('click', (e) => {
-    e.preventDefault; 
+    e.preventDefault(); 
     btnAddDifi.classList.add('text-warning');
     displayElemento(dificultadElemento, false);
 });

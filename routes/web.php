@@ -16,7 +16,9 @@ use App\Http\Controllers\{
     InscripcioneController,
     LoginController,
     NotaController,
-    PageController
+    PageController,
+    RepresentanteController,
+    RepresentanteEstudianteController
 };
 
 
@@ -69,6 +71,16 @@ Route::middleware('auth')->group(function () {
      */
     
     Route::resource('/estudiantes', EstudianteController::class)->names('admin.estudiantes');
+    /**
+     * Rutas de Representante
+     */
+    
+    Route::resource('/representantes', RepresentanteController::class)->names('admin.representantes');
+    
+    /**
+     * Rutas de Representante ASIGNADOS AL ESTUDIANTE
+     */
+    Route::resource('/representanteEstudiates', RepresentanteEstudianteController::class)->names('admin.reprsentanteEstudiates');
     
     /**
      * Rutas de Niveles de estudio
