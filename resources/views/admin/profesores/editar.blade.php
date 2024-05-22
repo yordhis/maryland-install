@@ -5,9 +5,9 @@
 
 @section('content')
 
-  @isset($respuesta)
-    @include('partials.alert')  
-  @endisset
+@if( session('mensaje') )
+  @include('partials.alert')
+@endif
 
 <div class="container">
     <section class="section register d-flex flex-column align-items-center justify-content-center ">
@@ -39,7 +39,7 @@
                           <span class="input-group-text text-white bg-primary" id="inputGroupPrepend">@</span>
                           <input type="text" name="nombre" class="form-control" id="yourUsername" 
                           placeholder="Ingrese su nombres y apellidos"
-                          value="{{$profesore->nombre ?? old('nombre')}}"
+                          value="{{ old('nombre') ?? $profesore->nombre }}"
                           required>
                           <div class="invalid-feedback">Por favor, ingrese nombre! </div>
                           @error('nombre')
@@ -60,6 +60,7 @@
                               <option value="E" selected>E</option>
                             @endif
                           @endif
+
                           <option value="V">V</option>
                           <option value="E">E</option>
                         </select>
@@ -77,7 +78,7 @@
                         <div class="input-group">
                           <input type="text" name="cedula" class="form-control bg-muted" id="inputCedula" 
                           placeholder="Ingrese número de cédula"
-                          value="{{ $profesore->cedula ?? old('cedula') }}"
+                          value="{{ old('cedula') ?? $profesore->cedula  }}"
                           disabled
                           readonly
                           required>
@@ -95,7 +96,7 @@
                         <label for="yourPassword" class="form-label">Teléfono</label>
                         <input type="text" name="telefono" class="form-control" id="yourUsername" 
                         placeholder="Ingrese número de teléfono"
-                        value="{{$profesore->telefono ?? old('telefono')}}"
+                        value="{{ old('telefono') ?? $profesore->telefono }}"
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese número de teléfono!</div>
                         @error('telefono')
@@ -103,11 +104,11 @@
                         @enderror
                       </div>
 
-                      <div class="col-xs-12 col-sm-4">
-                        <label for="yourPassword" class="form-label">E-mail</label>
-                        <input type="email" name="correo" class="form-control" id="yourUsername" 
+                      <div class="col-12">
+                        <label for="correo" class="form-label">E-mail</label>
+                        <input type="email" name="correo" class="form-control" id="correo" 
                         placeholder="Ingrese dirección de correo."
-                        value="{{$profesore->correo ?? old('correo')}}"
+                        value="{{ old('correo') ?? $profesore->correo }}"
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese dirección de correo!</div>
                         @error('correo')
@@ -115,11 +116,11 @@
                         @enderror
                       </div>
 
-                      <div class="col-xs-12 col-sm-4">
+                      <div class="col-xs-12 col-sm-6">
                         <label for="yourPassword" class="form-label">Fecha de nacimiento</label>
                         <input type="date" name="nacimiento" class="form-control" id="yourUsername" 
                         placeholder="Ingrese fecha de nacimiento."
-                        value="{{$profesore->nacimiento ?? old('nacimiento')}}"
+                        value="{{ old('nacimiento') ?? $profesore->nacimiento }}"
                         required>
                         <div class="invalid-feedback">Por favor, ingrese fecha de nacimiento!</div>
                         @error('nacimiento')
@@ -127,11 +128,11 @@
                         @enderror
                       </div>
 
-                      <div class="col-xs-12 col-sm-4">
+                      <div class="col-xs-12 col-sm-6">
                         <label for="yourPassword" class="form-label">Edad</label>
                         <input type="number" name="edad" class="form-control" id="yourUsername" 
                         placeholder="Ingrese edad."
-                        value="{{$profesore->edad ?? old('edad')}}"
+                        value="{{ old('edad') ?? $profesore->edad }}"
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese edad!</div>
                         @error('edad')
@@ -140,10 +141,10 @@
                       </div>
 
                       <div class="col-12">
-                        <label for="yourPassword" class="form-label">Dirección de habitación</label>
-                        <input type="text" name="direccion" class="form-control" id="yourUsername" 
+                        <label for="direccion" class="form-label">Dirección de habitación</label>
+                        <input type="text" name="direccion" class="form-control" id="direccion" 
                         placeholder="Ingrese dirección de domicilio."
-                        value="{{$profesore->direccion ?? old('direccion')}}"
+                        value="{{ old('direccion') ?? $profesore->direccion }}"
                         required>
                         <div class="invalid-feedback">Por favor, Ingrese edad!</div>
                         @error('direccion')
@@ -158,7 +159,7 @@
                       </div>
 
                       <div class="col-xs-12 col-sm-6 card">
-                        <img src="{{$profesore->foto}}" class="img-fluid rounded" alt="">                        
+                        <img src="{{asset($profesore->foto)}}" class="img-fluid rounded" alt="">                        
                       </div>
 
                   

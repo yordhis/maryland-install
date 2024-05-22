@@ -6,59 +6,62 @@ namespace App\Http\Controllers;
 use App\Models\{
     Profesore,
     Helpers,
-    DataDev
+    DataDev,
+    Grupo
 };
 
 use App\Http\Requests\StoreProfesoreRequest;
 use App\Http\Requests\UpdateProfesoreRequest;
-
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ProfesoreController extends Controller
 {
-    public $respuesta;
-    public $notificaciones;
-    public $usuario;
-    public $profesores;
+    public $data;
 
     /**
      * Constructor
      */
      public function __construct(){
-        $data = new DataDev();
-
-        $this->respuesta= $data->respuesta;
-
-        $this->notificaciones =  $data->notificaciones;
-
-        $this->usuario =  $data->usuario;
-        
-        $this->profesores= Profesore::where('estatus', '!=', 0)->orderBy('id','DESC')->get();
+        $this->data = new DataDev;
      }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $profesores = $this->profesores;
-        $usuario = $this->usuario;
-        $notificaciones = $this->notificaciones;
+        try {
+            if($request->filtro){
 
-        return view('admin.profesores.lista', compact('notificaciones', 'usuario', 'profesores') );
+                $profesores = Profesore::where('cedula', $request->filtro)
+                ->orWhere('nombre', 'LIKE', "%{$request->filtro}%")  
+                ->orWhere('edad', 'LIKE', "%{$request->filtro}%")  
+                ->orWhere('correo', 'LIKE', "%{$request->filtro}%")
+                ->orderBy('id', 'desc')
+                ->paginate(12);  
+    
+            }else{
+                $profesores =  Profesore::orderBy('id', 'desc')->paginate(12);
+            }
+
+            foreach ($profesores as $key => $profesor) {
+                $profesor['grupos_estudios'] = Grupo::where('cedula_profesor', $profesor->cedula)->get();
+            }
+
+       
+            $notificaciones = $this->data->notificaciones;
+            $respuesta = $this->data->respuesta;
+    
+            return view('admin.profesores.lista', compact('notificaciones', 'request', 'profesores', 'respuesta') );
+        } catch (\Throwable $th) {
+            $mensaje = Helpers::getMensajeError($th, ', ¡Error interno al intentar listar los profesores!');
+            $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
+            return back()->with(compact('mensaje', 'estatus'));
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $usuario = $this->usuario;
-        $notificaciones = $this->notificaciones;
-        return view('admin.profesores.crear', compact('notificaciones', 'usuario'));
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -84,29 +87,14 @@ class ProfesoreController extends Controller
         }
 
         
-        $this->respuesta['mensaje'] = $estatusCreate ? "Profesor registrado correctamente"
+        $mensaje = $estatusCreate ? "Profesor registrado correctamente"
                                     : "La cédula ingresada ya esta registrada con {$datoExiste->nombre} - V-{$datoExiste->cedula}, por favor vuelva a intentar con otra cédula.";
-        $this->respuesta['estatus'] = $estatusCreate ? 201 : 301;
+        $estatus = $estatusCreate ? Response::HTTP_OK : Response::HTTP_UNAUTHORIZED;
        
-        $profesores = Profesore::where('estatus', '!=', 0)->orderBy('id','DESC')->get();
-        $respuesta = $this->respuesta;
-        $notificaciones = $this->notificaciones;
 
-        return $estatusCreate ? view('admin.profesores.lista', compact('notificaciones', 'respuesta', 'profesores'))
-        : view('admin.profesores.crear', compact('notificaciones', 'respuesta', 'request'));
+        return back()->with( compact('mensaje', 'estatus') );
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Profesore  $profesore
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Profesore $profesore)
-    {
-        //redireccionamos a la lista
-        return redirect()->route('admin.profesores.index');
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -116,8 +104,9 @@ class ProfesoreController extends Controller
      */
     public function edit(Profesore $profesore)
     {
-        $notificaciones = $this->notificaciones;
-        return view('admin.profesores.editar', compact('profesore', 'notificaciones'));
+        $notificaciones = $this->data->notificaciones;
+        $respuesta = $this->data->respuesta;
+        return view('admin.profesores.editar', compact('profesore', 'notificaciones', 'respuesta'));
     }
 
     /**
@@ -129,29 +118,40 @@ class ProfesoreController extends Controller
      */
     public function update(UpdateProfesoreRequest $request, Profesore $profesore)
     {
-       
-       // Validamos si se envio una foto
-       if (isset($request->file)) {
-            // Eliminamos la imagen anterior
-            Helpers::removeFile($profesore->foto);
-             
-            // Insertamos la nueva imagen o archivo
-            $request['foto'] = Helpers::setFile($request);
-        }else{
-            $request['foto'] = $profesore->foto;
-        }
+       try {
+            /** verificamos si cambio la cedula */
+            if($request->cedula != $profesore->cedula){
+                Grupo::where('cedula_profesor', $profesore->cedula)
+                ->update([
+                    "cedula_profesor" => $request->cedula
+                ]);
+            }
 
-        // Ejecutamos la actualizacion (Guardamos los cambios)
-        if($profesore->update($request->all())){
-            $this->respuesta['estatus']=200;
-            $this->respuesta['mensaje']="Datos Guardados Correctamente";
-            $respuesta = $this->respuesta;
-            $usuario = $this->usuario;
-            $notificaciones = $this->notificaciones;
-        }
-        $profesores = Profesore::where('estatus', '!=', 0)->orderBy('id','DESC')->get();
-        
-        return view('admin.profesores.lista', compact('notificaciones', 'usuario', 'respuesta', 'profesores'));
+           // Validamos si se envio una foto
+           if (isset($request->file)) {
+                // Eliminamos la imagen anterior
+                Helpers::removeFile($profesore->foto);
+                 
+                // Insertamos la nueva imagen o archivo
+                $request['foto'] = Helpers::setFile($request);
+            }else{
+                $request['foto'] = $profesore->foto;
+            }
+    
+            // Ejecutamos la actualizacion (Guardamos los cambios)
+            $profesore->update( $request->all() );
+
+            //respuesta
+            $mensaje = "Los datos del profesor se actualizaron correctamente.";
+            $estatus = Response::HTTP_OK;
+            return back()->with(compact('mensaje', 'estatus'));
+    
+       } catch (\Throwable $th) {
+            $mensaje = Helpers::getMensajeError($th, ', ¡Error interno al intentar actualizar el profesor!');
+            $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
+            return back()->with(compact('mensaje', 'estatus'));
+       }
+      
     }
 
     /**
@@ -162,11 +162,27 @@ class ProfesoreController extends Controller
      */
     public function destroy(Profesore $profesore)
     {
-        $profesore->update([
-            "estatus" => 0
-        ]);
-        $mensaje = "el profesor fue eliminado correctamente.";
-        $estatus = 200;
-        return redirect()->route('admin.profesores.index', compact('mensaje', 'estatus'));
+        try {
+
+            /** validar que el profesor no este asignado a ningun grupo */
+            $gruposAsignados = Grupo::where('cedula_profesor', $profesore->cedula)->get();
+            if(count($gruposAsignados)){
+                $mensaje = "el profesor tiene grupos de estudios asignados, debes cambiar de profesor en el grupo o eliminar el grupo para poder eliminar al profesor.";
+                $estatus = Response::HTTP_UNAUTHORIZED;
+                return back()->with( compact('mensaje', 'estatus') );
+            }
+
+            /** Eliminamos al profesor */
+            $profesore->delete();
+
+            $mensaje = "el profesor fue eliminado correctamente.";
+            $estatus = Response::HTTP_OK;
+            return back()->with( compact('mensaje', 'estatus') );
+         
+        } catch (\Throwable $th) {
+            $mensaje = Helpers::getMensajeError($th, ', ¡Error interno al intentar eliminar el profesor!');
+            $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
+            return back()->with(compact('mensaje', 'estatus'));
+        }
     }
 }

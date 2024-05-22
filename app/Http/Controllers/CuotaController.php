@@ -10,6 +10,16 @@ use App\Models\Helpers;
 
 class CuotaController extends Controller
 {
+
+
+    public $data;
+
+    /**
+     * Constructor
+     */
+     public function __construct(){
+        $this->data = new DataDev();
+     }
     /**
      * Display a listing of the resource.
      *
@@ -17,9 +27,9 @@ class CuotaController extends Controller
      */
     public function index()
     {
-        $data = new DataDev;
-        $notificaciones = $data->notificaciones;
-        $usuario = $data->usuario;
+       
+        $notificaciones = $this->data->notificaciones;
+        $respuesta = $this->data->respuesta;
         //mostramos una lista de cuotas
         $cuotas = Helpers::addDatosDeRelacion(
             Cuota::where('estatus', 0)
@@ -31,9 +41,9 @@ class CuotaController extends Controller
                 "estudiantes" => "cedula_estudiante"
             ]
         );
-
+   
         // return $cuotas[0]->estudiante['nombre'];
-        return view('admin.cuotas.lista', compact('usuario', 'notificaciones', 'cuotas'));
+        return view('admin.cuotas.lista', compact('respuesta', 'notificaciones', 'cuotas'));
     }
 
     /**

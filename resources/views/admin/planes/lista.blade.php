@@ -98,11 +98,10 @@
 
             </div>
 
-
-            <div class="col-sm-6 col-xs-12 text-end">
+            <div class="col-12 text-end">
                 @include('admin.planes.partials.modaldialog')
-                <br>
-                 
+            </div>
+            <div class="col-sm-6 col-xs-12 text-end">                 
                 @if ($errors->any())
                     <div class="alert alert-danger text-start">
                         <ul>

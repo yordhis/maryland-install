@@ -6,7 +6,9 @@
 
     <section class="section">
         <div class="row">
-
+            @if( session('mensaje') )
+                @include('partials.alert')
+            @endif
             <div class="col-sm-12">
                 <h2>Lista de Cuotas Atrasadas</h2>
             </div>

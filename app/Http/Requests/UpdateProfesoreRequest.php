@@ -27,11 +27,10 @@ class UpdateProfesoreRequest extends FormRequest
             "nombre"        => "required | max:255", 
             "nacionalidad"  => "required", 
             "cedula"        => "numeric | unique:profesores",
-            "telefono"      => "required | numeric",
-            "correo"        => "required | max:255",
-            "nacimiento"    => "required",
-            "edad"          => "required | numeric",     
-            "direccion"     => "required | max:255",
+            "telefono"      => "required | min:11",
+            "correo"        => "min:3 | max:255",
+            "edad"          => "numeric | min:18 | max:120",     
+            "direccion"     => "min:3 | max:255",
             "foto"          => "mimes:jpg,bmp,png",
         ];
     }

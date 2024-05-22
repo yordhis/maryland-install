@@ -111,8 +111,19 @@
             </div>
 
 
-            <div class="col-sm-6 col-xs-12 text-end">
+            <div class="col-12 text-end">
                     @include('admin.estudiantes.partials.modalFormulario')
+            </div>
+            <div class="col-sm-6 col-xs-12 text-end">
+                @if ($errors->any())
+                    <div class="alert alert-danger text-start">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </div>
         </div>
 

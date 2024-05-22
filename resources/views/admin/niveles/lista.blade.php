@@ -92,10 +92,13 @@
                 </div>
             </div>
 
-            <div class="col-sm-6 col-xs-12 text-end">
+            <div class="col-12 text-end">
                 {{-- boton del modal para crear --}}
                 @include('admin.niveles.partials.modaldialog')
-                <br>
+            </div>
+            
+            <div class="col-sm-6 col-xs-12 text-end">
+              
 
                 @if ($errors->any())
                     <div class="alert alert-danger text-start">

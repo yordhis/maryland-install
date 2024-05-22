@@ -1,87 +1,128 @@
 @extends('layouts.app')
 
-@section('title', 'Lista de Profesores')
+@section('title', 'Lista de profesores')
 
 @section('content')
 
-        <section class="section profile">
-            <div class="row">
+    @if( session('mensaje') )
+        @include('partials.alert')
+    @endif
+    <div id="alert"></div>
 
-                <div class="col-sm-12">
-                    <h2>Lista de Profesores</h2>
+    <section class="section">
+        <div class="row">
+
+
+
+            <div class="col-sm-6 col-xs-12">
+                <h2> Lista de profesores</h2>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+                <form action="{{ route('admin.profesores.index') }}" method="post">
+                @csrf
+                @method('GET')
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" 
+                    name="filtro"
+                    placeholder="Buscar" 
+                    aria-label="Filtrar" 
+                    aria-describedby="button-addon2" required>
+                    <button class="btn btn-primary" type="submit" id="button-addon2">
+                        <i class="bi bi-search"></i>
+                    </button>
+                  </div>
+                </form>
+            </div>
+
+            <div class="col-lg-12 table-responsive">
+                <!-- Table with stripped rows -->
+
+                <table class="table table-hover  bg-white mt-2">
+                    <thead>
+                        <tr class="bg-primary text-white">
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Cédula</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">Grupos</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+               
+                        @foreach ($profesores as $profesor)
+                            <tr>
+                                <th scope="row">{{ $profesor->id }}</th>
+                                <td>{{ $profesor->nombre }}</td>
+                                <td>{{ $profesor->cedula }}</td>
+                                <td>{{ $profesor->telefono }}</td>
+                                <td>{{ "Asignados " . count($profesor->grupos_estudios) }}</td>
+                               
+
+                                <td>
+                                    @include('admin.profesores.partials.modalver')
+                                    
+                                    <a href="{{ route('admin.profesores.edit', $profesor->id) }}">
+                                        <i class="bi bi-pencil text-warning"></i>
+                                    </a>
+
+
+                                    @include('admin.profesores.partials.modal')
+
+
+                                </td>
+                            </tr>
+                           
+                        @endforeach
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+
+                            <td colspan="7" class="text-center table-secondary">
+                                Total de profesores: {{ $profesores->total() }} | 
+                                <a href="{{ route('admin.profesores.index') }}"
+                                   class="text-primary" >
+                                    Ver todo
+                                </a>
+                                <br>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <!-- End Table with stripped rows -->
+                <div class="col-sm-6 col-xs-12">
+                    {{ $profesores->appends(['filtro'=> $request->filtro])->links() }}
                 </div>
 
-                <div id="alert"></div>
-                @if (count($profesores))
-                    @foreach ($profesores as $profesor)
-            
-                        <div class="col-xl-12">
-                            <div class="card">
-                                <div class="card-body profile-card pt-4 d-flex flex-inline align-items-center">
-                                    
-                                        <div class="col-sm-2">
-                                            <img src="{{ asset($profesor['foto']) }}" alt="Foto" class="rounded-circle">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <p class="text-primary">Profesor</p>
-                                            <h2>{{$profesor['nombre']}}</h2>
-                                            <h3>{{$profesor['nacionalidad'] . "-" . number_format($profesor['cedula'],0,',','.') }}</h3>
-                                            <h6>{{$profesor['edad']}} años</h6>
-                                            
-                                        </div>
-                                        <div class="col-sm-3">
-                                            
-                                            <p class="text-primary">Contacto</p>
-                                            @if ($profesor['telefono'])
-                                                <h2>{{
-                                                "(".substr( $profesor['telefono'],0,4).")"." ".substr( $profesor['telefono'],5,3)."-".substr( $profesor['telefono'],6,4)
-                                                }}</h2>
-                                                
-                                            @else
-                                                <h2>No registrado.</h2>
-                                            @endif
-                                            <h6>{{ $profesor['correo'] }}</h6>
-                                            
-                                        </div>
-                                        <div class="col-sm-3 ">
-                                        
-                                                <p class="text-primary">Estatus</p>
-                                                <h2 class="{{ $profesor['estatus'] == 1 ? 'text-success' : 'text-warning' }}" >
-                                                    {{ $profesor['estatus'] == 1 ? 'Activo' : 'Inactivo' }}
-                                                </h2>
-                                            
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <div class="social-links mt-2 d-flex flex-column ">
-                                                {{-- <a href="/profesores/{{$profesor->id}}" class="twitter text-danger fs-3 mb-3 "><i class="bi bi-trash"></i></a> --}}
-                                                @include('admin.profesores.partials.modal')
-                                                <a href="{{ route('admin.profesores.edit', $profesor->id ) }}"  class="facebook text-warning fs-3"><i class="bi bi-pencil"></i></a>
-                                            </div>
-                                        </div>
-                                        
+            </div>
 
-                                </div>
-                            </div>
-                        </div>
-        
-                    @endforeach
-                @else
-                    <div class="card p-4 text-center text-danger fs-1">
-                        <div class="d-flex justify-content-center">
-                            <div class="d-flex flex-column">
-                                <p>No hay registros</p>
-                                <a href="{{ route('admin.profesores.create') }}" 
-                                class="btn btn-primary">
-                                    <i class="bi bi-person-plus fs-4 p-2"></i>
-                                    Crear Profesor
-                                </a>
-                            </div>
 
-                        </div>
+            <div class="col-12 text-end">
+                @include('admin.profesores.partials.modalform')
+            </div>
+            <div class="col-sm-6 col-xs-12 text-end">
+                <br>
+                 
+                @if ($errors->any())
+                    <div class="alert alert-danger text-start">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
                 @endif
-
             </div>
-        </section>
+        </div>
 
-    @endsection
+       
+
+    </section>
+
+
+    
+
+
+@endsection

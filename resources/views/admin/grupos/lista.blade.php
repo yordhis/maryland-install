@@ -104,11 +104,11 @@
 
             </div>
 
+            <div class="col-12 text-end">
+            @include('admin.grupos.partials.modalformulario')
+            </div>
 
             <div class="col-sm-6 col-xs-12 text-end">
-                @include('admin.grupos.partials.modalformulario')
-                <br>
-
                 @if ($errors->any())
                     <div class="alert alert-danger text-start">
                         <ul>

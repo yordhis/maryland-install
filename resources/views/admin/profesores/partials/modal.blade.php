@@ -1,7 +1,7 @@
 
         
 <!-- Vertically centered Modal -->
-<a type="button" class=" fs-3 mb-3" data-bs-toggle="modal" data-bs-target="#verticalycentered{{$profesor->id}}">
+<a type="button" class="mb-3" data-bs-toggle="modal" data-bs-target="#verticalycentered{{$profesor->id}}">
     <i class="bi bi-trash text-primary"></i>
 </a>
 
@@ -19,7 +19,7 @@
             <form action="{{ route('admin.profesores.destroy', $profesor->id) }}" method="post" >
             @csrf
             @method('delete')
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary">Si, proceder a eliminar.</button>
             </form>
         </div>

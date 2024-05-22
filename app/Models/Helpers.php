@@ -295,8 +295,8 @@ class Helpers extends Model
                     'profesores.foto as profesor_foto',
                 )
                 ->where('grupos.codigo', $filtro)
+                ->orWhere('grupos.cedula_profesor', $filtro)
                 ->orWhere('grupos.nombre', 'like', "%{$filtro}%")
-                ->orWhere('grupos.cedula_profesor', 'like', "%{$filtro}%")
                 ->orWhere('profesores.nombre', 'like', "%{$filtro}%")
                 ->orderBy('id', 'desc')
                 ->paginate($paginacion);
