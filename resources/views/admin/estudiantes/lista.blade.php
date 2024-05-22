@@ -10,26 +10,28 @@
 
     <div id="alert"></div>
 
+    {{-- respuesta de validadciones --}}
+    <div class="col-12">
+        @if ($errors->any())
+            <div class="alert alert-danger text-start">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
+
     <section class="section">
         <div class="row">
 
-            @if ($errors->any())
-                <div class="alert alert-warning alert-dismissible fade show text-start" role="alert">
-                    <strong>Faltaron datos!</strong> verifique que los datos del estudiante esten correctamente suminitrados en el formulario, vuelva a hacer click en el botón registrar estudiante.
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
-
-            <div class="col-sm-6 col-xs-12">
+            <div class="col-12">
                 <h2> Lista de estudiantes </h2>
             </div>
-
+            <div class="col-sm-6 col-xs-12">
+                @include('admin.estudiantes.partials.modalFormulario')
+            </div>
             <div class="col-sm-6 col-xs-12">
                 <form action="{{ route('admin.estudiantes.index') }}" method="post">
                     @csrf
@@ -111,20 +113,8 @@
             </div>
 
 
-            <div class="col-12 text-end">
-                    @include('admin.estudiantes.partials.modalFormulario')
-            </div>
-            <div class="col-sm-6 col-xs-12 text-end">
-                @if ($errors->any())
-                    <div class="alert alert-danger text-start">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
+          
+            
         </div>
 
 

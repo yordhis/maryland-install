@@ -85,7 +85,7 @@
                         <input type="email" name="correo" class="form-control" id="correo" 
                         placeholder="Ingrese dirección de correo."
                         value="{{ old('correo') ?? '' }}"
-                        >
+                        required>
                         <div class="invalid-feedback">Por favor, Ingrese dirección de correo!</div>
                         @error('correo')
                           <div class="text-danger">{{ $message }}</div>

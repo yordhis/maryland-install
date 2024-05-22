@@ -8,14 +8,28 @@
         @include('partials.alert')
     @endif
     <div id="alert"></div>
+    {{-- respuestas de las validaciones --}}
+    <div class="col-12">
+        @if ($errors->any())
+            <div class="alert alert-danger text-start">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
 
     <section class="section">
         <div class="row">
 
-
+            <div class="col-12">
+                <h2> Lista de grupos de estudio </h2>
+            </div>
 
             <div class="col-sm-6 col-xs-12">
-                <h2> Lista de grupos de estudio </h2>
+                @include('admin.grupos.partials.modalformulario')
             </div>
             <div class="col-sm-6 col-xs-12">
                 <form action="{{ route('admin.grupos.index') }}" method="post">
@@ -102,31 +116,7 @@
                     {{ $grupos->appends(['filtro' => $request->filtro])->links() }}
                 </div>
 
-            </div>
-
-            <div class="col-12 text-end">
-            @include('admin.grupos.partials.modalformulario')
-            </div>
-
-            <div class="col-sm-6 col-xs-12 text-end">
-                @if ($errors->any())
-                    <div class="alert alert-danger text-start">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
+            </div>  
         </div>
-
-
-
     </section>
-
-
-
-
-
 @endsection

@@ -8,14 +8,29 @@
         @include('partials.alert')
     @endif
     <div id="alert"></div>
+    <div class="col-12">                 
+        @if ($errors->any())
+            <div class="alert alert-danger text-start">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
 
     <section class="section">
         <div class="row">
 
 
 
-            <div class="col-sm-6 col-xs-12">
+            <div class="col-12">
                 <h2> Lista de Planes de pago </h2>
+            </div>
+
+            <div class="col-sm-6 col-xs-12">
+                @include('admin.planes.partials.modaldialog')
             </div>
             <div class="col-sm-6 col-xs-12">
                 <form action="{{ route('admin.planes.index') }}" method="post">
@@ -46,6 +61,7 @@
                             <th scope="col">Cantidad de cuotas</th>
                             <th scope="col">Plazo de días</th>
                             <th scope="col">Descripcion del plan</th>
+                            <th scope="col">Descuento</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
@@ -59,6 +75,7 @@
                                 <td>{{ $plane->cantidad_cuotas }}</td>
                                 <td>{{ $plane->plazo }} Dias</td>
                                 <td class="text-break">{{ $plane->descripcion }}</td>
+                                <td class="text-break">{{ $plane->porcentaje_descuento }} %</td>
 
                                 <td>
 
@@ -79,7 +96,7 @@
                     <tfoot>
                         <tr>
 
-                            <td colspan="7" class="text-center table-secondary">
+                            <td colspan="8" class="text-center table-secondary">
                                 Total de planes: {{ $planes->total() }} | 
                                 <a href="{{ route('admin.planes.index') }}"
                                    class="text-primary" >
@@ -98,20 +115,8 @@
 
             </div>
 
-            <div class="col-12 text-end">
-                @include('admin.planes.partials.modaldialog')
-            </div>
-            <div class="col-sm-6 col-xs-12 text-end">                 
-                @if ($errors->any())
-                    <div class="alert alert-danger text-start">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
+           
+            
         </div>
 
        

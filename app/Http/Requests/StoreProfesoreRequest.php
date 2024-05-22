@@ -28,10 +28,10 @@ class StoreProfesoreRequest extends FormRequest
             "nacionalidad"  => "required", 
             "cedula"        => "required | numeric | unique:profesores",
             "telefono"      => "required | numeric",
-            "correo"        => "required | max:255",
-            "nacimiento"    => "required",
-            "edad"          => "required | numeric",     
-            "direccion"     => "required | max:255",
+            "correo"        => "email | min:3 | max:255",
+            "nacimiento"    => "date",
+            "edad"          => "min:18 | max:120 | numeric",     
+            "direccion"     => "min:3 | max:255",
             "foto"          => "mimes:jpg,bmp,png",
         ];
     }

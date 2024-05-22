@@ -8,14 +8,28 @@
         @include('partials.alert')
     @endif
     <div id="alert"></div>
+    <div class="col-12">
+        @if ($errors->any())
+            <div class="alert alert-danger text-start">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
 
     <section class="section">
         <div class="row">
 
-
+            <div class="col-12">
+                <h2> Lista de niveles </h2>
+            </div>
 
             <div class="col-sm-6 col-xs-12">
-                <h2> Lista de niveles </h2>
+                {{-- boton del modal para crear --}}
+                @include('admin.niveles.partials.modaldialog')
             </div>
             <div class="col-sm-6 col-xs-12">
                 <form action="{{ route('admin.niveles.index') }}" method="post">
@@ -90,29 +104,9 @@
                 <div class="col-sm-6 col-xs-12">
                     {{ $niveles->appends(['filtro' => $request->filtro])->links() }}
                 </div>
-            </div>
-
-            <div class="col-12 text-end">
-                {{-- boton del modal para crear --}}
-                @include('admin.niveles.partials.modaldialog')
-            </div>
+            </div>   
             
-            <div class="col-sm-6 col-xs-12 text-end">
-              
-
-                @if ($errors->any())
-                    <div class="alert alert-danger text-start">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
         </div>
-
-
 
     </section>
 

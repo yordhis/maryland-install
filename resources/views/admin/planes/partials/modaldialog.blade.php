@@ -52,6 +52,15 @@
                          @enderror
                      </div>
 
+                     <div class="col-12 ">
+                        <label for="yourPassword" class="form-label">Porcentaje descuento (%)</label>
+                        <input type="number" name="porcentaje_descuento" step="0.1" class="form-control" id="porcentaje_descuento"
+                            placeholder="Ingrese Porcentaje descuento."
+                            value="{{ old('porcentaje_descuento') ?? $request->porcentaje_descuento }}" 
+                            required>
+                        <div class="invalid-feedback">Por favor, Ingrese porcentaje descuento!</div>
+                    </div>
+
                      <div class="col-sm-4 col-xs-12 ">
                         <label for="yourPassword" class="form-label">Cantidad de cuotas</label>
                         <input type="number" name="cantidad_cuotas" class="form-control" id="yourUsername"

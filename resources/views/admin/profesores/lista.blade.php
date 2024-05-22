@@ -9,14 +9,32 @@
     @endif
     <div id="alert"></div>
 
+    <div class="col-12">
+        @if ($errors->any())
+            <div class="alert alert-danger text-start">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
+    
+
     <section class="section">
         <div class="row">
 
 
 
-            <div class="col-sm-6 col-xs-12">
+            <div class="col-12">
                 <h2> Lista de profesores</h2>
             </div>
+            
+            <div class="col-sm-6 col-xs-12 ">
+                @include('admin.profesores.partials.modalform')
+            </div>
+
             <div class="col-sm-6 col-xs-12">
                 <form action="{{ route('admin.profesores.index') }}" method="post">
                 @csrf
@@ -33,6 +51,7 @@
                   </div>
                 </form>
             </div>
+
 
             <div class="col-lg-12 table-responsive">
                 <!-- Table with stripped rows -->
@@ -98,31 +117,8 @@
 
             </div>
 
-
-            <div class="col-12 text-end">
-                @include('admin.profesores.partials.modalform')
-            </div>
-            <div class="col-sm-6 col-xs-12 text-end">
-                <br>
-                 
-                @if ($errors->any())
-                    <div class="alert alert-danger text-start">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
-        </div>
-
-       
+        </div>       
 
     </section>
-
-
-    
-
 
 @endsection

@@ -10,13 +10,31 @@
 
     <div id="alert"></div>
 
+    <div class="col-12">
+
+        @if ($errors->any())
+            <div class="alert alert-danger text-start">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
+
     <section class="section">
         <div class="row">
 
 
 
-            <div class="col-sm-6 col-xs-12">
+            <div class="col-12">
                 <h2> Lista de Inscripciones </h2>
+            </div>
+
+            <div class="col-sm-6 col-xs-12">
+                <a href="{{ route('admin.inscripciones.createEstudiante') }}" class="btn btn-primary">Procesar
+                inscripción</a>
             </div>
             <div class="col-sm-6 col-xs-12">
                 <form action="{{ route('admin.inscripciones.index') }}" method="post">
@@ -113,27 +131,7 @@
                 </div>
 
             </div>
-
-            <div class="col-12 text-end">
-            <a href="{{ route('admin.inscripciones.createEstudiante') }}" class="btn btn-primary">Procesar
-                inscripción</a>
-            </div>
-            <div class="col-sm-6 col-xs-12 text-end">
-
-                @if ($errors->any())
-                    <div class="alert alert-danger text-start">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
         </div>
-
-
-
     </section>
 
 
