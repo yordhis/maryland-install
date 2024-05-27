@@ -702,12 +702,12 @@ class Helpers extends Model
             if (count($estudiante)) {
 
                 /** Obrenemos el representante */
-                $estudiante[0]['representantes'] = self::addDatosDeRelacion(
-                    RepresentanteEstudiante::where('cedula_estudiante', $estudiante[0]->cedula)->get(),
-                    [
-                        "representantes" => "cedula_representante"
-                    ]
-                );
+                // $estudiante[0]['representantes'] = self::addDatosDeRelacion(
+                //     RepresentanteEstudiante::where('cedula_estudiante', $estudiante[0]->cedula)->get(),
+                //     [
+                //         "representantes" => "cedula_representante"
+                //     ]
+                // );
 
 
                 /** CIERRE Obrenemos los representantes */
@@ -760,7 +760,7 @@ class Helpers extends Model
                 }else{
                     $estudiante[0]->telefono = "No asignado.";
                 }
-                
+
 
             } else {
                 $estudiante = [];
