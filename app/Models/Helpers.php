@@ -733,23 +733,23 @@ class Helpers extends Model
                 $estudiante[0]['inscripciones'] = $inscripciones;
 
 
-                if (count($estudiante[0]['inscripciones'])) {
+                // if (count($estudiante[0]['inscripciones'])) {
 
-                    foreach ($estudiante[0]['inscripciones'] as $key => $inscripcion) {
+                //     foreach ($estudiante[0]['inscripciones'] as $key => $inscripcion) {
 
-                        $inscripcion['grupo'] = Helpers::addDatosDeRelacion(
-                            Helpers::setConvertirObjetoParaArreglo($inscripcion['grupo']),
-                            [
-                                "niveles" => "codigo_nivel",
-                                "profesores" => "cedula_profesor",
-                            ]
-                        );
+                //         $inscripcion['grupo'] = Helpers::addDatosDeRelacion(
+                //             Helpers::setConvertirObjetoParaArreglo($inscripcion['grupo']),
+                //             [
+                //                 "niveles" => "codigo_nivel",
+                //                 "profesores" => "cedula_profesor",
+                //             ]
+                //         );
 
-                        $inscripcion['grupo'] = $inscripcion['grupo'][0];
-                    }
+                //         $inscripcion['grupo'] = $inscripcion['grupo'][0];
+                //     }
 
            
-                }
+                // }
 
                 /** formatear cedula */
                 $estudiante[0]->cedulaFormateada = number_format($estudiante[0]->cedula, 0, ',', '.');
