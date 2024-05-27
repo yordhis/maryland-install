@@ -270,6 +270,83 @@ class Helpers extends Model
 
         return $inscripciones;
     }
+    public static function getInscripcion($codigo)
+    {
+            $inscripcion = Inscripcione::join('grupos', 'grupos.codigo', '=', 'inscripciones.codigo_grupo')
+                ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
+                ->join('planes', 'planes.codigo', '=', 'inscripciones.codigo_plan')
+                ->join('profesores', 'profesores.cedula', '=', 'grupos.cedula_profesor')
+                ->join('niveles', 'niveles.codigo', '=', 'grupos.codigo_nivel')
+                ->select(
+                    'inscripciones.id',
+                    'inscripciones.codigo',
+                    'inscripciones.cedula_estudiante',
+                    'inscripciones.codigo_grupo',
+                    'inscripciones.codigo_plan',
+                    'inscripciones.nota',
+                    'inscripciones.extras',
+                    'inscripciones.total',
+                    'inscripciones.abono',
+                    'inscripciones.fecha',
+                    'inscripciones.estatus',
+                    'grupos.codigo_nivel',
+                    'grupos.cedula_profesor',
+                    'grupos.nombre as grupo_nombre',
+                    'grupos.dias as grupo_dias',
+                    'grupos.hora_inicio as grupo_hora_inicio',
+                    'grupos.hora_fin as grupo_hora_fin',
+                    'grupos.fecha_inicio as grupo_fecha_inicio',
+                    'grupos.fecha_fin as grupo_fecha_fin',
+                    'profesores.nombre as grupo_profesor_nombre',
+                    'profesores.nacionalidad as grupo_profesor_nacionalidad',
+                    'profesores.edad as grupo_profesor_edad',
+                    'profesores.telefono as grupo_profesor_telefono',
+                    'niveles.nombre as nivel_nombre',
+                    'niveles.precio as nivel_precio',
+                    'niveles.libro as nivel_libro',
+                    'niveles.duracion as nivel_duracion',
+                    'niveles.tipo_duracion as nivel_tipo_duracion',
+                    'planes.nombre as plan_nombre',
+                    'planes.cantidad_cuotas as plan_cantidad_cuotas',
+                    'planes.plazo as plan_plazo',
+                    'planes.descripcion as plan_descripcion',
+                    'estudiantes.nombre as estudiante_nombre',
+                    'estudiantes.nacionalidad as estudiante_nacionalidad',
+                    'estudiantes.telefono as estudiante_telefono',
+                    'estudiantes.correo as estudiante_correo',
+                    'estudiantes.nacimiento as estudiante_nacimiento',
+                    'estudiantes.edad as estudiante_edad',
+                    'estudiantes.direccion as estudiante_direccion',
+                    'estudiantes.grado as estudiante_grado',
+                    'estudiantes.ocupacion as estudiante_ocupacion',
+                    'estudiantes.foto as estudiante_foto'
+                )
+                ->where('inscripciones.codigo', $codigo)
+                ->get();
+    
+
+            $inscripcion[0]['cuotas'] = Cuota::where([
+                'codigo_inscripcion' => $inscripcion[0]->codigo,
+                'cedula_estudiante' => $inscripcion[0]->cedula_estudiante
+            ])->get();
+
+            /** obtenemos la proxima fecha de pago */
+            $inscripcion[0]['proxima_fecha_pago'] = $inscripcion[0]['cuotas']->where('estatus', 0)->min('fecha') ?? 'PAGADO';
+
+            /** Verificamos si el estudiante no esta en un grupo */
+            $estudianteEstaEnGrupo = GrupoEstudiante::where([
+                "codigo_grupo" => $inscripcion[0]->codigo_grupo,
+                "cedula_estudiante" => $inscripcion[0]->cedula_estudiante,
+            ])->get();
+            if (count($estudianteEstaEnGrupo)) {
+                $inscripcion[0]['estatus_reasignar'] = false;
+            } else {
+                $inscripcion[0]['estatus_reasignar'] = true;
+            }
+        
+
+        return $inscripcion[0];
+    }
 
     /** obtener toda la informacion de los grupos o un grupo por filtro */
     public static function getGrupos($filtro = false, $paginacion = 12)
@@ -719,36 +796,40 @@ class Helpers extends Model
                 /** Obtenemos todos los datos de inscripción del estudiante */
                 $inscripciones = Inscripcione::where("cedula_estudiante", $estudiante[0]->cedula)->orderBy('fecha', 'desc')->get();
 
-                if (count($inscripciones)) {
-                    $inscripciones = Helpers::addDatosDeRelacion(
-                        $inscripciones,
-                        [
-                            "grupos" => "codigo_grupo",
-                            "planes" => "codigo_plan",
-                        ]
-                    );
+                foreach ($inscripciones as $key => $inscripcion) {
+                    $inscripciones[$key] = self::getInscripcion($inscripcion->codigo);
                 }
+
+                // if (count($inscripciones)) {
+                //     $inscripciones = Helpers::addDatosDeRelacion(
+                //         $inscripciones,
+                //         [
+                //             "grupos" => "codigo_grupo",
+                //             "planes" => "codigo_plan",
+                //         ]
+                //     );
+                // }
 
                 $estudiante[0]['inscripciones'] = $inscripciones;
 
 
-                if (count($estudiante[0]['inscripciones'])) {
+                // if (count($estudiante[0]['inscripciones'])) {
 
-                    foreach ($estudiante[0]['inscripciones'] as $key => $inscripcion) {
+                //     foreach ($estudiante[0]['inscripciones'] as $key => $inscripcion) {
 
-                        if(count($inscripcion->grupo)){
-                            $inscripcion['grupo'] = Helpers::addDatosDeRelacion(
-                                Helpers::setConvertirObjetoParaArreglo($inscripcion['grupo']),
-                                [
-                                    "niveles" => "codigo_nivel",
-                                    "profesores" => "cedula_profesor",
-                                ]
-                            );
+                //         if(count($inscripcion->grupo)){
+                //             $inscripcion['grupo'] = Helpers::addDatosDeRelacion(
+                //                 Helpers::setConvertirObjetoParaArreglo($inscripcion['grupo']),
+                //                 [
+                //                     "niveles" => "codigo_nivel",
+                //                     "profesores" => "cedula_profesor",
+                //                 ]
+                //             );
     
-                            $inscripcion['grupo'] = $inscripcion['grupo'][0];
-                        }
-                    }
-                }
+                //             $inscripcion['grupo'] = $inscripcion['grupo'][0];
+                //         }
+                //     }
+                // }
 
                 /** formatear cedula */
                 $estudiante[0]->cedulaFormateada = number_format($estudiante[0]->cedula, 0, ',', '.');
