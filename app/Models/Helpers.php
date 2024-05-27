@@ -720,7 +720,6 @@ class Helpers extends Model
                 $inscripciones = Inscripcione::where("cedula_estudiante", $estudiante[0]->cedula)->orderBy('fecha', 'desc')->get();
 
                 if (count($inscripciones)) {
-
                     $inscripciones = Helpers::addDatosDeRelacion(
                         $inscripciones,
                         [
@@ -733,23 +732,23 @@ class Helpers extends Model
                 $estudiante[0]['inscripciones'] = $inscripciones;
 
 
-                // if (count($estudiante[0]['inscripciones'])) {
+                if (count($estudiante[0]['inscripciones'])) {
 
-                //     foreach ($estudiante[0]['inscripciones'] as $key => $inscripcion) {
+                    foreach ($estudiante[0]['inscripciones'] as $key => $inscripcion) {
 
-                //         $inscripcion['grupo'] = Helpers::addDatosDeRelacion(
-                //             Helpers::setConvertirObjetoParaArreglo($inscripcion['grupo']),
-                //             [
-                //                 "niveles" => "codigo_nivel",
-                //                 "profesores" => "cedula_profesor",
-                //             ]
-                //         );
-
-                //         $inscripcion['grupo'] = $inscripcion['grupo'][0];
-                //     }
-
-           
-                // }
+                        if(count($inscripcion->grupo)){
+                            $inscripcion['grupo'] = Helpers::addDatosDeRelacion(
+                                Helpers::setConvertirObjetoParaArreglo($inscripcion['grupo']),
+                                [
+                                    "niveles" => "codigo_nivel",
+                                    "profesores" => "cedula_profesor",
+                                ]
+                            );
+    
+                            $inscripcion['grupo'] = $inscripcion['grupo'][0];
+                        }
+                    }
+                }
 
                 /** formatear cedula */
                 $estudiante[0]->cedulaFormateada = number_format($estudiante[0]->cedula, 0, ',', '.');
