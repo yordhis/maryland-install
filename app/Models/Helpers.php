@@ -755,11 +755,11 @@ class Helpers extends Model
                 $estudiante[0]->cedulaFormateada = number_format($estudiante[0]->cedula, 0, ',', '.');
 
                 /** formatear telefono */
-                if(!empty($estudiante[0]->telefono)){
-                    $estudiante[0]->telefono = '(' . substr($estudiante[0]->telefono, 0, 4) . ')' . ' ' . substr($estudiante[0]->telefono, 5, 3) . '-' . substr($estudiante[0]->telefono, 6, 4);
-                }else{
-                    $estudiante[0]->telefono = "No asignado.";
-                }
+                // if(!empty($estudiante[0]->telefono)){
+                //     $estudiante[0]->telefono = '(' . substr($estudiante[0]->telefono, 0, 4) . ')' . ' ' . substr($estudiante[0]->telefono, 5, 3) . '-' . substr($estudiante[0]->telefono, 6, 4);
+                // }else{
+                //     $estudiante[0]->telefono = "No asignado.";
+                // }
 
 
             } else {
