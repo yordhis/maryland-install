@@ -17,6 +17,7 @@ use App\Http\Controllers\{
     LoginController,
     NotaController,
     PageController,
+    PreinscripcioneController,
     RepresentanteController,
     RepresentanteEstudianteController
 };
@@ -36,6 +37,8 @@ Route::get('/', [PageController::class, 'index'])->name('page.index');
 
 Route::controller(PageController::class)->group(function () {
     Route::get('/preinscripcion', 'create')->name('page.preinscripcion.index');
+});
+Route::controller(PreinscripcioneController::class)->group(function () {
     Route::post('/preinscripcion', 'store')->name('page.preinscripcion.store');
 });
 

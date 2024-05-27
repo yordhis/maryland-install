@@ -68,8 +68,8 @@
                             <tr>
                                 <td scope="row">{{ $estudiante->id }}</td>
                                 <td>{{ $estudiante->nombre }}</td>
-                                <td>{{ number_format($estudiante->cedula, 0, ',', '.') }}</td>
-                                <td>{{ '(' . substr($estudiante['telefono'], 0, 4) . ')' . ' ' . substr($estudiante['telefono'], 5, 3) . '-' . substr($estudiante['telefono'], 6, 4) }}</td>
+                                <td>{{$estudiante->cedulaFormateada }}</td>
+                                <td>{{ $estudiante->telefono}}</td>
                                 <td>{{ $estudiante->correo }}</td>
 
                                 <td>

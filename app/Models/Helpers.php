@@ -748,28 +748,16 @@ class Helpers extends Model
                         $inscripcion['grupo'] = $inscripcion['grupo'][0];
                     }
 
-                    // Obtenemos todos los pagos
-                    // $pagos = Pago::where('')
-                    // foreach ($estudiante['inscripciones'] as $inscripcion) {
-                    //     $inscripcion['cuotas'] = Cuota::where(
-                    //         [
-                    //             'cedula_estudiante' => $inscripcion['cedula_estudiante'],
-                    //             'codigo_grupo' => $inscripcion['codigo_grupo'],
-                    //         ]
-                    //     )->get();
-                    //     // Calculamos el total abonado a esa inscripcion
-                    //     $totalAbonado = 0;
-                    //     foreach ($inscripcion['cuotas'] as $cuota) {
-                    //         if ($cuota->estatus == 1) {
-                    //             $totalAbonado += $cuota->cuota;
-                    //         }
-                    //     }
-                    //     $inscripcion['totalAbonado'] = $totalAbonado;
-                    // }
-
-                    // formateamos la cedula
-                    $estudiante[0]->cedulaFormateada = number_format($estudiante[0]->cedula, 0, ',', '.');
+           
                 }
+
+                $estudiante[0]->cedulaFormateada = number_format($estudiante[0]->cedula, 0, ',', '.');
+                if(!empty($estudiante[0]->telefono)){
+                    $estudiante[0]->telefono = '(' . substr($estudiante[0]->telefono, 0, 4) . ')' . ' ' . substr($estudiante[0]->telefono, 5, 3) . '-' . substr($estudiante[0]->telefono, 6, 4);
+                }else{
+                    $estudiante[0]->telefono = "No asignado.";
+                }
+
             } else {
                 $estudiante = [];
             }

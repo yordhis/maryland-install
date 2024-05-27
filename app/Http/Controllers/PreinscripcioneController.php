@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePreinscripcioneRequest;
+use App\Http\Requests\UpdatePreinscripcioneRequest;
+use App\Models\Preinscripcione;
 use Illuminate\Http\Request;
 
-class PreinscripcionController extends Controller
+class PreinscripcioneController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,9 +35,9 @@ class PreinscripcionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePreinscripcioneRequest $request)
     {
-        //
+        return $request;
     }
 
     /**
@@ -66,9 +69,9 @@ class PreinscripcionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePreinscripcioneRequest $request, Preinscripcione $preinscripcione)
     {
-        //
+        return $preinscripcione;
     }
 
     /**

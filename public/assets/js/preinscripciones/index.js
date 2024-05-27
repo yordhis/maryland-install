@@ -107,31 +107,31 @@ const hanledCheckbox = (e) => {
     }
 }
 
-const hanledSubmit = (e) =>{
-    e.preventDefault();
-    if(validarFormulario(e.target)){
-        e.target.submit();
-    }else{
-        $.alert({
-            title: "¡Alerta!",
-            content: "Llene todos los campos, por favor.",
-            type: "orange"
-        })
-    }
-};
+// const hanledSubmit = (e) =>{
+//     e.preventDefault();
+//     if(validarFormulario(e.target)){
+//         e.target.submit();
+//     }else{
+//         $.alert({
+//             title: "¡Alerta!",
+//             content: "Llene todos los campos, por favor.",
+//             type: "orange"
+//         })
+//     }
+// };
 
 checkbox_pago.forEach(checkbox => {
     checkbox.addEventListener('click', hanledCheckbox);
 });
 
-forms.addEventListener('submit', hanledSubmit);
+// forms.addEventListener('submit', hanledSubmit);
 
 /** funciones */
 
-function validarFormulario(formulario){
+// function validarFormulario(formulario){
   
-   for (const iterator of formulario) {
-        log(iterator)
-   }
-    return false;
-}
+//    for (const iterator of formulario) {
+//         log(iterator)
+//    }
+//     return false;
+// }
