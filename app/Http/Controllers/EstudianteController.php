@@ -7,12 +7,8 @@ use App\Http\Requests\UpdateEstudianteRequest;
 
 
 use App\Models\{
-    Cuota,
     Estudiante,
-    Representante,
-    RepresentanteEstudiante,
     DificultadEstudiante,
-    Dificultade,
     Helpers,
     DataDev
 };
@@ -41,6 +37,7 @@ class EstudianteController extends Controller
      */
     public function index(Request $request)
     {
+        return $request;
         if ($request->filtro) {
             $estudiantes =  Helpers::getEstudiantes($request->filtro);
         } else {
