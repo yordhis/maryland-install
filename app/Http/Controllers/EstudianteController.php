@@ -46,6 +46,7 @@ class EstudianteController extends Controller
         } else {
             $estudiantes =  Helpers::getEstudiantes();
         }
+        return $estudiantes;
         $notificaciones =  $this->data->notificaciones;
         $respuesta =  $this->data->respuesta;
         return view('admin.estudiantes.lista', compact('estudiantes', 'notificaciones', 'request', 'respuesta'));
