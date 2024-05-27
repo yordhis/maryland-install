@@ -189,8 +189,8 @@
                                       <form action="{{route('admin.grupos.index')}}" method="post">
                                         @csrf
                                         @method('get')
-                                        <input type="hidden" name="filtro" value="{{ $inscripcione->grupo['codigo']}}">
-                                        <button type="submit" class="btn btn-none">{{ $inscripcione->grupo['nombre']}}</button>
+                                        <input type="hidden" name="filtro" value="{{ $inscripcione->codigo_grupo }}">
+                                        <button type="submit" class="btn btn-none">{{ $inscripcione->grupo_nombre }}</button>
                                       </form>
                                     </div>
                                     <div class="col-md-12 label"> 

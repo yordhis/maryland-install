@@ -202,9 +202,9 @@ class GrupoController extends Controller
     public function destroy(Grupo $grupo)
     {
         try {
-            $grupos = Helpers::getGrupos($grupo->codigo);
+            $grupoEstudiante = GrupoEstudiante::where('codigo_grupo', $grupo->codigo)->get();
  
-            if(count($grupos[0]->estudiantes)){
+            if(count($grupoEstudiante)){
                 return back()->with([
                     "mensaje" => "No se puede eliminar el grupo, porque poseé estudiantes inscriptos.",
                     "estatus" => Response::HTTP_UNAUTHORIZED
