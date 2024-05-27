@@ -106,6 +106,12 @@
                             <div class="col-md-12 label"> 
                               <span class="text-primary">Cédula:</span> {{ $representante->representante->cedula ?? '' }} 
                             </div>
+                            <div class="col-md-12 label"> 
+                              <span class="text-primary">Cumpleaños:</span> {{ $representante->representante->nacimiento ?? '' }} 
+                            </div>
+                            <div class="col-md-12 label"> 
+                              <span class="text-primary">Edad:</span> {{ $representante->representante->edad ?? '' }} 
+                            </div>
 
                             <div class="col-md-12 label"> 
                               <span class="text-primary">Teléfono:</span> {{ $representante->representante->telefono ?? ''}} 
