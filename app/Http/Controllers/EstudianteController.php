@@ -37,7 +37,7 @@ class EstudianteController extends Controller
      */
     public function index(Request $request)
     {
-        return $request;
+        return  Helpers::getEstudiantes();
         if ($request->filtro) {
             $estudiantes =  Helpers::getEstudiantes($request->filtro);
         } else {
