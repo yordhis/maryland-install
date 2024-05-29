@@ -15,21 +15,23 @@ class PageController extends Controller
      */
     public function index()
     {
+        
         $planes = Plane::all();
         $niveles = Nivele::all();
         return view('page.index', compact('planes', 'niveles'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * PÁGINA DE PREINCRIPCIÓN
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $niveles = Nivele::all();
         $planes = Plane::all();
-        return view('page.preinscripcion', compact('niveles', 'planes'));
+        $planSolicitado = Plane::where('codigo', $request->codigo_plan)->get();
+        return view('page.preinscripcion', compact('niveles', 'planes', 'request', 'planSolicitado'));
     }
 
     /**

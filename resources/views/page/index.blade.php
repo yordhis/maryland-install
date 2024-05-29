@@ -63,7 +63,7 @@
 
 
     <!--------PLANES--------->
-    <section
+    {{-- <section
         class="z-30 bg-center  phone_1:-mt-[100px] phone_2:-mt-[80px]  xl:-mt-[90px] 2xl:-mt-9  bg-no-repeat  bg-white bg-blend-multiply">
         <div class="">
 
@@ -91,84 +91,51 @@
 
 
                     @foreach ($planes as $plan)
-                        
+                        <div class="rounded-md border border-[#BC1E2B]  p-8 text-center shadow-md">
+                            <div class="button-text mx-auto flex h-12 w-12 items-center justify-center rounded-md border "
+                                style="background-image: linear-gradient(117deg, rgba(255,192,57,1) 0%, rgba(244,176,31,1) 64%, rgba(227,154,0,1) 100%);">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tools"
+                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4"></path>
+                                    <line x1="14.5" y1="5.5" x2="18.5" y2="9.5"></line>
+                                    <polyline points="12 8 7 3 3 7 8 12"></polyline>
+                                    <line x1="7" y1="8" x2="5.5" y2="9.5"></line>
+                                    <polyline points="16 12 21 17 17 21 12 16"></polyline>
+                                    <line x1="16" y1="17" x2="14.5" y2="18.5"></line>
+                                </svg>
+                            </div>
+                            <h3 class="mt-2 text-black font-bold">{{ $plan->nombre}}:
+                               
+                            </h3>
+                            <h4 class="text-green-500 font-bold text-lg">
+                                {{ $plan->porcentaje_descuento }}% de descuento
+                            </h4>
+                            <p class="my-1 mb-0  leading-relaxed tracking-wide font-semibold text-black">
+                                {{ $plan->descripcion}}
+                            </p>
+
+                            <a href="{{ route('page.preinscripcion.index', ["codigo_plan" => $plan->codigo]) }}"
+                                class="inline-flex items-center bg-[#BC1E2B] mx-auto w-full px-2 py-2  font-medium  text-white rounded-lg hover:bg-[#bc1e2bea]  ">
+                                <span class="mx-auto text-[90%] flex ">
+                                    Obtener plan
+                                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2 my-auto" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
                     @endforeach
-
-                    <div class="rounded-md border border-[#BC1E2B]  p-8 text-center shadow-md">
-                        <div class="button-text mx-auto flex h-12 w-12 items-center justify-center rounded-md border "
-                            style="background-image: linear-gradient(117deg, rgba(255,192,57,1) 0%, rgba(244,176,31,1) 64%, rgba(227,154,0,1) 100%);">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tools"
-                                width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4"></path>
-                                <line x1="14.5" y1="5.5" x2="18.5" y2="9.5"></line>
-                                <polyline points="12 8 7 3 3 7 8 12"></polyline>
-                                <line x1="7" y1="8" x2="5.5" y2="9.5"></line>
-                                <polyline points="16 12 21 17 17 21 12 16"></polyline>
-                                <line x1="16" y1="17" x2="14.5" y2="18.5"></line>
-                            </svg>
-                        </div>
-                        <h3 class="mt-2 text-black font-bold">Plan Individual:<span class="text-[#BC1E2B]"> 180$ De
-                                contado</span></h3>
-                        <p class="my-1 mb-0  leading-relaxed tracking-wide font-semibold text-black">Crédito
-                            faccionado: 200$<br>Cuota 1: 100$ (INICIAL)<br> Cuota 2: 100$ A los 30 Dias
-                        </p>
-
-                        <a href="{{ route('page.preinscripcion.index') }}"
-                            class="inline-flex items-center bg-[#BC1E2B] mx-auto w-full px-2 py-2  font-medium  text-white rounded-lg hover:bg-[#bc1e2bea]  ">
-                            <span class="mx-auto text-[90%] flex ">
-                                Obtener plan
-                                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2 my-auto" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                </svg>
-                            </span>
-                        </a>
-                    </div>
-
-
-                    <div class="rounded-md border border-[#BC1E2B]  p-8 text-center shadow-md">
-                        <div class="button-text mx-auto flex h-12 w-12 items-center justify-center rounded-md border "
-                            style="background-image: linear-gradient(117deg, rgba(255,192,57,1) 0%, rgba(244,176,31,1) 64%, rgba(227,154,0,1) 100%);">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tools"
-                                width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4"></path>
-                                <line x1="14.5" y1="5.5" x2="18.5" y2="9.5"></line>
-                                <polyline points="12 8 7 3 3 7 8 12"></polyline>
-                                <line x1="7" y1="8" x2="5.5" y2="9.5"></line>
-                                <polyline points="16 12 21 17 17 21 12 16"></polyline>
-                                <line x1="16" y1="17" x2="14.5" y2="18.5"></line>
-                            </svg>
-                        </div>
-                        <h3 class="mt-2 text-black font-bold">Plan Duo:<span class="text-[#BC1E2B]"> 240$ De
-                                contado</span></h3>
-                        <p class="my-1 mb-0  leading-relaxed tracking-wide font-semibold text-black">Crédito
-                            faccionado: 260$<br> Cuota 1: 130$ (INICIAL)<br> Cuota 2: 130$ A los 30 Dias
-                        </p>
-
-                        <a href="{{ route('page.preinscripcion.index') }}"
-                            class="inline-flex items-center bg-[#BC1E2B] mx-auto w-full px-2 py-2  font-medium  text-white rounded-lg hover:bg-[#bc1e2bea]  ">
-                            <span class="mx-auto text-[90%] flex ">
-                                Obtener plan
-                                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2 my-auto" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                </svg>
-                            </span>
-                        </a>
-                    </div>
 
                 </div>
             </section>
         </div>
 
 
-    </section>
+    </section> --}}
 
 
     <!------section_de curso de niño------->
@@ -187,179 +154,58 @@
             </p>
         </div>
 
+        {{-- cursos para niños --}}
         <h2 class="py-2 font-semibold text-[#BC1E2B] text-[160%]">Curso para Niños</h2>
 
-        {{-- cursos para niños --}}
         <div
             class="grid align-middle mb-5 phone_1:grid-cols-1  phone_3:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
 
-            <div class=" mx-auto">
+            @foreach ($niveles as $nivel)
+                @if($nivel->tipo_nivel == 'ninio')
+                    <div class=" mx-auto">
 
 
-                <div
-                    class="max-w-sm   bg-white border border-[#bc1e2b44] rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <a href="{{ route('page.preinscripcion.index') }}">
-                        <img class="rounded-t-lg  w-full" src="../src/images/high-1.jpg" alt="" />
-                    </a>
-                    <div class="p-3">
-                        <a href="{{ route('page.preinscripcion.index') }}">
-                            <h5
-                                class="mb-2  text-center text-[100%] phone_1:text-[125%] md:text-[130%] font-bold tracking-tight text-gray-900 dark:text-white">
-                                Nivel 1</h5>
-                        </a>
-                        <p class="mb-3 font-normal text-[95%] text-gray-700 dark:text-gray-400">¡Inscríbelo en un viaje
-                            educativo que los hará sonreír mientra aprende!.</p>
-                        <a href="{{ route('page.preinscripcion.index') }}"
-                            class="inline-flex items-center bg-[#BC1E2B] mx-auto w-full px-2 py-2  font-medium  text-white  rounded-lg hover:bg-[#bc1e2bea]  ">
-                            <span class="mx-auto text-[90%] flex ">
-                                Inscripciones Abiertas
-                                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2 my-auto" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                </svg>
-                            </span>
-                        </a>
+                        <div
+                            class="max-w-sm   bg-white border border-[#bc1e2b44] rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                            <a href="{{ route('page.preinscripcion.index') }}">
+                                <img class="rounded-t-lg  w-full" src="../src/images/high-1.jpg" alt="" />
+                            </a>
+                            <div class="p-3">
+                                <a href="{{ route('page.preinscripcion.index') }}">
+                                    <h5
+                                        class="mb-2  text-center text-[100%] phone_1:text-[125%] md:text-[130%] font-bold tracking-tight text-gray-900 dark:text-white">
+                                        Nivel 1</h5>
+                                </a>
+                                <p class="mb-3 font-normal text-[95%] text-gray-700 dark:text-gray-400">¡Inscríbelo en un viaje
+                                    educativo que los hará sonreír mientra aprende!.</p>
+                                <a href="{{ route('page.preinscripcion.index') }}"
+                                    class="inline-flex items-center bg-[#BC1E2B] mx-auto w-full px-2 py-2  font-medium  text-white  rounded-lg hover:bg-[#bc1e2bea]  ">
+                                    <span class="mx-auto text-[90%] flex ">
+                                        Inscripciones Abiertas
+                                        <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2 my-auto" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                        </svg>
+                                    </span>
+                                </a>
 
-                    </div>
-                </div>
-
-            </div>
-            <div class=" mx-auto">
-
-
-                <div
-                    class="max-w-sm   bg-white border border-[#bc1e2b44] rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <a href="{{ route('page.preinscripcion.index') }}">
-                        <img class="rounded-t-lg  w-full" src="../src/images/high-2.jpg" alt="" />
-                    </a>
-                    <div class="p-3">
-                        <a href="{{ route('page.preinscripcion.index') }}">
-                            <h5
-                                class="mb-2  text-center text-[100%] phone_1:text-[125%] md:text-[130%] font-bold tracking-tight text-gray-900 dark:text-white">
-                                Nivel 2</h5>
-                        </a>
-                        <p class="mb-3 font-normal text-[95%] text-gray-700 dark:text-gray-400">¡Inscríbelo en un viaje
-                            educativo que los hará sonreír mientra aprende!.</p>
-                        <a href="{{ route('page.preinscripcion.index') }}"
-                            class="inline-flex items-center bg-[#BC1E2B] mx-auto w-full px-2 py-2  font-medium  text-white  rounded-lg hover:bg-[#bc1e2bea]  ">
-                            <span class="mx-auto text-[90%] flex ">
-                                Inscripciones Abiertas
-                                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2 my-auto" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                </svg>
-                            </span>
-                        </a>
+                            </div>
+                        </div>
 
                     </div>
-                </div>
+                @endif
+            @endforeach
+          
 
-            </div>
-            <div class=" mx-auto">
-
-
-                <div
-                    class="max-w-sm   bg-white border border-[#bc1e2b44] rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <a href="{{ route('page.preinscripcion.index') }}">
-                        <img class="rounded-t-lg  w-full" src="../src/images/high-3.jpg" alt="" />
-                    </a>
-                    <div class="p-3">
-                        <a href="{{ route('page.preinscripcion.index') }}">
-                            <h5
-                                class="mb-2  text-center text-[100%] phone_1:text-[125%] md:text-[130%] font-bold tracking-tight text-gray-900 dark:text-white">
-                                Nivel 3</h5>
-                        </a>
-                        <p class="mb-3 font-normal text-[95%] text-gray-700 dark:text-gray-400">¡Inscríbelo en un viaje
-                            educativo que los hará sonreír mientra aprende!.</p>
-                        <a href="{{ route('page.preinscripcion.index') }}"
-                            class="inline-flex items-center bg-[#BC1E2B] mx-auto w-full px-2 py-2  font-medium  text-white  rounded-lg hover:bg-[#bc1e2bea]  ">
-                            <span class="mx-auto text-[90%] flex ">
-                                Inscripciones Abiertas
-                                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2 my-auto" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                </svg>
-                            </span>
-                        </a>
-
-                    </div>
-                </div>
-
-            </div>
-            <div class=" mx-auto">
-
-
-                <div
-                    class="max-w-sm   bg-white border border-[#bc1e2b44] rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <a href="{{ route('page.preinscripcion.index') }}">
-                        <img class="rounded-t-lg  w-full" src="../src/images/high-4.jpg" alt="" />
-                    </a>
-                    <div class="p-3">
-                        <a href="{{ route('page.preinscripcion.index') }}">
-                            <h5
-                                class="mb-2  text-center text-[100%] phone_1:text-[125%] md:text-[130%] font-bold tracking-tight text-gray-900 dark:text-white">
-                                Nivel 4</h5>
-                        </a>
-                        <p class="mb-3 font-normal text-[95%] text-gray-700 dark:text-gray-400">¡Inscríbelo en un viaje
-                            educativo que los hará sonreír mientra aprende!.</p>
-                        <a href="{{ route('page.preinscripcion.index') }}"
-                            class="inline-flex items-center bg-[#BC1E2B] mx-auto w-full px-2 py-2  font-medium  text-white  rounded-lg hover:bg-[#bc1e2bea]  ">
-                            <span class="mx-auto text-[90%] flex ">
-                                Inscripciones Abiertas
-                                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2 my-auto" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                </svg>
-                            </span>
-                        </a>
-
-                    </div>
-                </div>
-
-            </div>
-            <div class=" mx-auto">
-
-
-                <div
-                    class="max-w-sm   bg-white border border-[#bc1e2b44] rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <a href="{{ route('page.preinscripcion.index') }}">
-                        <img class="rounded-t-lg  w-full" src="../src/images/high-5.jpg" alt="" />
-                    </a>
-                    <div class="p-3">
-                        <a href="{{ route('page.preinscripcion.index') }}">
-                            <h5
-                                class="mb-2  text-center text-[100%] phone_1:text-[125%] md:text-[130%] font-bold tracking-tight text-gray-900 dark:text-white">
-                                Nivel 5</h5>
-                        </a>
-                        <p class="mb-3 font-normal text-[95%] text-gray-700 dark:text-gray-400">¡Inscríbelo en un viaje
-                            educativo que los hará sonreír mientra aprende!.</p>
-                        <a href="{{ route('page.preinscripcion.index') }}"
-                            class="inline-flex items-center bg-[#BC1E2B] mx-auto w-full px-2 py-2  font-medium  text-white  rounded-lg hover:bg-[#bc1e2bea]  ">
-                            <span class="mx-auto text-[90%] flex ">
-                                Inscripciones Abiertas
-                                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2 my-auto" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                </svg>
-                            </span>
-                        </a>
-
-                    </div>
-                </div>
-
-            </div>
+        
 
         </div>
 
 
+        <!--------- curso de jovenes y adultos----------->
         <h1 class=" py-4 font-semibold text-[#BC1E2B] text-[160%] ">Curso para Adolescentes y Adultos</h1>
         
-        <!--------- curso de jovenesy adultos----------->
         <div
             class="grid align-middle phone_1:grid-cols-1  phone_3:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-3">
 
