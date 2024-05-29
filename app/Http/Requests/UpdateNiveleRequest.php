@@ -29,7 +29,8 @@ class UpdateNiveleRequest extends FormRequest
             "libro" => "required | max:255",
             "precio" => "required | numeric",
             "duracion" => "required | numeric",
-            "tipo_nivel" => "required"
+            "tipo_nivel" => "required",
+            "imagen" => "file | max:2048"
         ];
     }
 }

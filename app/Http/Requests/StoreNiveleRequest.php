@@ -29,7 +29,7 @@ class StoreNiveleRequest extends FormRequest
             "libro" => "required | max:255",
             "precio" => "required | numeric",
             "duracion" => "required | numeric",
-            "file" => "required | file",
+            "file" => "required | file | max:2048",
             "tipo_nivel" => "required"
         ];
     }

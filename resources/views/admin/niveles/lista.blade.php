@@ -71,20 +71,25 @@
                                 <td>{{ $nivel->precio }}</td>
                                 <td class="text-break">{{ $nivel->libro }}</td>
                                 <td>{{ $nivel->duracion . ' ' . $nivel->tipo_duracion }} </td>
-                                <td>{{ $nivel->tipo_nivel ?? "Sin asignar categoria"}} </td>
+                                
+                                @if ( $nivel->tipo_nivel )
+                                    <td>{{ $nivel->tipo_nivel == 'ninio' ? 'Niños' : 'Adultos' }} </td>
+                                @else
+                                        <td> Sin asignar categoria </td>
+                                @endif
 
-                                <td>
+                        <td>
 
-                                    <a href="{{ route('admin.niveles.edit', $nivel->id) }}">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-
-
-                                    @include('admin.niveles.partials.modal')
+                            <a href="{{ route('admin.niveles.edit', $nivel->id) }}">
+                                <i class="bi bi-pencil"></i>
+                            </a>
 
 
-                                </td>
-                            </tr>
+                            @include('admin.niveles.partials.modal')
+
+
+                        </td>
+                        </tr>
                         @endforeach
 
                     </tbody>
@@ -106,8 +111,8 @@
                 <div class="col-sm-6 col-xs-12">
                     {{ $niveles->appends(['filtro' => $request->filtro])->links() }}
                 </div>
-            </div>   
-            
+            </div>
+
         </div>
 
     </section>

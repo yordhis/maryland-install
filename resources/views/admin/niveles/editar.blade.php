@@ -136,10 +136,10 @@
                                         <select name="tipo_nivel" class="form-select" id="validationCustom04" required>
                                             @if (old('tipo_nivel'))
                                                 <option value="{{ old('tipo_nivel') }}" selected>
-                                                    {{ old('tipo_nivel') }}</option>
+                                                    {{ old('tipo_nivel') == 'ninio' ? 'Niños' : 'Adultos' }}</option>
                                             @elseif($nivele->tipo_nivel)
                                                 <option value="{{ $nivele->tipo_nivel }}" selected>
-                                                    {{ $nivele->tipo_nivel }}</option>
+                                                    {{ $nivele->tipo_nivel == 'ninio' ? 'Niños' : 'Adultos' }}</option>
                                             @else
                                                 <option selected disabled value="">Seleccione categoria</option>
                                             @endif

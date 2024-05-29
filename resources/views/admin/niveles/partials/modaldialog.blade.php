@@ -59,7 +59,7 @@
                      <div class="col-12">
                          <label for="yourPassword" class="form-label">Libro</label>
                          <input type="text" name="libro" class="form-control" id="yourUsername"
-                             placeholder="Ingrese nombre del libro para este nivel." value="{{ $request->libro ?? '' }}"
+                             placeholder="Ingrese nombre del libro para este nivel." value="{{ old('libro') ?? $request->libro }}"
                              required>
                          <div class="invalid-feedback">Por favor, Ingrese nombre del libro para este nivel!</div>
                          @error('libro')
@@ -70,7 +70,7 @@
                      <div class="col-sm-8 col-xs-12">
                          <label for="yourPassword" class="form-label">Tiempo de duración del nivel</label>
                          <input type="number" name="duracion" class="form-control" id="yourUsername"
-                             placeholder="Ingrese Tiempo de duración del nivel." value="{{ $request->duracion ?? '' }}"
+                             placeholder="Ingrese Tiempo de duración del nivel." value="{{ old('duracion') ?? $request->duracion }}"
                              required>
                          <div class="invalid-feedback">Por favor, Tiempo de duración del nivel!</div>
                          @error('duracion')
@@ -117,7 +117,7 @@
                         <select name="tipo_nivel" class="form-select" id="validationCustom04" required>
                             @if (old('tipo_nivel'))
                                 <option value="{{ old('tipo_nivel') }}" selected>
-                                    {{ old('tipo_nivel') }}</option>
+                                    {{ old('tipo_nivel')  == 'ninio' ? 'Niños' : 'Adultos'}}</option>
                             @else
                                 <option selected disabled value="">Seleccione categoria</option>
                             @endif
