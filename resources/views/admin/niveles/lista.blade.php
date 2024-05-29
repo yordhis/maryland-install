@@ -57,6 +57,7 @@
                             <th scope="col">Precio</th>
                             <th scope="col">Libro</th>
                             <th scope="col">Duración</th>
+                            <th scope="col">Categoria</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
@@ -70,6 +71,7 @@
                                 <td>{{ $nivel->precio }}</td>
                                 <td class="text-break">{{ $nivel->libro }}</td>
                                 <td>{{ $nivel->duracion . ' ' . $nivel->tipo_duracion }} </td>
+                                <td>{{ $nivel->tipo_nivel ?? "Sin asignar categoria"}} </td>
 
                                 <td>
 

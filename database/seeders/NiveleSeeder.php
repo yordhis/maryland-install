@@ -20,7 +20,7 @@ class NiveleSeeder extends Seeder
         $nivele = new Nivele();
         $nivele->codigo = Helpers::getCodigo("niveles");
         $nivele->nombre = 'Nivel 1';
-        $nivele->precio = 150;
+        $nivele->precio = 270;
         $nivele->libro = "The Ingles - Volumen 1";
         $nivele->duracion = 3;
         $nivele->tipo_duracion = "Meses";
@@ -29,7 +29,7 @@ class NiveleSeeder extends Seeder
         $niveleDos = new Nivele();
         $niveleDos->codigo = Helpers::getCodigo("niveles");
         $niveleDos->nombre = 'Nivel 2';
-        $niveleDos->precio = 200;
+        $niveleDos->precio = 270;
         $niveleDos->libro = "The Ingles - Volumen 2";
         $niveleDos->duracion = 3;
         $niveleDos->tipo_duracion = "Meses";
@@ -38,7 +38,7 @@ class NiveleSeeder extends Seeder
         $niveleTres = new Nivele();
         $niveleTres->codigo = Helpers::getCodigo("niveles");
         $niveleTres->nombre = 'Nivel 3';
-        $niveleTres->precio = 250;
+        $niveleTres->precio = 270;
         $niveleTres->libro = "The Ingles - Volumen 3";
         $niveleTres->duracion = 3;
         $niveleTres->tipo_duracion = "Meses";

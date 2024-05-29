@@ -15,7 +15,9 @@ class PageController extends Controller
      */
     public function index()
     {
-        return view('page.index');
+        $planes = Plane::all();
+        $niveles = Nivele::all();
+        return view('page.index', compact('planes', 'niveles'));
     }
 
     /**

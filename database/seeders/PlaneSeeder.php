@@ -14,20 +14,43 @@ class PlaneSeeder extends Seeder
      */
     public function run()
     {
-        $planeUno = new Plane();
-        $planeUno->codigo = "0001";
-        $planeUno->nombre = "Estandar";
-        $planeUno->cantidad_cuotas = 3;
-        $planeUno->plazo = 30;
-        $planeUno->descripcion = "El pago se realiza cada 30 días";
-        $planeUno->save();
-        
-        $planeDos = new Plane();
-        $planeDos->codigo = "0002";
-        $planeDos->nombre = "Contado";
-        $planeDos->cantidad_cuotas = 1;
-        $planeDos->plazo = 1;
-        $planeDos->descripcion = "Se realiza un solo pago.";
-        $planeDos->save();
+        $planes = [
+            [
+                "codigo" => "0001",
+                "nombre" => "DUO CREDITO",
+                "cantidad_cuotas" => 3,
+                "plazo" => 30,
+                "descripcion" => "OBTEN UN DESCUENTO DE 10% SI TE INSCRIBES CON UN AMIGO",
+                "porcentaje_descuento" => 10,
+            ],
+            [
+                "codigo" => "0002",
+                "nombre" => "DUO CONTADO",
+                "cantidad_cuotas" => 1,
+                "plazo" => 1,
+                "descripcion" => "OBTEN UN DESCUENTO DE 30% SI TE INSCRIBES CON UN AMIGO",
+                "porcentaje_descuento" => 30,
+            ],
+            [
+                "codigo" => "0003",
+                "nombre" => "INDIVIDUAL CONTADO",
+                "cantidad_cuotas" => 1,
+                "plazo" => 1,
+                "descripcion" => "OBTEN UN DESCUENTO DE 10% SI TE INSCRIBES CON UN SOLO PAGO",
+                "porcentaje_descuento" => 10,
+            ],
+            [
+                "codigo" => "0004",
+                "nombre" => "INDIVIDUAL CREDITO",
+                "cantidad_cuotas" => 3,
+                "plazo" => 30,
+                "descripcion" => "¡TE DAMOS LA FACILIDAD DE PAGAR TU CURSO EN 3 CUOTAS MENSAUALES!",
+                "porcentaje_descuento" => 0,
+            ]
+        ];
+
+        foreach ($planes as $key => $plan) {
+            Plane::create($plan);
+        }
     }
 }

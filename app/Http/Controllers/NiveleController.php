@@ -70,8 +70,16 @@ class NiveleController extends Controller
             $estatusCreate = 0;
             $datoExiste = Helpers::datoExiste($request, ["niveles" => ["nombre","","nombre"]]);
             if(!$datoExiste){
+                if($request->file('file')){
+                    $request['imagen'] = Helpers::setFile($request);
+                }
+
                 $estatusCreate = Nivele::create($request->all());
+
             }
+
+
+
             $mensaje = $estatusCreate ? "El nivel se Registró correctamente."
                                       : "El nombre del Nivel Ya existe, Cambie el nombre.";
             $estatus = $estatusCreate ? Response::HTTP_OK 
@@ -123,6 +131,13 @@ class NiveleController extends Controller
     public function update(UpdateNiveleRequest $request, Nivele $nivele)
     {
         try {
+            if($request->file('file')){
+                /** seteamos la nueva imagen y la guardamos en el storage */
+                $request['imagen'] = Helpers::setFile($request);
+                /** eliminamos la imagen vieja */
+                Helpers::removeFile($nivele->imagen);
+            }
+
             if($nivele->update($request->all())){
                 $mensaje = "El nivel se Actualizó correctamente.";
                 $estatus = Response::HTTP_OK;    

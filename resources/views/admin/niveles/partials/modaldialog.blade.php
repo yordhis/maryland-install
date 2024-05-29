@@ -67,7 +67,7 @@
                          @enderror
                      </div>
 
-                     <div class="col-8">
+                     <div class="col-sm-8 col-xs-12">
                          <label for="yourPassword" class="form-label">Tiempo de duración del nivel</label>
                          <input type="number" name="duracion" class="form-control" id="yourUsername"
                              placeholder="Ingrese Tiempo de duración del nivel." value="{{ $request->duracion ?? '' }}"
@@ -78,7 +78,7 @@
                          @enderror
                      </div>
 
-                     <div class="col-4">
+                     <div class="col-sm-4 col-xs-12">
                          <label for="validationCustom04" class="form-label">Tipo de plazo</label>
                          <select name="tipo_duracion" class="form-select" id="validationCustom04" required>
                              @if (old('tipo_duracion'))
@@ -98,6 +98,40 @@
                              <div class="text-danger">{{ $message }}</div>
                          @enderror
                      </div>
+
+                     <div class="col-12">
+                         <label for="validationCustom04" class="form-label">Imagen para la web</label>
+                         <input type="file" name="file" class="form-control" id="imagen_nivel" 
+                         accept="image/*"
+                         required>
+                         <div class="invalid-feedback">
+                             Por favor, Agregue una imagen para el sitio web!
+                         </div>
+                         @error('imagen')
+                             <div class="text-danger">{{ $message }}</div>
+                         @enderror
+                     </div>
+
+                     <div class="col-12">
+                        <label for="validationCustom04" class="form-label"> Tipo Nivel </label>
+                        <select name="tipo_nivel" class="form-select" id="validationCustom04" required>
+                            @if (old('tipo_nivel'))
+                                <option value="{{ old('tipo_nivel') }}" selected>
+                                    {{ old('tipo_nivel') }}</option>
+                            @else
+                                <option selected disabled value="">Seleccione categoria</option>
+                            @endif
+
+                            <option value="ninio">Niños</option>
+                            <option value="adulto">Adultos</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Por favor, Seleccione para que categoria es el curso!
+                        </div>
+                        @error('tipo_nivel')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
 
 
                      <div class="col-12">

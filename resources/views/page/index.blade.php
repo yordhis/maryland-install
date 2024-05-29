@@ -8,28 +8,25 @@
         <div
             class="-z-10  relative h-[130px] phone_1:h-[340px] phone_2:h-[390px] phone_3:h-[420px] tablet:h-[500px] md:h-[630px] lg:h-[720px] xl:h-[800px] 2xl:h-[880px] overflow-hidden rounded-lg ">
             <!-- Item 1 -->
-            <div class="hidden duration-[1000ms]  ease-in-out" data-carousel-item>
-                <!-- <div class="  z-[100] w-full absolute top-[80px] text-center ">
-                    <h1 class="font-bold tx">Curso de Ingles</h1>
-                    <p>El aprendizaje nunca agota la mente</p>
-                </div> -->
-                <img src="../src/images/banner_1.jpg"
+            <div class="hidden duration-[2000ms]  ease-in-out" data-carousel-item>
+            
+                <img src="{{ asset('/src/images/banner_1.jpg')}}"
                     class="absolute  w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2  block
                     "
-                    alt="...">
+                    alt="banner_1">
 
             </div>
 
-
-            <!-- Item 5 -->
-            <div class="hidden duration-[1000ms] ease-in-out" data-carousel-item>
-                <img src="../src/images/ing.jpg"
-                    class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+            <!-- Item 2 -->
+            <div class="hidden duration-[2000ms] ease-in-out" data-carousel-item>
+                <img src="{{ asset('/src/images/ing.jpg') }}"
+                    class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="banner_2">
             </div>
-            <!-- Item 5 -->
+
+            <!-- Item 3 -->
             <div class="hidden duration-[1000ms]  ease-in-out" data-carousel-item>
-                <img src="../src/images/high 1.jpg"
-                    class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 " alt="...">
+                <img src="{{ asset('/src/images/high 1.jpg') }}"
+                    class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 " alt="banner_3">
             </div>
         </div>
 
@@ -39,7 +36,7 @@
             class=" absolute top-0 start-0 z-40 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
             data-carousel-prev>
             <span
-                class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-100/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
                 <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -53,7 +50,7 @@
             class="absolute top-0 end-0 z-40 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
             data-carousel-next>
             <span
-                class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-100/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
                 <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -91,6 +88,11 @@
                 <div
                     class="relative mx-auto w-[100%] phone_3:w-[75%] sm:w-[95%] md:w-[90%] xl:w-[65%] 2xl:w-[60%] z-10 grid grid-cols-1 gap-10 pt-14 sm:grid-cols-2 ">
 
+
+
+                    @foreach ($planes as $plan)
+                        
+                    @endforeach
 
                     <div class="rounded-md border border-[#BC1E2B]  p-8 text-center shadow-md">
                         <div class="button-text mx-auto flex h-12 w-12 items-center justify-center rounded-md border "
