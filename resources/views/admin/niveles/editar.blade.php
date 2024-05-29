@@ -14,6 +14,14 @@
         <section class="section register d-flex flex-column align-items-center justify-content-center ">
             <div class="container">
                 <div class="row justify-content-center">
+
+                    <div class="col-12 text-center">
+                      <a href="{{ route('admin.niveles.index') }}">
+                        <i class="bi bi-box-arrow-up-left"></i>
+                        Volver a la lista 
+                      </a>
+                    </div>
+
                     <div class=" col-sm-8 d-flex flex-column align-items-center justify-content-center">
 
                         <div class="card ">
