@@ -4,6 +4,10 @@
 @section('content')
     <!-----form---->
     <div class=" mt-[6em] w-[80%] m-auto">
+        @if (session('mensaje'))
+            @include('partials.alertTail')
+        @endif
+        
         <h1
             class="text-[#bc1e2b] text-center text-[26px]  sm:text-[34px] md:text-[37px]  lg:text-[40px] 2xl:text-[48px] font-semibold border-b-2 border-[#BC1E2B]">
             Registro de preinscripción
@@ -84,24 +88,28 @@
 
 
         <p
-        class="mt-3 text-center font-semibold text-[16px]  sm:text-[18px] md:text-[22px]  lg:text-[24px] 2xl:text-[26px] mb-[3%] ">
-        Cantidad de estudiante a Pre-inscribir: {{ $planSolicitado[0]->cantidad_estudiantes}}
+            class="mt-3 text-center font-semibold text-[16px]  sm:text-[18px] md:text-[22px]  lg:text-[24px] 2xl:text-[26px] mb-[3%] ">
+            Cantidad de estudiante a Pre-inscribir: {{ $planSolicitado[0]->cantidad_estudiantes }}
         </p>
-        <form action="{{ route('page.preinscripcion.store') }}" method="post" enctype="multipart/form-data">
+
+        <form action="{{ route('page.preinscripcion.estudiante.store') }}" method="post" enctype="multipart/form-data"
+            novalidate>
             @csrf
-            @method('post')
+            @method('POST')
             {{-- Inputs ocultos --}}
-            <input type="text" name="codigo_nivel" value="{{ $nivelSolicitado[0]->codigo }}" >
-            <input type="text" name="codigo_plan" value="{{ $planSolicitado[0]->codigo }}" >
-            <input type="text" name="cantidad_estudiantes" value="{{ $planSolicitado[0]->cantidad_estudiantes }}" >
+            <input type="text" name="codigo_nivel" value="{{ $nivelSolicitado[0]->codigo }}">
+            <input type="text" name="codigo_plan" value="{{ $planSolicitado[0]->codigo }}">
+            <input type="text" name="cantidad_estudiantes" value="{{ $planSolicitado[0]->cantidad_estudiantes }}">
+
             <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
                     <label for="cedula" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         Tipo de documento
                     </label>
                     <select name="nacionalidad"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        id="validationCustom04" required>
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        id="nacionalidad" required>
+
                         @if (old('nacionalidad'))
                             <option value="{{ old('nacionalidad') }}" selected>
                                 {{ old('nacionalidad') }}
@@ -113,6 +121,9 @@
                         <option value="V">V</option>
                         <option value="E">E</option>
                     </select>
+                    @error('nacionalidad')
+                        <div class="text-red-500">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div>
                     <label for="cedula" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -120,8 +131,12 @@
                         de Cédula o DNI
                     </label>
                     <input type="number" id="cedula" name="cedula"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                         placeholder="29000000" required />
+                    
+                    @error('cedula')
+                        <div class="text-red-500">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div>
@@ -130,8 +145,12 @@
                         completo
                     </label>
                     <input type="text" id="nombre_completo" name="nombre"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                         placeholder="John" required />
+
+                    @error('nombre')
+                        <div class="text-red-500">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div>
@@ -140,18 +159,26 @@
                         de telefonos
                     </label>
                     <input type="tel" id="telefono" name="telefono"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                         placeholder="teléfono ejemplo: 04144545678" required />
                     <span class="text-red-900"></span>
+
+                    @error('telefono')
+                    <div class="text-red-500">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div>
                     <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo
                         Electronico</label>
                     <input type="email" id="email" name="correo"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                         placeholder="Academia@gamil.com" required />
                     <span class="text-red-900"></span>
+
+                    @error('correo')
+                        <div class="text-red-500">{{ $message }}</div>
+                    @enderror
                 </div>
 
 
@@ -159,41 +186,61 @@
                     <label for="nacimiento" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de
                         nacimiento</label>
                     <input type="date" id="nacimiento" name="nacimiento"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                         placeholder="nacimiento" required />
                     <span class="text-red-900"></span>
+
+                    @error('nacimiento')
+                        <div class="text-red-500">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div>
-                    <label for="edad" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Edad</label>
+                    <label for="edad"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Edad</label>
                     <input type="number" id="edad" name="edad"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                         placeholder="edad" required />
                     <span class="text-red-900"></span>
+
+                    @error('edad')
+                        <div class="text-red-500">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div>
                     <label for="direccion"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección</label>
                     <input type="text" id="direccion" name="direccion"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                         placeholder="ingrese dirección de domicilio" required />
                     <span class="text-red-900"></span>
+
+                    @error('direccion')
+                    <div class="text-red-500">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div>
-                    <label for="ocupacion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ocupación o
+                    <label for="ocupacion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ocupación
+                        o
                         oficio</label>
                     <input type="text" id="ocupacion" name="ocupacion"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                         placeholder="ingrese dirección de domicilio" required />
                     <span class="text-red-900"></span>
+                    @error('ocupacion')
+                        <div class="text-red-500">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div>
                     <label for="grado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grado de
                         instrucción</label>
                     <input type="text" id="grado" name="grado"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                         placeholder="ingrese grado de instrucción (basica, secundadria, universisdad o N/A)" required />
                     <span class="text-red-900"></span>
+                    @error('grado')
+                        <div class="text-red-500">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div>
                     <!-------subir file--------->
@@ -225,10 +272,10 @@
                 <div class="flex items-start mb-6">
                     <div class="flex items-center h-5">
                         <input id="remember" type="checkbox" value=""
-                            class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
+                            class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 "
                             required />
                     </div>
-                    <label for="remember" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Apceotos los
+                    <label for="remember" class="ms-2 text-sm font-medium text-gray-900 ">Apcepto los
                         <a href="#descargarPdf" class="text-blue-600 hover:underline dark:text-blue-500">
                             Terminos y
                             condiciones</a>.
@@ -236,12 +283,12 @@
                 </div>
 
                 {{-- Boton de enviar --}}
-                <div class="flex justify-center">
-                    <button type="submit"
-                        class=" text-whitebg bg-[#BC1E2B] text-white hover:bg-[#d44f5a] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        Enviar
-                    </button>
-                </div>
+            </div>
+            <div class="flex justify-center">
+                <button type="submit"
+                    class=" text-whitebg bg-[#BC1E2B] text-white hover:bg-[#d44f5a] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+                    Registrar estudiante
+                </button>
             </div>
 
 

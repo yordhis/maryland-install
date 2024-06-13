@@ -38,6 +38,7 @@ Route::get('/', [PageController::class, 'index'])->name('page.index');
 Route::controller(PageController::class)->group(function () {
     Route::get('/preinscripcion/{codigo_nivel?}', 'create')->name('page.preinscripcion.index');
     Route::get('/preinscripcion/estudiante/{codigo_nivel?}/{codigo_plan?}', 'createEstudiante')->name('page.preinscripcion.estudiante');
+    Route::post('/preinscripcion/registrar/estudiante', 'store')->name('page.preinscripcion.estudiante.store');
 });
 Route::controller(PreinscripcioneController::class)->group(function () {
     Route::post('/preinscripcion', 'store')->name('page.preinscripcion.store');

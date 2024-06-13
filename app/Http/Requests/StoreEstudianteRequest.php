@@ -38,20 +38,13 @@ class StoreEstudianteRequest extends FormRequest
         ];
     }
 
-    // public function attributes()
-    // {
-    //    return [
-    //        'foto'=> 'imagen'
-    //    ];
-    // }
 
     public function messages(): array
     {
         return [
             'foto.image' => 'El archivo debe ser una imagen jpg/png',
             'foto.max' => 'El archivo excede el limite de peso permitido de Megas del archivo  (max: 2048kb)',
-            'cedula.required' => 'El campo Cédula es obligatorio!'
-            
+            'cedula.required' => 'El campo Cédula es obligatorio!'  
         ];
     }
 }

@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEstudianteRequest;
+use App\Models\DataDev;
+use App\Models\DificultadEstudiante;
+use App\Models\Estudiante;
 use App\Models\Helpers;
 use App\Models\Nivele;
 use App\Models\Plane;
@@ -40,9 +44,10 @@ class PageController extends Controller
     {
         try {
        
+            $respuestaTail = DataDev::$respuestaTail;
             $nivelSolicitado = Nivele::where('codigo', $request->codigo_nivel)->get();
             $planSolicitado = Plane::where('codigo', $request->codigo_plan)->get();
-            return view('page.estudiantePreinscripcion', compact('request', 'nivelSolicitado', 'planSolicitado'));
+            return view('page.estudiantePreinscripcion', compact('request', 'nivelSolicitado', 'planSolicitado', 'respuestaTail'));
             
         } catch (\Throwable $th) {
            $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
@@ -52,14 +57,73 @@ class PageController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Crear estudiante desde la página.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\StoreEstudianteRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEstudianteRequest $request)
     {
-        //
+        /** lo puedo hacer guardando los datos en la sessión */
+
+        return $request;
+        try {
+            // Validando cedula 
+            $estatusCreate = 0;
+
+            // Configuramos las dificultades en un array
+            $dificultadesInput = Helpers::getDificultades($request->request);
+
+            // Validamos si se envio una foto
+            if (isset($request->file)) {
+                $request['foto'] = Helpers::setFile($request);
+            }
+
+            // registramos el estudiante
+            $estatusCreate = Estudiante::create($request->all());
+
+            if ($estatusCreate) {
+                // Validamos si existe el representante
+                if (isset($request->rep_cedula)) {
+                    if (isset($request->rep_nombre)) {
+                        // Se crea y asigna el representante al estudiante
+                        Helpers::setRepresentantes($request);
+                    } else {
+                        // Solo asignamos al representante
+                        Helpers::asignarRepresentante($request->cedula, $request->rep_cedula);
+                    }
+                }
+
+                if (isset($dificultadesInput)) {
+                    /** Relacionamos los estudiante con la dificultad */
+                    foreach ($dificultadesInput as $dificultad) {
+                        DificultadEstudiante::create([
+                            "cedula_estudiante" => $request->cedula,
+                            "dificultad" => $dificultad->nombre,
+                            "estatus" => $dificultad->estatus,
+                        ]);
+                    }
+                }
+            }
+
+
+            $mensaje =  $estatusCreate   ? "Estudiante registrado correctamente"
+                : "No se pudo registrar verifique los datos.";
+            $estatus = $estatusCreate ? Response::HTTP_CREATED : Response::HTTP_NOT_FOUND;
+
+            if ($estatus == 201) {
+                if($estatusCreate->edad >= 18){
+
+                }
+            } else {
+                return back()->with(compact('mensaje', 'estatus'));
+            }
+            
+        } catch (\Throwable $th) {
+            $mensaje = Helpers::getMensajeError($th, ", ¡Error interno al intentar registrar estudiante!");
+            $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
+            return back()->with(compact('mensaje', 'estatus'));
+        }
     }
 
     /**

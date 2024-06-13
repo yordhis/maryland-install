@@ -100,7 +100,7 @@ let form = document.forms[0],
 
 const hanledSubmit= (e) => {
     e.preventDefault();
-    console.log(e.target);
+    console.log(e.target.submit());
 };
 
 form.addEventListener('submit', hanledSubmit);
