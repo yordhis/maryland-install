@@ -10,7 +10,7 @@
         </h1>
         <p
             class="mt-3 text-center font-semibold text-[16px]  sm:text-[18px] md:text-[22px]  lg:text-[24px] 2xl:text-[26px] mb-[3%] ">
-            ¡Ya casi! formaras parte de la Académia de ingles Maryland
+            ¡Ya casi! formarás parte de la Académia de ingles Maryland
         </p>
 
 

@@ -30,7 +30,7 @@
             </div>
 
             <div class="col-sm-6 col-xs-12">
-                @include('admin.planes.partials.modaldialog')
+                @include('admin.planes.partials.modalFormularioCrearPlan')
             </div>
             <div class="col-sm-6 col-xs-12">
                 <form action="{{ route('admin.planes.index') }}" method="post">
@@ -58,9 +58,8 @@
                             <th scope="col">#</th>
                             <th scope="col">Código</th>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Cantidad de cuotas</th>
-                            <th scope="col">Plazo de días</th>
-                            <th scope="col">Descripcion del plan</th>
+                            <th scope="col">Cuotas</th>
+                            <th scope="col">Plazo</th>
                             <th scope="col">Descuento</th>
                             <th scope="col">Acciones</th>
                         </tr>
@@ -74,10 +73,11 @@
                                 <td>{{ $plane->nombre }}</td>
                                 <td>{{ $plane->cantidad_cuotas }}</td>
                                 <td>{{ $plane->plazo }} Dias</td>
-                                <td class="text-break">{{ $plane->descripcion }}</td>
+                                
                                 <td class="text-break">{{ $plane->porcentaje_descuento }} %</td>
 
                                 <td>
+                                    @include('admin.planes.partials.modalVerInfoDelPlan')
 
                                     <a href="{{ route('admin.planes.edit', $plane->id) }}">
                                         <i class="bi bi-pencil"
@@ -86,7 +86,7 @@
                                     </a>
 
 
-                                    @include('admin.planes.partials.modal')
+                                    @include('admin.planes.partials.modalEliminarPlan')
 
 
                                     @if ($plane->estatus == 2)

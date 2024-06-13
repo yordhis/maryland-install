@@ -14,6 +14,9 @@
         <section class="section register d-flex flex-column align-items-center justify-content-center ">
             <div class="container">
                 <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <a href="{{route('admin.estudiantes.index')}}">Volver a la lista de estudiantes</a>
+                    </div>
                     <div class=" col-sm-10 d-flex flex-column align-items-center justify-content-center">
 
                         <div class="card">
@@ -267,9 +270,7 @@
                                     <div class="col-12">
                                         <button class="btn btn-primary w-100" type="submit">Guardar datos</button>
                                     </div>
-                                    <div class="col-12">
-                                        <a href="{{route('admin.estudiantes.index')}}">Voler a la lista</a>
-                                    </div>
+                                  
 
                                 </form>
 
@@ -328,7 +329,7 @@
                                     </div>
                                     <div class="col-12">
                                         <label for="yourUsername" class="form-label">Teléfono </label>
-                                        <input type="phone" name="rep_telefono" class="form-control" id="yourUsername"
+                                        <input type="text" name="rep_telefono" class="form-control" id="yourUsername"
                                             placeholder="Ingrese teléfono del representante."
                                             value="{{ old('rep_telefono') ?? $estudiante->representantes[0]->representante->telefono }}"
                                             required>

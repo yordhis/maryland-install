@@ -69,7 +69,7 @@
                                 <td scope="row">{{ $estudiante->id }}</td>
                                 <td>{{ $estudiante->nombre }}</td>
                                 <td>{{$estudiante->cedulaFormateada }}</td>
-                                <td>{{ $estudiante->telefono}}</td>
+                                <td>{{ $estudiante->telefonoFormateado}}</td>
                                 <td>{{ $estudiante->correo }}</td>
 
                                 <td>

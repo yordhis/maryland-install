@@ -99,6 +99,8 @@
                                         <label for="yourPassword" class="form-label">Cantidad de cuotas</label>
                                         <input type="number" name="cantidad_cuotas" class="form-control" id="yourUsername"
                                             placeholder="Ingrese cantidad de cuotas"
+                                            min="1"
+                                            max="5"
                                             value="{{ old('cantidad_cuotas') ?? $plane->cantidad_cuotas }}" 
                                             required>
                                         <div class="invalid-feedback">Por favor, Ingrese cantidad de cuotas!</div>

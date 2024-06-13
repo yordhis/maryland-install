@@ -800,45 +800,16 @@ class Helpers extends Model
                     $inscripciones[$key] = self::getInscripcion($inscripcion->codigo);
                 }
 
-                // if (count($inscripciones)) {
-                //     $inscripciones = Helpers::addDatosDeRelacion(
-                //         $inscripciones,
-                //         [
-                //             "grupos" => "codigo_grupo",
-                //             "planes" => "codigo_plan",
-                //         ]
-                //     );
-                // }
-
                 $estudiante[0]['inscripciones'] = $inscripciones;
-
-
-                // if (count($estudiante[0]['inscripciones'])) {
-
-                //     foreach ($estudiante[0]['inscripciones'] as $key => $inscripcion) {
-
-                //         if(count($inscripcion->grupo)){
-                //             $inscripcion['grupo'] = Helpers::addDatosDeRelacion(
-                //                 Helpers::setConvertirObjetoParaArreglo($inscripcion['grupo']),
-                //                 [
-                //                     "niveles" => "codigo_nivel",
-                //                     "profesores" => "cedula_profesor",
-                //                 ]
-                //             );
-    
-                //             $inscripcion['grupo'] = $inscripcion['grupo'][0];
-                //         }
-                //     }
-                // }
 
                 /** formatear cedula */
                 $estudiante[0]->cedulaFormateada = number_format($estudiante[0]->cedula, 0, ',', '.');
 
                 /** formatear telefono */
                 if(!empty($estudiante[0]->telefono)){
-                    $estudiante[0]->telefono = '(' . substr($estudiante[0]->telefono, 0, 4) . ')' . ' ' . substr($estudiante[0]->telefono, 5, 3) . '-' . substr($estudiante[0]->telefono, 6, 4);
+                    $estudiante[0]->telefonoFormateado = '(' . substr($estudiante[0]->telefono, 0, 4) . ')' . ' ' . substr($estudiante[0]->telefono, 5, 3) . '-' . substr($estudiante[0]->telefono, 6);
                 }else{
-                    $estudiante[0]->telefono = "No asignado.";
+                    $estudiante[0]->telefonoFormateado = "No asignado.";
                 }
 
 

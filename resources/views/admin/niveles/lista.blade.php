@@ -96,7 +96,7 @@
                     <tfoot>
                         <tr>
 
-                            <td colspan="7" class="text-center table-secondary">
+                            <td colspan="8" class="text-center table-secondary">
                                 Total de niveles: {{ $niveles->total() }} |
                                 <a href="{{ route('admin.niveles.index') }}" class="text-primary">
                                     Ver todo
