@@ -3,6 +3,10 @@
 
 @section('content')
     <!-----form---->
+    @if( session('mensaje') )
+        @include('partials.alertTail')
+    @endif
+    
     <div class=" mt-[6em] w-[80%] m-auto">
         <h1
             class="text-[#bc1e2b] text-center text-[26px]  sm:text-[34px] md:text-[37px]  lg:text-[40px] 2xl:text-[48px] font-semibold border-b-2 border-[#BC1E2B]">
@@ -10,246 +14,122 @@
         </h1>
         <p
             class="mt-3 text-center font-semibold text-[16px]  sm:text-[18px] md:text-[22px]  lg:text-[24px] 2xl:text-[26px] mb-[3%] ">
-            Haste parte de la Académia de ingles Maryland</p>
-        <div class="w-[]">
+            {{ count($nivelSolicitado) ? "Selecciona un plan de pago" : "Seleccione el nivel a cursar" }}
+        </p>
 
-            {{-- <div
-                class="rounded-xl overflow-hidden flex shadow border-gray-300 hover:shadow-[#e9b02f] hover:shadow-sm max-w-sm bg-white  h-[120px] mb-[5%] ">
-                <div class="lg:flex flex w-5/12 p-2 rounded-[20px]">
-                    <img src="../src/images/intermediate1.jpg" class="rounded-[15px] object-contain w-full h-full" />
+        @if (count($nivelSolicitado))
+            {{-- INFORMACION DEL CURSO SELECCIONADO --}}
+            <div class="w-[]">
+                <div class="text-sm font-semibold cursor-pointer text-green-500  tracking-wider hover:text-[#e9b02f]">
+                    Curso seleccionado
                 </div>
-                <div class="w-7/12 pl-3 p-3 text-text1 flex flex-col justify-center">
-                    <p class="text-base mb-2 font-bold truncate">Adolescentes y Adultos</p>
-                    <div class="text-xs text-primary mb-2">
-
-                        <span class="font-bold tracking-wide text-sm text-[#bc1e2b]">Plan Individual</span> <span
-                            class="ml-2 cursor-pointer font-semibold tracking-wide text-[12px] text-black hover:text-[#e9b02f]">Cambiar</span>
-
+                <div
+                    class="rounded-xl overflow-hidden flex shadow border-gray-300 hover:shadow-[#e9b02f] hover:shadow-sm max-w-sm bg-white  h-[120px] mb-[5%] ">
+                    <div class="lg:flex flex w-5/12 p-2 rounded-[20px]">
+                        <img src="{{ asset($nivelSolicitado[0]->imagen) }}"
+                            class="rounded-[15px] object-contain w-full h-full" />
                     </div>
-                    <div class="text-sm font-semibold cursor-pointer text-text2 tracking-wider hover:text-[#e9b02f]">Curso
-                    </div>
-                </div>
-
-            </div> --}}
-
-        </div>
-        <form action="{{ route('page.preinscripcion.store') }}" method="post" enctype="multipart/form-data">
-            @csrf
-            @method('post')
-
-            <div class="grid gap-6 mb-6 md:grid-cols-2">
-                <div>
-                    <label for="cedula" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                       Tipo de documento
-                    </label>
-                    <select name="nacionalidad" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="validationCustom04" 
-                    required>
-                        @if (old('nacionalidad'))
-                            <option value="{{ old('nacionalidad') }}" selected>
-                                {{ old('nacionalidad') }}
-                            </option>
-                        @endif
-
-
-                       <option value="">Seleccione Nacionalidad</option>
-                       <option value="V">V</option>
-                       <option value="E">E</option>
-                   </select>
-                </div>
-                <div>
-                    <label for="cedula" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Número
-                        de Cédula o DNI
-                    </label>
-                    <input type="number" id="cedula" name="cedula"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="29000000" required />
-                </div>
-
-                <div>
-                    <label for="nombre_completo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Nombre
-                        completo
-                    </label>
-                    <input type="text" id="nombre_completo" name="nombre"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="John" required />
-                </div>
-
-                <div>
-                    <label for="telefono" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Número
-                        de telefonos
-                    </label>
-                    <input type="tel" id="telefono" name="telefono"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="teléfono ejemplo: 04144545678"  required />
-                    <span class="text-red-900"></span>
-                </div>
-
-                <div>
-                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo
-                        Electronico</label>
-                    <input type="email" id="email" name="correo"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Academia@gamil.com" required />
-                    <span class="text-red-900"></span>
-                </div>
-
-
-                <div>
-                    <label for="nacimiento" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de
-                        nacimiento</label>
-                    <input type="date" id="nacimiento" name="nacimiento"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="nacimiento" required />
-                    <span class="text-red-900"></span>
-                </div>
-
-                <div>
-                    <label for="edad" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Edad</label>
-                    <input type="number" id="edad" name="edad"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="edad" required />
-                    <span class="text-red-900"></span>
-                </div>
-                <div>
-                    <label for="direccion"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección</label>
-                    <input type="text" id="direccion" name="direccion"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="ingrese dirección de domicilio" required />
-                    <span class="text-red-900"></span>
-                </div>
-                <div>
-                    <label for="ocupacion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ocupación o
-                        oficio</label>
-                    <input type="text" id="ocupacion" name="ocupacion"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="ingrese dirección de domicilio" required />
-                    <span class="text-red-900"></span>
-                </div>
-                <div>
-                    <label for="grado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grado de
-                        instrucción</label>
-                    <input type="text" id="grado" name="grado"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="ingrese grado de instrucción (basica, secundadria, universisdad o N/A)" required />
-                    <span class="text-red-900"></span>
-                </div>
-                <div>
-                    <!-------subir file--------->
-                    <label
-                        class="flex  w-[240px] mx-auto cursor-pointer appearance-none justify-center rounded-md border border-dashed border-gray-300 bg-white px-3 py-6 text-sm transition hover:border-gray-400 focus:border-solid focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
-                        tabindex="0">
-                        <span for="photo-dropbox" class="flex items-center space-x-2">
-                            <svg class="h-6 w-6 stroke-gray-400" viewBox="0 0 256 256">
-                                <path d="M96,208H72A56,56,0,0,1,72,96a57.5,57.5,0,0,1,13.9,1.7" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></path>
-                                <path d="M80,128a80,80,0,1,1,144,48" fill="none" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="24"></path>
-                                <polyline points="118.1 161.9 152 128 185.9 161.9" fill="none" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="24"></polyline>
-                                <line x1="152" y1="208" x2="152" y2="128" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
-                            </svg>
-                            <span class="text-xs font-medium text-gray-600">
-                                subir una foto del estudiante en formato: png, jpg, jpje
-                                <span class="text-blue-600 underline">Cargar foto</span>
-                            </span>
+                    <div class="w-7/12 pl-3 p-3 text-text1 flex flex-col justify-center">
+                        <p class="text-base mb-2 font-bold truncate">{{ $nivelSolicitado[0]->nombre }}</p>
+                        <div class="text-xs text-primary mb-2">
+                            <span class="font-bold tracking-wide text-sm text-[#bc1e2b]">Precio del curso:
+                                {{ $nivelSolicitado[0]->precio }} $ </span>
+                        </div>
+                        <span
+                            class=" cursor-pointer font-semibold tracking-wide text-[12px] text-black hover:text-[#e9b02f]">
+                            Lapso del curso: {{ $nivelSolicitado[0]->duracion . ' ' . $nivelSolicitado[0]->tipo_duracion }}
                         </span>
-                        <input id="photo-dropbox" type="file" name="foto" class="sr-only" />
-                        <span class="text-red-900"></span>
-                    </label>
+
+
+                    </div>
+
                 </div>
             </div>
 
-
-            <div class="mb-6">
-                <label for="select_cursos" 
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Cursos</label>
-                <select id="select_cursos" name="codigo_nivel"
-                    class="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required>
-                    <option selected disabled value="">Seleccione el curso</option>
-                    @foreach ($niveles as $nivel)
-                    <option value="{{$nivel->codigo}}">{{$nivel->nombre}} - Inversión: {{$nivel->precio}}$</option>
-                    @endforeach
-
-                </select>
-            </div>
-            <div class="mb-6">
-                <label for="select_planes"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Plan de pago</label>
-                <select id="select_planes" name="codigo_plan"
-                    class="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required>
-                    <option selected disabled value="">Seleccione el plan de pago</option>
-                    @foreach ($planes as $plan)
-                    <option value="{{$plan->codigo}}">{{$plan->nombre}} - Cantidad de cuotas: {{$plan->cantidad_cuotas}} - Plazo: {{$plan->plazo}} Días</option>
-                    @endforeach
-
-                </select>
+            <div class="text-sm font-semibold cursor-pointer text-text2 tracking-wider hover:text-[#e9b02f]">
+                Seleccione un plan de pago
             </div>
 
+            <div class="grid md:grid-cols-4 md:gap-4 xs:grid-cols-12 xs:gap-12">
+                @foreach ($planes as $plan)
+                <div class="m-2 rounded-md border border-[#BC1E2B] p-8 text-center shadow-md">
+                    <div class="button-text mx-auto flex h-12 w-12 items-center justify-center rounded-md border "
+                        style="background-image: linear-gradient(117deg, rgba(255,192,57,1) 0%, rgba(244,176,31,1) 64%, rgba(227,154,0,1) 100%);">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tools"
+                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4"></path>
+                            <line x1="14.5" y1="5.5" x2="18.5" y2="9.5"></line>
+                            <polyline points="12 8 7 3 3 7 8 12"></polyline>
+                            <line x1="7" y1="8" x2="5.5" y2="9.5"></line>
+                            <polyline points="16 12 21 17 17 21 12 16"></polyline>
+                            <line x1="16" y1="17" x2="14.5" y2="18.5"></line>
+                        </svg>
+                    </div>
+                    <h3 class="mt-2 text-black font-bold">
+                        {{ $plan->nombre}}:
+                    </h3>
 
-            <!-- <h3 class="mb-2  text-gray-900 dark:text-white font-light">Metodos de pago</h3> -->
-            <div class=" mb-4">
-                <ul
-                    class="items-center   w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                    <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-                        <div class="flex items-center ps-3">
-                            <input id="horizontal-list-radio-license" type="radio" value="pago_en_plataforma" name="list-radio"
-                                class="checkbox_pago w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label for="horizontal-list-radio-license"
-                                class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                Hacer
-                                el pago
-                            </label>
-                        </div>
-                    </li>
-                    <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-                        <div class="flex items-center ps-3">
-                            <input id="horizontal-list-radio-id" type="radio" value="pago_en_academia" name="list-radio"
-                                class="checkbox_pago w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label for="horizontal-list-radio-id"
-                                class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                Pago
-                                en la Académia
-                            </label>
-                        </div>
-                    </li>
+                    <h4 class="text-green-500 font-bold text-lg">
+                        {{ $plan->porcentaje_descuento }}% de descuento
+                    </h4>
+                    <h4 class="text-gray-500 font-normal text-lg">
+                        Candidad de estudiante a inscribir: {{ $plan->cantidad_estudiantes }}
+                    </h4>
+                 
+                    <h4 class="text-red-500 font-normal text-lg">
+                        Monto total: {{ $nivelSolicitado[0]->precio }} $
+                    </h4>
 
-                </ul>
-            </div>
+                    <h4 class="text-gray-500 font-normal text-lg">
+                        Monto a pagar 
+                    </h4>
+                    <h4 class="text-green-500 font-normal text-3xl">
+                        {{ ($nivelSolicitado[0]->precio -($nivelSolicitado[0]->precio * ($plan->porcentaje_descuento / 100))) }} $
+                    </h4>
 
-            {{-- Información de pago --}}
-            <div class="mb-6" id="informacion_pago">
-            </div>
 
-            {{-- Terminos y condiciones el checkbox --}}
-            <div class="flex items-start mb-6">
-                <div class="flex items-center h-5">
-                    <input id="remember" type="checkbox" value=""
-                        class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                        required />
+
+                    <a href="{{ route('page.preinscripcion.estudiante', [ "codigo_nivel" => $nivelSolicitado[0]->codigo, "codigo_plan" => $plan->codigo ]) }}"
+                        class="inline-flex items-center bg-[#BC1E2B] mx-auto w-full px-2 py-2  font-medium  text-white rounded-lg hover:bg-[#bc1e2bea]  mt-4">
+                        <span class="mx-auto text-[90%] flex ">
+                            Obtener plan
+                            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2 my-auto" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                            </svg>
+                        </span>
+                    </a>
                 </div>
-                <label for="remember" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Apceotos los
-                    <a href="#descargarPdf" class="text-blue-600 hover:underline dark:text-blue-500">
-                        Terminos y
-                        condiciones</a>.
-                </label>
+                @endforeach
             </div>
+        @else
+            {{-- INPUT PARA SELECCIONAR CURSO EN CASO DE NO HABER SELECIONADO UNO --}}
+            <form action="{{route('page.preinscripcion.index')}}" method="post">
+            @csrf
+            @method('GET')
+                <div class="mb-6">
+                    <label for="select_cursos"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Cursos</label>
+                    <select id="select_cursos" name="codigo_nivel"
+                        class="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        required>
+                        <option selected disabled value="">Seleccione el curso</option>
+                        @foreach ($niveles as $nivel)
+                            <option value="{{ $nivel->codigo }}">{{ $nivel->nombre }} - Inversión: {{ $nivel->precio }}$
+                            </option>
+                        @endforeach
 
-            {{-- Boton de enviar --}}
-            <div class="flex justify-center">
-                <button type="submit"
-                    class=" text-whitebg bg-[#BC1E2B] text-white hover:bg-[#d44f5a] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    Enviar
-                </button>
-            </div>
-        </form>
+                    </select>
+                </div>
+            </form>
+        @endif
+
+
+
+
     </div>
 
 

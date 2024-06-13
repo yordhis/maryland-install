@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Helpers;
 use App\Models\Nivele;
 use App\Models\Plane;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class PageController extends Controller
 {
@@ -29,9 +31,24 @@ class PageController extends Controller
     public function create(Request $request)
     {
         $niveles = Nivele::all();
-        $planes = Plane::all();
-        $planSolicitado = Plane::where('codigo', $request->codigo_plan)->get();
-        return view('page.preinscripcion', compact('niveles', 'planes', 'request', 'planSolicitado'));
+        $planes = Plane::where('estatus', 2)->get();
+        $nivelSolicitado = Nivele::where('codigo', $request->codigo_nivel)->get();
+        return view('page.preinscripcion', compact('niveles', 'planes', 'request', 'nivelSolicitado'));
+    }
+
+    public function createEstudiante(Request $request)
+    {
+        try {
+       
+            $nivelSolicitado = Nivele::where('codigo', $request->codigo_nivel)->get();
+            $planSolicitado = Plane::where('codigo', $request->codigo_plan)->get();
+            return view('page.estudiantePreinscripcion', compact('request', 'nivelSolicitado', 'planSolicitado'));
+            
+        } catch (\Throwable $th) {
+           $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
+           $mensaje = Helpers::getMensajeError($th, ", ¡Error interno al intentar acceder a la vista de preincripción!");
+           return back()->with(compact('estatus', 'mensaje'));
+        }
     }
 
     /**

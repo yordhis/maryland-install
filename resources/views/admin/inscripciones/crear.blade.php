@@ -137,7 +137,7 @@
                                         <span class="input-group-text bg-primary text-white"> Total a pagar </span>
 
                                         <input type="text" placeholder="Ingrese monto a cobrar" id="total"
-                                            name="total" value="0" class="form-control fs-2">
+                                            name="total" readonly value="0" class="form-control fs-2">
 
                                         <i class="input-group-text bg-primary text-white bi bi-currency-dollar"></i>
                                     </div>

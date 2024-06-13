@@ -13,6 +13,7 @@ class Plane extends Model
         "codigo",
         "nombre",
         "cantidad_cuotas",
+        "cantidad_estudiantes",
         "plazo",
         "descripcion",
         "porcentaje_descuento",

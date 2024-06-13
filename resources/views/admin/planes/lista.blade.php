@@ -80,12 +80,24 @@
                                 <td>
 
                                     <a href="{{ route('admin.planes.edit', $plane->id) }}">
-                                        <i class="bi bi-pencil"></i>
+                                        <i class="bi bi-pencil"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Editar plan">
+                                        </i>
                                     </a>
 
 
                                     @include('admin.planes.partials.modal')
 
+
+                                    @if ($plane->estatus == 2)
+                                        <i class="bi bi-wifi text-success"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Visible en la página web">
+                                        </i>
+                                    @else
+                                        <i class="bi bi-wifi-off text-danger"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="No disponoble para la página web">
+                                        </i>
+                                    @endif
 
                                 </td>
                             </tr>

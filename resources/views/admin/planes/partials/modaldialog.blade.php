@@ -54,11 +54,22 @@
 
                      <div class="col-12 ">
                         <label for="yourPassword" class="form-label">Porcentaje descuento (%)</label>
-                        <input type="number" name="porcentaje_descuento" step="0.1" class="form-control" id="porcentaje_descuento"
+                        <input type="number" name="porcentaje_descuento" step="1" class="form-control" id="porcentaje_descuento"
+                            min="0"
                             placeholder="Ingrese Porcentaje descuento."
                             value="{{ old('porcentaje_descuento') ?? $request->porcentaje_descuento }}" 
                             required>
                         <div class="invalid-feedback">Por favor, Ingrese porcentaje descuento!</div>
+                    </div>
+
+                     <div class="col-12 ">
+                        <label for="cantidad_estudiantes" class="form-label">Cantidad de estudiantes para aplicar al plan</label>
+                        <input type="number" name="cantidad_estudiantes" step="1" class="form-control" id="cantidad_estudiantes"
+                            placeholder="Ingrese Porcentaje descuento."
+                            min="1"
+                            value="{{ old('cantidad_estudiantes') ?? 1 }}" 
+                            required>
+                        <div class="invalid-feedback">Por favor, Ingrese una cantidad valida de estudiantes!</div>
                     </div>
 
                      <div class="col-sm-4 col-xs-12 ">
@@ -89,6 +100,14 @@
                         </div>
                     </div> 
 
+                    <div class="col-12">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="estatus" value="2">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">
+                                Activa para mostrar el plan en la pagina web
+                            </label>
+                        </div>
+                    </div>
 
                      <div class="col-12">
                          <button class="btn btn-primary w-100" type="submit">Crear Plan de pago</button>

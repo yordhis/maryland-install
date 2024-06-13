@@ -2,7 +2,8 @@
         
 <!-- Vertically centered Modal -->
 <a type="button" class="text-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered{{$plane->id}}">
-    <i class="bi bi-trash"></i>
+    <i class="bi bi-trash"
+    data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar plan"></i>
 </a>
 
 <div class="modal fade" id="verticalycentered{{$plane->id}}" tabindex="-1">

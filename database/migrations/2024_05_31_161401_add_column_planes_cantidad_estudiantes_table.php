@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnPlanesPorcentajeTable extends Migration
+class AddColumnPlanesCantidadEstudiantesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddColumnPlanesPorcentajeTable extends Migration
     public function up()
     {
         Schema::table('planes', function (Blueprint $table) {
-            $table->double('porcentaje_descuento', 8, 2)->default(0)->after('descripcion');
+            $table->integer('cantidad_estudiantes')->default(0)->after('descripcion');
         });
     }
 
@@ -26,7 +26,7 @@ class AddColumnPlanesPorcentajeTable extends Migration
     public function down()
     {
         Schema::table('planes', function (Blueprint $table) {
-            $table->dropColumn('porcentaje_descuento');
-        });   
+            $table->dropColumn('cantidad_estudiantes');
+        }); 
     }
 }

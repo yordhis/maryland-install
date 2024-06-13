@@ -77,11 +77,22 @@
 
                                     <div class="col-12 ">
                                         <label for="yourPassword" class="form-label">Porcentaje descuento (%)</label>
-                                        <input type="number" name="porcentaje_descuento" step="0.1" class="form-control" id="porcentaje_descuento"
-                                            placeholder="Ingrese Porcentaje descuento."
+                                        <input type="number" name="porcentaje_descuento" step="1" class="form-control" id="porcentaje_descuento"
+                                            placeholder="Ingrese el porcentaje descuento en números enteros ejemplo: 30 = 30%."
+                                            min="0"
                                             value="{{ old('porcentaje_descuento') ?? $plane->porcentaje_descuento }}" 
                                             required>
-                                        <div class="invalid-feedback">Por favor, Ingrese porcentaje descuento!</div>
+                                        <div class="invalid-feedback">Por favor, Ingrese porcentaje descuento! sino desea descuento ingrese CERO (0)</div>
+                                    </div>
+
+                                    <div class="col-12 ">
+                                        <label for="cantidad_estudiantes" class="form-label">Cantidad de estudiantes para aplicar al plan</label>
+                                        <input type="number" name="cantidad_estudiantes" step="1" class="form-control" id="cantidad_estudiantes"
+                                            placeholder="Ingrese Porcentaje descuento."
+                                            min="1"
+                                            value="{{ old('cantidad_estudiantes') ?? $plane->cantidad_estudiantes}}" 
+                                            required>
+                                        <div class="invalid-feedback">Por favor, Ingrese una cantidad valida de estudiantes!</div>
                                     </div>
 
                                     <div class="col-sm-4 col-xs-12 ">
@@ -114,6 +125,15 @@
                                         </div>
                                     </div> 
 
+                                    <div class="col-12">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="estatus" value="2"
+                                            {{ $plane->estatus == 2 ? "checked" : ""}}>
+                                            <label class="form-check-label" for="flexSwitchCheckChecked">
+                                                Activa para mostrar el plan en la pagina web
+                                            </label>
+                                        </div>
+                                    </div>
 
                                     <div class="col-12">
                                         <button class="btn btn-primary w-100" type="submit">Guardar cambios</button>

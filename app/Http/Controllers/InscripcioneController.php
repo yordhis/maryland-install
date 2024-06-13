@@ -95,7 +95,7 @@ class InscripcioneController extends Controller
             $respuesta = $this->data->respuesta;
             $notificaciones = $this->data->notificaciones;
             $codigo = Helpers::getCodigo('inscripciones');
-            $planes = Plane::where("estatus", 1)->get();
+            $planes = Plane::all();
             $grupos = Helpers::setMatricula(Grupo::where("estatus", 1)->get());
 
             return view('admin.inscripciones.crear', compact('planes', 'grupos', 'codigo', 'notificaciones', 'respuesta'));

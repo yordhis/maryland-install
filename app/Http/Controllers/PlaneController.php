@@ -40,9 +40,9 @@ class PlaneController extends Controller
                 $planes = Plane::where('codigo', $request->filtro)
                 ->orWhere('nombre', 'like', "%{$request->filtro}%")
                 ->orderBy('id', 'desc')
-                ->paginate(5);
+                ->paginate(12);
             }else{
-                $planes = Plane::orderBy('id', 'desc')->paginate(5);
+                $planes = Plane::orderBy('id', 'desc')->paginate(12);
             }
             return view(
                 'admin.planes.lista',
@@ -153,6 +153,8 @@ class PlaneController extends Controller
         try {
             $notificaciones = $this->data->notificaciones;
 
+            if(empty($request->estatus)) $request['estatus'] = 1;
+            
             $estatusUpdate = $plane->update($request->all());
            
             $mensaje = $this->data->respuesta['mensaje'] = $estatusUpdate ? "El Plan se Actualizó correctamente."
