@@ -112,13 +112,9 @@ class PageController extends Controller
                 : "No se pudo registrar verifique los datos.";
             $estatus = $estatusCreate ? Response::HTTP_CREATED : Response::HTTP_NOT_FOUND;
 
-            if ($estatus == 201) {
-                if($estatusCreate->edad >= 18){
-
-                }
-            } else {
-                return back()->with(compact('mensaje', 'estatus'));
-            }
+         
+            return back()->with(compact('mensaje', 'estatus'));
+            
             
         } catch (\Throwable $th) {
             $mensaje = Helpers::getMensajeError($th, ", ¡Error interno al intentar registrar estudiante!");
