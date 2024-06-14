@@ -3,6 +3,8 @@ log('conectado con preincripciones');
 let form = document.forms[0],
     checkbox_pago = document.querySelectorAll('.checkbox_pago'),
     elemento_informacion_de_pago = document.querySelector('#informacion_pago'),
+    inputEdadEstudiante = document.getElementById('edad_estudiante'),
+    inputFechaNacimiento = document.getElementById('fecha_nacimiento'),
     html_informacion_pago = `
     <div class="relative overflow-x-auto mb-4">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -97,6 +99,20 @@ let form = document.forms[0],
         
     };
 
+
+    /** Ecuchamos los eventos */
+    inputFechaNacimiento.addEventListener("change", (e)=>{
+        let cumpleanio = e.target.value.split('-');
+        let fechaActual = new Date();
+
+        if( fechaActual.getMonth() + 1 >= parseInt(cumpleanio[1]) 
+            && fechaActual.getDate() >= parseInt(cumpleanio[2])){
+                
+            inputEdadEstudiante.value = fechaActual.getFullYear() - parseInt(e.target.value.split('-')[0]);
+        }else{
+            inputEdadEstudiante.value = fechaActual.getFullYear() - parseInt(e.target.value.split('-')[0]) - 1;
+        }
+    });
 
 const hanledSubmit= (e) => {
     e.preventDefault();

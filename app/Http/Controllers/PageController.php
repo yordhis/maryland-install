@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEstudianteRequest;
+use App\Http\Requests\StorePageRequest;
 use App\Models\DataDev;
 use App\Models\DificultadEstudiante;
 use App\Models\Estudiante;
@@ -59,10 +60,10 @@ class PageController extends Controller
     /**
      * Crear estudiante desde la página.
      *
-     * @param  \Illuminate\Http\StoreEstudianteRequest  $request
+     * @param  \Illuminate\Http\StorePageRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreEstudianteRequest $request)
+    public function store(StorePageRequest $request)
     {
         /** lo puedo hacer guardando los datos en la sessión */
 

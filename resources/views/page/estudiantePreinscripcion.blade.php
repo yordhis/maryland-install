@@ -76,7 +76,7 @@
 
                         <p class=" cursor-pointer font-semibold tracking-wide text-[12px] text-black hover:text-[#e9b02f]">
                             Modalida de pago por cuota <br>
-                            Candidad de cuotas: {{ $planSolicitado[0]->cantidad_cuotas }}
+                            Cantidad de cuotas: {{ $planSolicitado[0]->cantidad_cuotas }}
                         </p>
 
 
@@ -185,7 +185,7 @@
                 <div>
                     <label for="nacimiento" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de
                         nacimiento</label>
-                    <input type="date" id="nacimiento" name="nacimiento"
+                    <input type="date" id="fecha_nacimiento" name="nacimiento"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                         placeholder="nacimiento" required />
                     <span class="text-red-900"></span>
@@ -198,7 +198,8 @@
                 <div>
                     <label for="edad"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Edad</label>
-                    <input type="number" id="edad" name="edad"
+                    <input type="number" id="edad_estudiante" name="edad"
+                        readonly
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                         placeholder="edad" required />
                     <span class="text-red-900"></span>
@@ -271,16 +272,23 @@
                 {{-- Terminos y condiciones el checkbox --}}
                 <div class="flex items-start mb-6">
                     <div class="flex items-center h-5">
-                        <input id="remember" type="checkbox" value=""
+                        <input id="remember" type="checkbox" value="ACEPTO"
+                            name="terminos"
                             class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 "
                             required />
                     </div>
                     <label for="remember" class="ms-2 text-sm font-medium text-gray-900 ">Apcepto los
-                        <a href="#descargarPdf" class="text-blue-600 hover:underline dark:text-blue-500">
+                        <a href="{{ asset('assets/documentos/terminos_y_condiciones_maryland.pdf')}}"  target="_blank" class="text-blue-600 hover:underline dark:text-blue-500">
                             Terminos y
-                            condiciones</a>.
+                            condiciones.</a>
+
+                            @error('terminos')
+                                <div class="text-red-500">{{ $message }}</div>
+                            @enderror
                     </label>
+                 
                 </div>
+               
 
                 {{-- Boton de enviar --}}
             </div>

@@ -75,7 +75,7 @@
                         {{ $plan->porcentaje_descuento }}% de descuento
                     </h4>
                     <h4 class="text-gray-500 font-normal text-lg">
-                        Candidad de estudiante a inscribir: {{ $plan->cantidad_estudiantes }}
+                        Cantidad de estudiante a inscribir: {{ $plan->cantidad_estudiantes }}
                     </h4>
                  
                     <h4 class="text-red-500 font-normal text-lg">
@@ -83,7 +83,7 @@
                     </h4>
 
                     <h4 class="text-gray-500 font-normal text-lg">
-                        Monto a pagar 
+                        Monto a pagar por estudiante
                     </h4>
                     <h4 class="text-green-500 font-normal text-3xl">
                         {{ ($nivelSolicitado[0]->precio -($nivelSolicitado[0]->precio * ($plan->porcentaje_descuento / 100))) }} $
