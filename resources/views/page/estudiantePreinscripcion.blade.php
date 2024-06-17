@@ -7,7 +7,7 @@
         @if (session('mensaje'))
             @include('partials.alertTail')
         @endif
-        
+
         <h1
             class="text-[#bc1e2b] text-center text-[26px]  sm:text-[34px] md:text-[37px]  lg:text-[40px] 2xl:text-[48px] font-semibold border-b-2 border-[#BC1E2B]">
             Registro de preinscripción
@@ -132,8 +132,8 @@
                     </label>
                     <input type="number" id="cedula" name="cedula"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="29000000" required />
-                    
+                        placeholder="29000000" value="{{ old('cedula') ?? '' }}" required />
+
                     @error('cedula')
                         <div class="text-red-500">{{ $message }}</div>
                     @enderror
@@ -146,7 +146,7 @@
                     </label>
                     <input type="text" id="nombre_completo" name="nombre"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="John" required />
+                        placeholder="John" value="{{ old('nombre') ?? '' }}" required />
 
                     @error('nombre')
                         <div class="text-red-500">{{ $message }}</div>
@@ -160,11 +160,11 @@
                     </label>
                     <input type="tel" id="telefono" name="telefono"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="teléfono ejemplo: 04144545678" required />
+                        placeholder="teléfono ejemplo: 04144545678" value="{{ old('telefono') ?? '' }}" required />
                     <span class="text-red-900"></span>
 
                     @error('telefono')
-                    <div class="text-red-500">{{ $message }}</div>
+                        <div class="text-red-500">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -173,7 +173,7 @@
                         Electronico</label>
                     <input type="email" id="email" name="correo"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="Academia@gamil.com" required />
+                        placeholder="Academia@gamil.com" value="{{ old('correo') ?? '' }}" required />
                     <span class="text-red-900"></span>
 
                     @error('correo')
@@ -187,7 +187,7 @@
                         nacimiento</label>
                     <input type="date" id="fecha_nacimiento" name="nacimiento"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="nacimiento" required />
+                        placeholder="nacimiento" value="{{ old('nacimiento') ?? '' }}" required />
                     <span class="text-red-900"></span>
 
                     @error('nacimiento')
@@ -196,12 +196,10 @@
                 </div>
 
                 <div>
-                    <label for="edad"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Edad</label>
-                    <input type="number" id="edad_estudiante" name="edad"
-                        readonly
+                    <label for="edad" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Edad</label>
+                    <input type="number" id="edad_estudiante" name="edad" readonly
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="edad" required />
+                        placeholder="edad" value="{{ old('edad') ?? '' }}" required />
                     <span class="text-red-900"></span>
 
                     @error('edad')
@@ -213,11 +211,11 @@
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección</label>
                     <input type="text" id="direccion" name="direccion"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="ingrese dirección de domicilio" required />
+                        placeholder="ingrese dirección de domicilio" value="{{ old('direccion') ?? '' }}" required />
                     <span class="text-red-900"></span>
 
                     @error('direccion')
-                    <div class="text-red-500">{{ $message }}</div>
+                        <div class="text-red-500">{{ $message }}</div>
                     @enderror
                 </div>
                 <div>
@@ -226,19 +224,36 @@
                         oficio</label>
                     <input type="text" id="ocupacion" name="ocupacion"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="ingrese dirección de domicilio" required />
+                        placeholder="ingrese ocupación o oficio" value="{{ old('ocupacion') ?? '' }}" required />
                     <span class="text-red-900"></span>
                     @error('ocupacion')
                         <div class="text-red-500">{{ $message }}</div>
                     @enderror
                 </div>
                 <div>
-                    <label for="grado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grado de
-                        instrucción</label>
-                    <input type="text" id="grado" name="grado"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="ingrese grado de instrucción (basica, secundadria, universisdad o N/A)" required />
-                    <span class="text-red-900"></span>
+                    <label for="cedula" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        Grado de instrucción
+                    </label>
+                    <select name="grado"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        id="grado" required>
+
+                        @if (old('grado'))
+                            <option value="{{ old('grado') }}" selected>
+                                {{ old('grado') }}
+                            </option>
+                        @endif
+
+
+                        <option value="">Seleccione grado de instrucción</option>
+                        <option value="Prescolar">Prescolar</option>
+                        <option value="Escuala básica">Escuela básica</option>
+                        <option value="Bachillerato">Bachillerato</option>
+                        <option value="Universitario">Universitario</option>
+                        <option value="Posgrado">Posgrado</option>
+                        <option value="N/A">N/A</option>
+
+                    </select>
                     @error('grado')
                         <div class="text-red-500">{{ $message }}</div>
                     @enderror
@@ -260,39 +275,49 @@
                                     stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
                             </svg>
                             <span class="text-xs font-medium text-gray-600">
-                                subir una foto del estudiante en formato: png, jpg, jpje
+                                subir una foto del estudiante en formato png, jpg y fondo blanco.
                                 <span class="text-blue-600 underline">Cargar foto</span>
                             </span>
                         </span>
-                        <input id="photo-dropbox" type="file" name="foto" class="sr-only" />
+                        <input id="photo-dropbox" type="file" name="foto" class="sr-only"
+                            accept="image/.jpe,.jpg,.jpeg,.png,.bmp" />
                         <span class="text-red-900"></span>
                     </label>
                 </div>
 
                 {{-- Terminos y condiciones el checkbox --}}
                 <div class="flex items-start mb-6">
+
+
+
                     <div class="flex items-center h-5">
-                        <input id="remember" type="checkbox" value="ACEPTO"
-                            name="terminos"
+                        <input id="remember" type="checkbox" value="ACEPTO" name="terminos"
                             class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 "
                             required />
                     </div>
                     <label for="remember" class="ms-2 text-sm font-medium text-gray-900 ">Apcepto los
-                        <a href="{{ asset('assets/documentos/terminos_y_condiciones_maryland.pdf')}}"  target="_blank" class="text-blue-600 hover:underline dark:text-blue-500">
+                        <a href="{{ asset('assets/documentos/terminos_y_condiciones_maryland.pdf') }}" target="_blank"
+                            class="text-blue-600 hover:underline dark:text-blue-500">
                             Terminos y
                             condiciones.</a>
 
-                            @error('terminos')
-                                <div class="text-red-500">{{ $message }}</div>
-                            @enderror
+                        @error('terminos')
+                            <div class="text-red-500">{{ $message }}</div>
+                        @enderror
                     </label>
-                 
+
                 </div>
-               
+
 
                 {{-- Boton de enviar --}}
             </div>
             <div class="flex justify-center">
+                <button class="g-recaptcha"
+    data-sitekey="6LedFvopAAAAAFxWjeuSf2LqsKEfrY-ZHaHbpgcD"
+    data-callback='onSubmit'
+    data-action='submit'>
+  Submit
+</button>
                 <button type="submit"
                     class=" text-whitebg bg-[#BC1E2B] text-white hover:bg-[#d44f5a] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
                     Registrar estudiante
@@ -341,7 +366,13 @@
         </form>
     </div>
 
-
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LedFvopAAAAAFxWjeuSf2LqsKEfrY-ZHaHbpgcD"></script>
     <script src="{{ asset('assets/js/master.js') }}" defer></script>
     <script src="{{ asset('assets/js/preinscripciones/estudiante.js') }}" defer></script>
+    <!-- Replace the variables below. -->
+    <script>
+        function onSubmit(token) {
+            document.getElementById("demo-form").submit();
+        }
+    </script>
 @endsection

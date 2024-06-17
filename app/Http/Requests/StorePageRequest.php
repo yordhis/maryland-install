@@ -24,7 +24,7 @@ class StorePageRequest extends FormRequest
     public function rules()
     {
         return [
-            "cedula"        => "required | numeric | unique:estudiantes",
+            "cedula"        => "required | numeric ",
             "file"          => "max:2048 | mimes:jpg,bmp,png",
             "nombre"        => "max:255  | required", 
             "nacionalidad"  => "required", 
