@@ -313,11 +313,11 @@
             </div>
             <div class="flex justify-center">
                 <button class="g-recaptcha"
-    data-sitekey="6LedFvopAAAAAFxWjeuSf2LqsKEfrY-ZHaHbpgcD"
-    data-callback='onSubmit'
-    data-action='submit'>
-  Submit
-</button>
+                    data-sitekey="6LedFvopAAAAAFxWjeuSf2LqsKEfrY-ZHaHbpgcD"
+                    data-callback='onSubmit'
+                    data-action='submit'>
+                Submit
+                </button>
                 <button type="submit"
                     class=" text-whitebg bg-[#BC1E2B] text-white hover:bg-[#d44f5a] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
                     Registrar estudiante
@@ -366,7 +366,7 @@
         </form>
     </div>
 
-    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LedFvopAAAAAFxWjeuSf2LqsKEfrY-ZHaHbpgcD"></script>
+  
     <script src="{{ asset('assets/js/master.js') }}" defer></script>
     <script src="{{ asset('assets/js/preinscripciones/estudiante.js') }}" defer></script>
     <!-- Replace the variables below. -->
