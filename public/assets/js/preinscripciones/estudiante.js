@@ -97,6 +97,13 @@ let form = document.forms[0],
     preinscripciones = [],
     preinscripcion= {
         
+    },
+    eventrCapchat = {
+        event: {
+          token: "TOKEN",
+          expectedAction: "USER_ACTION",
+          siteKey: "6LcopfopAAAAACS70FlcZimSSRIoRaBN_QoRuVoW",
+        }
     };
 
 
@@ -116,10 +123,30 @@ let form = document.forms[0],
 
 const hanledSubmit= (e) => {
     e.preventDefault();
+ 
+    // document.getElementById("form-recapchat").submit();
+    
     console.log(e.target.submit());
 };
 
-form.addEventListener('submit', hanledSubmit);
+const onClickRcapchat = (e) => {
+    e.preventDefault();
+    grecaptcha.enterprise.ready(async () => {
+      const token = await grecaptcha.enterprise.execute('6LcopfopAAAAACS70FlcZimSSRIoRaBN_QoRuVoW', {action: 'LOGIN'});
+
+      log(token)
+    //   fetch("https://recaptchaenterprise.googleapis.com/v1/projects/marylandacedemy-1718630470127/assessments?key=6LcopfopAAAAACS70FlcZimSSRIoRaBN_QoRuVoW",{
+    //       method: "POST", 
+    //       body: JSON.stringify(cliente), // data can be `string` or {object}!
+    //       headers: {
+    //           "Content-Type": "application/json",
+    //       },
+    //   });
+    });
+
+}
+
+form.addEventListener('submit', onClickRcapchat);
 
 
 

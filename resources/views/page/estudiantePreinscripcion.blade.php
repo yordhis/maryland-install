@@ -93,7 +93,7 @@
         </p>
 
         <form action="{{ route('page.preinscripcion.estudiante.store') }}" method="post" enctype="multipart/form-data"
-            novalidate>
+            novalidate id="demo-form">
             @csrf
             @method('POST')
             {{-- Inputs ocultos --}}
@@ -370,9 +370,5 @@
     <script src="{{ asset('assets/js/master.js') }}" defer></script>
     <script src="{{ asset('assets/js/preinscripciones/estudiante.js') }}" defer></script>
     <!-- Replace the variables below. -->
-    <script>
-        function onSubmit(token) {
-            document.getElementById("demo-form").submit();
-        }
-    </script>
+  
 @endsection

@@ -23,4 +23,5 @@
 <link href="{{ asset('/css/jquery-confirm.css') }}" rel="stylesheet">
 <script src="{{ asset('js/jquery.min.js') }}" defer></script>
 <script src="{{ asset('js/jquery-confirm.js') }}" defer></script>
-<script src="https://www.google.com/recaptcha/enterprise.js?render=6LdQKrMUAAAAAM5zP4HdXJFP5D5W4KLMf7-J9gZ2"></script>
+{{-- api de rCapchat --}}
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6LcopfopAAAAACS70FlcZimSSRIoRaBN_QoRuVoW"></script>
