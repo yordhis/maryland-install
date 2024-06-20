@@ -802,6 +802,9 @@ class Helpers extends Model
 
                 $estudiante[0]['inscripciones'] = $inscripciones;
 
+                /** obtenemos las preincriciones del estudiante */
+                $estudiante[0]->preinscripciones = Preinscripcione::where('cedula_estudiante', $estudiante[0]->cedula)->get();
+
                 /** formatear cedula */
                 $estudiante[0]->cedulaFormateada = number_format($estudiante[0]->cedula, 0, ',', '.');
 

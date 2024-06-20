@@ -3,6 +3,7 @@ log('conectado con preincripciones');
 let form = document.forms[0],
     checkbox_pago = document.querySelectorAll('.checkbox_pago'),
     elemento_informacion_de_pago = document.querySelector('#informacion_pago'),
+    inputCedula = document.getElementById('cedula'),
     inputEdadEstudiante = document.getElementById('edad_estudiante'),
     inputFechaNacimiento = document.getElementById('fecha_nacimiento'),
     html_informacion_pago = `
@@ -97,14 +98,8 @@ let form = document.forms[0],
     preinscripciones = [],
     preinscripcion= {
         
-    },
-    eventrCapchat = {
-        event: {
-          token: "TOKEN",
-          expectedAction: "USER_ACTION",
-          siteKey: "6LcopfopAAAAACS70FlcZimSSRIoRaBN_QoRuVoW",
-        }
     };
+ 
 
 
     /** Ecuchamos los eventos */
@@ -126,27 +121,41 @@ const hanledSubmit= (e) => {
  
     // document.getElementById("form-recapchat").submit();
     
-    console.log(e.target.submit());
+    e.target.submit()
 };
 
-const onClickRcapchat = (e) => {
-    e.preventDefault();
-    grecaptcha.enterprise.ready(async () => {
-      const token = await grecaptcha.enterprise.execute('6LcopfopAAAAACS70FlcZimSSRIoRaBN_QoRuVoW', {action: 'LOGIN'});
+const hanledInputCedula = (e) => {
+    log(e.target.value);
+    fetch(`${URL_BASE_API}/getEstudiante/${e.target.value}`)
+    .then(response => response.json())
+    .then(res => {
+        log(res);
+        /** guardar en sesión al estudiante ya registrado */
+        if(res.estatus == 200){
+            $.confirm({
+                title: "Alerta",
+                content: "¡El estudiante ya está registrado!,  desea cargar los datos existentes?",
+                buttons:{
+                    confirm: function () {
+                        $.alert('Se cargarán los datos!' + `${URL_BASE_HOST}/setDatosEnSesionEstudiante/${res.data.id}`);
+                       location.href=`${URL_BASE_HOST}/setDatosEnSesionEstudiante/${res.data.id}`;
 
-      log(token)
-    //   fetch("https://recaptchaenterprise.googleapis.com/v1/projects/marylandacedemy-1718630470127/assessments?key=6LcopfopAAAAACS70FlcZimSSRIoRaBN_QoRuVoW",{
-    //       method: "POST", 
-    //       body: JSON.stringify(cliente), // data can be `string` or {object}!
-    //       headers: {
-    //           "Content-Type": "application/json",
-    //       },
-    //   });
+                    },
+                    cancel: function () {
+                        $.alert('Ingrese otra cédula!');
+                        form.reset();
+                    },
+                }
+            })
+        }
+    })
+    .catch(err => {
+        log(err);
     });
+};
 
-}
-
-form.addEventListener('submit', onClickRcapchat);
+form.addEventListener('submit', hanledSubmit);
+inputCedula.addEventListener('keyup', hanledInputCedula);
 
 
 

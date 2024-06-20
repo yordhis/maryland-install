@@ -24,7 +24,10 @@ class StorePreinscripcioneRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'cedula_estudiante_1' => 'required',
+            'codigo_plan' => 'required',
+            'codigo_nivel' => 'required',
+            'terminos' => 'required'
         ];
     }
 }

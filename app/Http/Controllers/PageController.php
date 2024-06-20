@@ -29,7 +29,7 @@ class PageController extends Controller
     }
 
     /**
-     * PÁGINA DE PREINCRIPCIÓN
+     * PÁGINA DE PREINCRIPCIÓN SELECCIÓN DEL PLAN
      *
      * @return \Illuminate\Http\Response
      */
@@ -41,14 +41,38 @@ class PageController extends Controller
         return view('page.preinscripcion', compact('niveles', 'planes', 'request', 'nivelSolicitado'));
     }
 
+    /**
+     * RUTA PARA SETEAR DATOS DE ESTUDIANTE EXISTENTE EN LA SESIÓN
+     * 
+     * @return @session('estudiantesInscriptos')
+     */
+
+     public function setDatosEnSesionEstudiante($idEstudiante){
+        $estudiantesInscriptos = session('estudiantesInscriptos') ?? [];
+        array_push( $estudiantesInscriptos, Estudiante::find($idEstudiante) );
+
+        session([ 
+            'estudiantesInscriptos' => $estudiantesInscriptos,
+            'totalDeRegistros' => count($estudiantesInscriptos),
+        ]);
+
+        return back();
+     }
+
+    /**
+     * PÁGINA DE PREINCRIPCIÓN REGISTRO DEL ESTUDIANTE
+     *
+     * @return \Illuminate\Http\Response
+     */
+
     public function createEstudiante(Request $request)
     {
         try {
-       
             $respuestaTail = DataDev::$respuestaTail;
             $nivelSolicitado = Nivele::where('codigo', $request->codigo_nivel)->get();
             $planSolicitado = Plane::where('codigo', $request->codigo_plan)->get();
-            return view('page.estudiantePreinscripcion', compact('request', 'nivelSolicitado', 'planSolicitado', 'respuestaTail'));
+            $totalDeRegistros = session('totalDeRegistros') ?? 0;
+            return view('page.estudiantePreinscripcion', compact('request', 'nivelSolicitado', 'planSolicitado', 'respuestaTail', 'totalDeRegistros'));
             
         } catch (\Throwable $th) {
            $estatus = Response::HTTP_INTERNAL_SERVER_ERROR;
@@ -66,11 +90,10 @@ class PageController extends Controller
     public function store(StorePageRequest $request)
     {
         /** lo puedo hacer guardando los datos en la sessión */
-
-        return $request;
         try {
             // Validando cedula 
-            $estatusCreate = 0;
+            $estudiante = 0;
+            $estudiantesInscriptos = session('estudiantesInscriptos') ?? [];
 
             // Configuramos las dificultades en un array
             $dificultadesInput = Helpers::getDificultades($request->request);
@@ -81,9 +104,9 @@ class PageController extends Controller
             }
 
             // registramos el estudiante
-            $estatusCreate = Estudiante::create($request->all());
+            $estudiante = Estudiante::create($request->all());
 
-            if ($estatusCreate) {
+            if ($estudiante) {
                 // Validamos si existe el representante
                 if (isset($request->rep_cedula)) {
                     if (isset($request->rep_nombre)) {
@@ -108,11 +131,19 @@ class PageController extends Controller
             }
 
 
-            $mensaje =  $estatusCreate   ? "Estudiante registrado correctamente"
+            $mensaje =  $estudiante   ? "Estudiante registrado correctamente"
                 : "No se pudo registrar verifique los datos.";
-            $estatus = $estatusCreate ? Response::HTTP_CREATED : Response::HTTP_NOT_FOUND;
+            $estatus = $estudiante ? Response::HTTP_CREATED : Response::HTTP_NOT_FOUND;
+            
+            array_push( $estudiantesInscriptos, Estudiante::find($estudiante->id) );
+            session([ 
+                'estudiantesInscriptos' => $estudiantesInscriptos,
+                'totalDeRegistros' => count($estudiantesInscriptos),
+            ]);
 
-         
+            // session()->flush(); // elimina todos los datos de la session
+            // return session('estudiantesInscriptos');
+
             return back()->with(compact('mensaje', 'estatus'));
             
             
