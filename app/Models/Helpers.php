@@ -324,28 +324,33 @@ class Helpers extends Model
                 ->where('inscripciones.codigo', $codigo)
                 ->get();
     
-
-            $inscripcion[0]['cuotas'] = Cuota::where([
-                'codigo_inscripcion' => $inscripcion[0]->codigo,
-                'cedula_estudiante' => $inscripcion[0]->cedula_estudiante
-            ])->get();
-
-            /** obtenemos la proxima fecha de pago */
-            $inscripcion[0]['proxima_fecha_pago'] = $inscripcion[0]['cuotas']->where('estatus', 0)->min('fecha') ?? 'PAGADO';
-
-            /** Verificamos si el estudiante no esta en un grupo */
-            $estudianteEstaEnGrupo = GrupoEstudiante::where([
-                "codigo_grupo" => $inscripcion[0]->codigo_grupo,
-                "cedula_estudiante" => $inscripcion[0]->cedula_estudiante,
-            ])->get();
-            if (count($estudianteEstaEnGrupo)) {
-                $inscripcion[0]['estatus_reasignar'] = false;
-            } else {
-                $inscripcion[0]['estatus_reasignar'] = true;
+            if(count($inscripcion)){
+                
+                $inscripcion[0]['cuotas'] = Cuota::where([
+                    'codigo_inscripcion' => $inscripcion[0]->codigo,
+                    'cedula_estudiante' => $inscripcion[0]->cedula_estudiante
+                ])->get();
+    
+                /** obtenemos la proxima fecha de pago */
+                $inscripcion[0]['proxima_fecha_pago'] = $inscripcion[0]['cuotas']->where('estatus', 0)->min('fecha') ?? 'PAGADO';
+    
+                /** Verificamos si el estudiante no esta en un grupo */
+                $estudianteEstaEnGrupo = GrupoEstudiante::where([
+                    "codigo_grupo" => $inscripcion[0]->codigo_grupo,
+                    "cedula_estudiante" => $inscripcion[0]->cedula_estudiante,
+                ])->get();
+                
+                if (count($estudianteEstaEnGrupo)) {
+                    $inscripcion[0]['estatus_reasignar'] = false;
+                } else {
+                    $inscripcion[0]['estatus_reasignar'] = true;
+                }
+                
             }
+            
+            return $inscripcion;
         
 
-        return $inscripcion[0];
     }
 
     /** obtener toda la informacion de los grupos o un grupo por filtro */
@@ -753,6 +758,7 @@ class Helpers extends Model
      */
     public static function getEstudiantes($filtro = false, $paginacion = 12)
     {
+        $estudiantes = [];
         if ($filtro) {
             $estudiantes = Estudiante::where('cedula', 'like', "%{$filtro}%")
                 ->orWhere('nombre', 'like', "%{$filtro}%")
@@ -760,12 +766,14 @@ class Helpers extends Model
         } else {
             $estudiantes = Estudiante::orderBy('id', 'desc')->paginate($paginacion);
         }
-
-
+        
+        
+        
         foreach ($estudiantes as $key => $estudiante) {
-            $estudiantes[$key] = self::getEstudiante($estudiante->cedula)[0];
+             $estudiantes[$key] = self::getEstudiante($estudiante->cedula)[0];
         }
 
+        
         return $estudiantes;
     }
 
@@ -797,7 +805,7 @@ class Helpers extends Model
                 $inscripciones = Inscripcione::where("cedula_estudiante", $estudiante[0]->cedula)->orderBy('fecha', 'desc')->get();
 
                 foreach ($inscripciones as $key => $inscripcion) {
-                    $inscripciones[$key] = self::getInscripcion($inscripcion->codigo);
+                    $inscripcion = count(self::getInscripcion($inscripcion->codigo)) ? self::getInscripcion($inscripcion->codigo)[0] : [];
                 }
 
                 $estudiante[0]['inscripciones'] = $inscripciones;

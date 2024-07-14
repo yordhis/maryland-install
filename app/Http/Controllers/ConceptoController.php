@@ -28,12 +28,12 @@ class ConceptoController extends Controller
     {
         try {
             $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
+            
             $conceptos = Concepto::all();
             foreach ($conceptos as $key => $value) {
                 $value->estatus = $value->estatus ? "Activo" : "Inactivo";
             }
-            return view('admin.conceptos.lista', compact('notificaciones', 'usuario', 'conceptos'));
+            return view('admin.conceptos.lista', compact('notificaciones', 'conceptos'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar lista de Conceptos de pago en el método index,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -49,8 +49,8 @@ class ConceptoController extends Controller
     {
         try {
             $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
-            return view('admin.conceptos.crear', compact('notificaciones', 'usuario'));
+            
+            return view('admin.conceptos.crear', compact('notificaciones'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar datos Conceptos de pago en el método create,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -69,7 +69,7 @@ class ConceptoController extends Controller
             $request['descripcion'] = trim(strtoupper($request['descripcion']));
             $request['codigo'] = trim(strtoupper($request['codigo']));
             $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
+            
             $estatusCreate = 0;
             $datoExiste = Helpers::datoExiste($request, ["conceptos" => ["codigo", "", "codigo"]]);
             if (!$datoExiste) {
@@ -81,7 +81,7 @@ class ConceptoController extends Controller
                 : 301;
             $respuesta = $this->data->respuesta;
             return $estatusCreate ? redirect()->route('admin.conceptos.index', compact('mensaje', 'estatus'))
-                : view('admin.conceptos.crear', compact('request', 'notificaciones', 'usuario', 'respuesta'));
+                : view('admin.conceptos.crear', compact('request', 'notificaciones', 'respuesta'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Registrar datos de Conceptos de pago en el método store,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -109,8 +109,8 @@ class ConceptoController extends Controller
     {
         try {
             $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
-            return view('admin.conceptos.editar', compact('notificaciones', 'usuario', 'concepto'));
+            
+            return view('admin.conceptos.editar', compact('notificaciones', 'concepto'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar datos de Conceptos de pago en el método edit,");
             return response()->view('errors.404', compact("errorInfo"), 404);

@@ -32,10 +32,10 @@ class UserController extends Controller
     {
         try {
             $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
+           
             $usuarios = Helpers::getUsuarios();
             // return $usuarios;
-            return view('admin.usuarios.lista', compact( 'notificaciones', 'usuario', 'usuarios'));
+            return view('admin.usuarios.lista', compact( 'notificaciones', 'usuarios'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar datos de usuarios en el metodo index,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -51,9 +51,9 @@ class UserController extends Controller
     {
         try {
             $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
+           
             $roles = Role::where('estatus', 1)->get();
-            return view('admin.usuarios.crear', compact('notificaciones', 'usuario', 'roles'));
+            return view('admin.usuarios.crear', compact('notificaciones', 'roles'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error al Consultar datos de usuarios en el metodo create,");
             return response()->view('errors.404', compact("errorInfo"), 404);
@@ -70,7 +70,7 @@ class UserController extends Controller
     {
         try {
             $notificaciones = $this->data->notificaciones;
-            $usuario = $this->data->usuario;
+           
             $roles = Role::where('estatus', 1)->get();
             $estatusCreate = 0;
             $datoExiste = Helpers::datoExiste($request, ["users" => ["email","","email"]]);
@@ -90,7 +90,7 @@ class UserController extends Controller
                                       : 301;
             $respuesta = $this->data->respuesta;
             return $estatusCreate ? redirect()->route('admin.usuarios.index', compact('mensaje', 'estatus'))
-                                  : view('admin.usuarios.crear', compact('request', 'notificaciones', 'usuario', 'respuesta', 'roles') );
+                                  : view('admin.usuarios.crear', compact('request', 'notificaciones', 'respuesta', 'roles') );
     
             
             
@@ -123,9 +123,9 @@ class UserController extends Controller
         try {
             $notificaciones = $this->data->notificaciones;
             $usuarioEdit = User::where('id',$request)->get()[0];
-            $usuario = $this->data->usuario;
+           
             $roles = Role::where('estatus', 1)->get();
-            return view('admin.usuarios.editar', compact('notificaciones', 'usuario', 'usuarioEdit', 'roles'));
+            return view('admin.usuarios.editar', compact('notificaciones', 'usuarioEdit', 'roles'));
         } catch (\Throwable $th) {
             $errorInfo = Helpers::getMensajeError($th, "Error de consula,");
             return response()->view('errors.404', compact("errorInfo"), 404);

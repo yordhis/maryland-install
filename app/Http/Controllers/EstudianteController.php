@@ -37,6 +37,7 @@ class EstudianteController extends Controller
      */
     public function index(Request $request)
     {
+         $estudiantes = [];
   
         if ($request->filtro) {
             $estudiantes =  Helpers::getEstudiantes($request->filtro);
@@ -46,6 +47,7 @@ class EstudianteController extends Controller
    
         $notificaciones =  $this->data->notificaciones;
         $respuesta =  $this->data->respuesta;
+      
         return view('admin.estudiantes.lista', compact('estudiantes', 'notificaciones', 'request', 'respuesta'));
     }
 

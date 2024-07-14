@@ -75,7 +75,7 @@
                                 <td>
 
                                     {{-- Boton modal de info del estudiante --}}
-                                    @include('admin.estudiantes.partials.modaldialog')
+                                    @include('admin.estudiantes.partials.modaldialog') 
 
                                     {{-- Boton editar --}}
                                     <a href="{{ route('admin.estudiantes.edit', $estudiante->id) }}">
