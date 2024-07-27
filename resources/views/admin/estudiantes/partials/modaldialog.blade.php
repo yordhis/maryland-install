@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="col-md-12 label"> 
-                          <span class="text-primary">Teléfono:</span> {{ $estudiante->telefono }} 
+                          <span class="text-primary">Teléfono:</span> {{ $estudiante->telefonoFormateado }} 
                         </div>
 
                         <div class="col-md-12 label"> 
