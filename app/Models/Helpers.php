@@ -810,7 +810,7 @@ class Helpers extends Model
 
                 /** formatear telefono */
                 if(!empty($estudiante[0]->telefono)){
-                    $estudiante[0]->telefonoFormateado = '(' . substr($estudiante[0]->telefono, 0, 4) . ')' . ' ' . substr($estudiante[0]->telefono, 5, 3) . '-' . substr($estudiante[0]->telefono, 6);
+                    $estudiante[0]->telefonoFormateado = '(' . substr($estudiante[0]->telefono, 0, 4) . ')' . ' ' . substr($estudiante[0]->telefono, 4, 3) . '-' . substr($estudiante[0]->telefono, 7);
                 }else{
                     $estudiante[0]->telefonoFormateado = "No asignado.";
                 }
