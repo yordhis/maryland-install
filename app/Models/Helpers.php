@@ -135,8 +135,10 @@ class Helpers extends Model
     /** OPbtenemos toda la información de las inscripciones */
     public static function getInscripciones($filtro = false, $paginacion = 12)
     {
+        $inscripciones = [];
+
         if ($filtro) {
-            $inscripciones = Inscripcione::join('grupos', 'grupos.codigo', '=', 'inscripciones.codigo_grupo')
+             $inscripciones = Inscripcione::join('grupos', 'grupos.codigo', '=', 'inscripciones.codigo_grupo')
                 ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
                 ->join('planes', 'planes.codigo', '=', 'inscripciones.codigo_plan')
                 ->join('profesores', 'profesores.cedula', '=', 'grupos.cedula_profesor')
@@ -194,6 +196,7 @@ class Helpers extends Model
                 ->paginate($paginacion);
         } else {
 
+
             $inscripciones = Inscripcione::join('grupos', 'grupos.codigo', '=', 'inscripciones.codigo_grupo')
                 ->join('estudiantes', 'estudiantes.cedula', '=', 'inscripciones.cedula_estudiante')
                 ->join('planes', 'planes.codigo', '=', 'inscripciones.codigo_plan')
@@ -248,6 +251,7 @@ class Helpers extends Model
         }
 
         foreach ($inscripciones as $key => $inscripcion) {
+            
             $inscripcion['cuotas'] = Cuota::where([
                 'codigo_inscripcion' => $inscripcion->codigo,
                 'cedula_estudiante' => $inscripcion->cedula_estudiante
@@ -261,6 +265,7 @@ class Helpers extends Model
                 "codigo_grupo" => $inscripcion->codigo_grupo,
                 "cedula_estudiante" => $inscripcion->cedula_estudiante,
             ])->get();
+
             if (count($estudianteEstaEnGrupo)) {
                 $inscripcion['estatus_reasignar'] = false;
             } else {

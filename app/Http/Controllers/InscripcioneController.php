@@ -50,7 +50,9 @@ class InscripcioneController extends Controller
             $conceptos = Concepto::where("estatus", 1)->get();
             $grupos = Helpers::getGrupos(false, 200);
 
-            $inscripciones = Helpers::getInscripciones($request->filtro);
+            $filtro = $request->filtro ? $request->filtro : false;
+    
+            $inscripciones = Helpers::getInscripciones( $filtro );
             // return $inscripciones;
             return view(
                 'admin.inscripciones.lista',
